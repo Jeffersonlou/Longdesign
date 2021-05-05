@@ -6,7 +6,7 @@ public class Cowboy_master : MonoBehaviour
 {
     public Transform myTarget;
     public bool isOnRoute;
-    public bool isNavPursue;
+    public bool isNavPaused;
 
     public delegate void GeneralEventHandler();
     public event GeneralEventHandler EventCowboyChase;
@@ -62,7 +62,7 @@ public class Cowboy_master : MonoBehaviour
 
     public void CallEventCowboyLostTarget()
     {
-        if(EventCowboyReachedTarget != null)
+        if(EventCowboyLostTarget != null)
         {
             EventCowboyLostTarget();
         }
@@ -70,7 +70,7 @@ public class Cowboy_master : MonoBehaviour
 
     public void CallEventCowboyChase()
     {
-        if(EventCowboyReachedTarget != null)
+        if(EventCowboyChase != null)
         {
             EventCowboyChase();
         }

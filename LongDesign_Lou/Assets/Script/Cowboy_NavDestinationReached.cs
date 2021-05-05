@@ -23,7 +23,7 @@ public class Cowboy_NavDestinationReached : MonoBehaviour
 
     void Update() 
     {
-        if(Time.time > checkRate)
+        if(Time.time > nextCheck)
         {
             nextCheck = Time.time + checkRate;
             CheckifReachedDestination();
@@ -44,7 +44,7 @@ public class Cowboy_NavDestinationReached : MonoBehaviour
     {
         if(cowboyMaster.isOnRoute)
         {
-            if(myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance)
+            if(myNavMeshAgent.remainingDistance <= myNavMeshAgent.stoppingDistance)
             {
                 cowboyMaster.isOnRoute = false;
                 cowboyMaster.CallEventCowboyReachedTarget();

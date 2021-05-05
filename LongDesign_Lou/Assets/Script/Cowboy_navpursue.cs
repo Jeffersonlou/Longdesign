@@ -18,7 +18,7 @@ public class Cowboy_navpursue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time > checkRate)
+        if(Time.time > nextCheck)
         {
             nextCheck = Time.time + checkRate;
             TryToChaseTarget();
@@ -38,7 +38,7 @@ public class Cowboy_navpursue : MonoBehaviour
 
     void TryToChaseTarget()
     {
-        if(cowboyMaster.myTarget != null && myNavMeshAgent != null)
+        if(cowboyMaster.myTarget != null && myNavMeshAgent != null && !cowboyMaster.isNavPaused)
         {
             myNavMeshAgent.SetDestination(cowboyMaster.myTarget.position);
 

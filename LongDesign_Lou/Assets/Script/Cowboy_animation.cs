@@ -15,7 +15,7 @@ public class Cowboy_animation : MonoBehaviour{
     {
 
         SetinitialRefrence();
-        cowboyMaster.EventCowboyLostTarget += SetAnimationToWalk;
+        cowboyMaster.EventCowboyReachedTarget += SetAnimationToIdle;
         cowboyMaster.EventCowboyAttack += SetAnimationToAttack;
         cowboyMaster.EventCowboyWander += SetAnimationToWalk;
         cowboyMaster.EventCowboyChase += SetAnimationToRun;
@@ -24,7 +24,7 @@ public class Cowboy_animation : MonoBehaviour{
     // Update is called once per frame
     void OnDisable() 
     {
-        cowboyMaster.EventCowboyLostTarget -= SetAnimationToWalk;
+        cowboyMaster.EventCowboyReachedTarget -= SetAnimationToIdle;
         cowboyMaster.EventCowboyAttack -= SetAnimationToAttack;
         cowboyMaster.EventCowboyWander -= SetAnimationToWalk;
         cowboyMaster.EventCowboyChase -= SetAnimationToRun;
@@ -36,6 +36,17 @@ public class Cowboy_animation : MonoBehaviour{
         if(GetComponent<Animator>() != null)
         {
             myAnimator = GetComponent<Animator>();
+        }
+    }
+
+    void SetAnimationToIdle()
+    {
+        if(myAnimator != null)
+        {
+            if(myAnimator.enabled)
+            {
+               myAnimator.SetBool("IsWalking",false);
+            }
         }
     }
 

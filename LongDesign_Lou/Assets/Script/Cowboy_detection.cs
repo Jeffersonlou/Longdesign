@@ -67,7 +67,7 @@ public class Cowboy_detection : MonoBehaviour
         }
         else
         {
-            cowboyMaster.CallEventCowboyWander();
+            cowboyMaster.CallEventCowboyLostTarget();
         }
         
 
@@ -79,19 +79,18 @@ public class Cowboy_detection : MonoBehaviour
         {
             if(hit.transform == potentialTarget)
             {
-                Debug.DrawRay(myTransform.position, myTransform.forward * detectRadius, Color.red);
                 cowboyMaster.CallEventCowboySetNavTarget(potentialTarget);
                 return true;
             }
             else
             {
-                cowboyMaster.CallEventCowboyWander();
+                cowboyMaster.CallEventCowboyLostTarget();
                 return false;
             }
         }
         else
         {
-            cowboyMaster.CallEventCowboyWander();
+            cowboyMaster.CallEventCowboyLostTarget();
             return false;
         }
     }
