@@ -36,8 +36,8 @@ public class Arthur : MonoBehaviour
         { 
             case ArthurState.Wander:
                 {
-                    Debug.Log("arthurPOS : " + transform.position);
-                    Debug.Log("A_Wander");
+                    //Debug.Log("arthurPOS : " + transform.position);
+                    //Debug.Log("A_Wander");
                     anim.Play("Arthur_walk");
                     if (aggroScript.NeedsDestination())
                     {
@@ -45,7 +45,7 @@ public class Arthur : MonoBehaviour
                         aggroScript.GetDestination();
                     }
 
-                    Debug.Log("des:"+aggroScript._destination);
+                   //Debug.Log("A des:"+aggroScript._destination);
                     transform.rotation = aggroScript._desiredRotation;
                     transform.Translate(Vector3.forward * Time.deltaTime);
 

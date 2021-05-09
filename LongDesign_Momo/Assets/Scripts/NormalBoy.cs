@@ -7,49 +7,42 @@ using UnityEngine.AI;
 public class NormalBoy : MonoBehaviour
 {
     public Animator anim;
+    public CheckAggroTest aggroScript;
+    public NavMeshAgent agent;
     float forwardAmount;
 
-    public NavMeshAgent agent;
-
     private float _hideRange = 5f;
-   
-
-    public CheckAggroTest aggroScript;
     //private Vector3 _destination;
     //private Quaternion _desiredRotation;
     //private Vector3 _direction;
     private Cowboy _target;
     private NormalState _currentState;
  
-
-
-    private void Update()
+    void Update()
     {
         switch (_currentState)
         {
             case NormalState.Wander:
                 {
-                    Debug.Log("N_Wander");
+                    //Debug.Log("N_Wander");
                     if (aggroScript.NeedsDestination())
                     {
                         aggroScript.GetDestination();
                     }
 
+                    Debug.Log("N des:"+aggroScript._destination);
                     transform.rotation = aggroScript._desiredRotation;
-
                     transform.Translate(Vector3.forward * Time.deltaTime);
                     anim.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
                     forwardAmount = Vector3.forward.z;
 
-                    
-
                     while (aggroScript.IsPathBlocked())
                     {
-                        
                         aggroScript.GetDestination();
                     }
 
                     var targetToAggro = gameObject.GetComponent<CheckAggroTest>().CheckForAggro();
+
                     if (targetToAggro != null)
                     {
                         _target = targetToAggro.GetComponent<Cowboy>();
@@ -71,16 +64,17 @@ public class NormalBoy : MonoBehaviour
                     float distance = Vector3.Distance(transform.position, _target.transform.position);
 
                     
-                        Debug.Log("N_distance");
+                        //Debug.Log("N_distance");
                         Vector3 dirtoPlayer = transform.position - _target.transform.position;
                         Vector3 newPos = (transform.position + dirtoPlayer);
+                        Debug.Log("newPos: "+newPos);
                         if (agent.SetDestination(newPos) == false)
                         {
                             Debug.Log("N_SetDest Error: " + dirtoPlayer.ToString() + ":" + newPos.ToString());
                         }
-                    
+                    Debug.Log("dis:"+distance+" hideR:"+_hideRange);
                     if (distance >= _hideRange)
-                    { 
+                    {
                         _currentState = NormalState.Hide;
                         //agent.Stop();
                     }

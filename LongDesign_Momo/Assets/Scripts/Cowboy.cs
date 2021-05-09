@@ -6,6 +6,7 @@ public class Cowboy : MonoBehaviour
 
 {
     public Animator anim;
+    public CheckAggroTest aggroScript;
     //float forwardAmount;
 
     public NavMeshAgent agent;
@@ -34,8 +35,9 @@ public class Cowboy : MonoBehaviour
     {
         switch (_currentState)
         {
-            case CowboyState.Wait:
+            case CowboyState.Wander:
                 {
+                    
                     var targetToAggro = gameObject.GetComponent<CheckAggroTest>().CheckForAggro();
                     if (targetToAggro != null)
                     {

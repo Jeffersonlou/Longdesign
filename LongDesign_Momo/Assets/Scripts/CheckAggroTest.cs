@@ -30,11 +30,10 @@ public class CheckAggroTest : MonoBehaviour
 
     public void GetDestination()
     {
-        Vector3 testPosition = (transform.position + (transform.forward * 2f)) +
-                               new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), 0f,
-                                   UnityEngine.Random.Range(-4.5f, 4.5f));
+        Vector3 testPosition = (transform.position + (transform.forward * 2f)) + 
+        new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), 0f,UnityEngine.Random.Range(-4.5f, 4.5f));
 
-        _destination = new Vector3(testPosition.x, 1f, testPosition.z);
+        _destination = new Vector3(testPosition.x, transform.position.y, testPosition.z);
 
         _direction = Vector3.Normalize(_destination - transform.position);
         _direction = new Vector3(_direction.x, 0f, _direction.z);
@@ -46,8 +45,7 @@ public class CheckAggroTest : MonoBehaviour
     {
         if (_destination == Vector3.zero)  
             return true;
- 
-
+        
         var distance = Vector3.Distance(transform.position, _destination);
         if (distance <= _stoppingDistance)
         {        
@@ -59,6 +57,7 @@ public class CheckAggroTest : MonoBehaviour
 
     Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector2.up);
     Quaternion stepAngle = Quaternion.AngleAxis(5, Vector2.up);
+    
     public Transform CheckForAggro()
     {
         float aggroRadius = 5f;
@@ -67,6 +66,7 @@ public class CheckAggroTest : MonoBehaviour
         var angle = transform.rotation * startingAngle;
         var direction = angle * Vector3.forward;
         var pos = transform.position;
+        
         for (var i = 0; i < 24; i++)
         {
             if (Physics.Raycast(pos, direction, out hit, aggroRadius))
