@@ -31,7 +31,7 @@ public class CheckAggroTest : MonoBehaviour
     public void GetDestination()
     {
         Vector3 testPosition = (transform.position + (transform.forward * 2f)) + 
-        new Vector3(UnityEngine.Random.Range(-4.5f, 4.5f), 0f,UnityEngine.Random.Range(-4.5f, 4.5f));
+        new Vector3(Random.Range(-4.5f, 4.5f), 0f,Random.Range(-4.5f, 4.5f));
 
         _destination = new Vector3(testPosition.x, transform.position.y, testPosition.z);
 
