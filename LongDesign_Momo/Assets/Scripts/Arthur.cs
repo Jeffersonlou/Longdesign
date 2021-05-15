@@ -13,7 +13,7 @@ public class Arthur : MonoBehaviour
 {
 
     private ArthurState _currentState;
-    private Cowboy _target;
+    private Cowboy_master _target;
 
     public CheckAggroTest aggroScript;
 
@@ -59,7 +59,7 @@ public class Arthur : MonoBehaviour
                     var targetToAggro = GetComponent<CheckAggroTest>().CheckForAggro();
                     if (targetToAggro != null)
                     {
-                        _target = targetToAggro.GetComponent<Cowboy>();
+                        _target = targetToAggro.GetComponent<Cowboy_master>();
                         _currentState = ArthurState.Chase;
                     }
                     break;
@@ -79,7 +79,7 @@ public class Arthur : MonoBehaviour
                         Vector3 newArthurPos = new Vector3(_target.transform.position.x - 5f, _target.transform.position.y, _target.transform.position.z);
                         agent.SetDestination(newArthurPos);
                         //anim.Play("Arthur_takeGun");
-                        _target = targetToAggro.GetComponent<Cowboy>();
+                        _target = targetToAggro.GetComponent<Cowboy_master>();
                         _currentState = ArthurState.Attack;
                         gGlobal.fShoot = false;
 
