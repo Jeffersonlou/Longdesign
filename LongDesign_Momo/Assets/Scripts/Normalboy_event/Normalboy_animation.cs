@@ -2,37 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-public class Cowboy_animation : MonoBehaviour{
-    private Cowboy_master cowboyMaster; 
+public class Normalboy_animation : MonoBehaviour{
+    private Normalboy_Master normalboyMaster; 
     private Animator myAnimator;
     private float forwardAmount;
 
-
-    // Start is called before the first frame update
     void OnEnable() 
     {
-
         SetinitialRefrence();
-        cowboyMaster.EventCowboyReachedTarget += SetAnimationToIdle;
-        cowboyMaster.EventCowboyAttack += SetAnimationToAttack;
-        cowboyMaster.EventCowboyWander += SetAnimationToWalk;
-        cowboyMaster.EventCowboyChase += SetAnimationToRun;
+        normalboyMaster.EventNormalboyReachedTarget += SetAnimationToIdle;
+        normalboyMaster.EventNormalboyAttack += SetAnimationToAttack;
+        normalboyMaster.EventNormalboyWander += SetAnimationToWalk;
+        normalboyMaster.EventNormalboyFlee += SetAnimationToRun;
     }
-
-    // Update is called once per frame
     void OnDisable() 
     {
-        cowboyMaster.EventCowboyReachedTarget -= SetAnimationToIdle;
-        cowboyMaster.EventCowboyAttack -= SetAnimationToAttack;
-        cowboyMaster.EventCowboyWander -= SetAnimationToWalk;
-        cowboyMaster.EventCowboyChase -= SetAnimationToRun;
+        normalboyMaster.EventNormalboyReachedTarget -= SetAnimationToIdle;
+        normalboyMaster.EventNormalboyAttack -= SetAnimationToAttack;
+        normalboyMaster.EventNormalboyWander -= SetAnimationToWalk;
+        normalboyMaster.EventNormalboyFlee -= SetAnimationToRun;
     }
 
     void SetinitialRefrence()
     {
-        cowboyMaster = GetComponent<Cowboy_master>();
+        normalboyMaster = GetComponent<Normalboy_Master>();
         if(GetComponent<Animator>() != null)
         {
             myAnimator = GetComponent<Animator>();
@@ -57,7 +50,7 @@ public class Cowboy_animation : MonoBehaviour{
         {
             if(myAnimator.enabled)
             {
-               myAnimator.SetFloat("Forward", forwardAmount, 0.2f, Time.deltaTime);
+               myAnimator.SetFloat("Forward", forwardAmount, 0.3f, Time.deltaTime);
                forwardAmount = Vector3.forward.z;
             }
         }
@@ -80,7 +73,7 @@ public class Cowboy_animation : MonoBehaviour{
         {
             if(myAnimator.enabled)
             {
-                myAnimator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
+                myAnimator.SetFloat("Forward", forwardAmount, 0.2f, Time.deltaTime);
                 forwardAmount = Vector3.forward.z;
             }
         }

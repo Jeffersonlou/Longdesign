@@ -48,7 +48,7 @@ public class Cowboy_Navwander : MonoBehaviour
             if(RandomWanderTarget(myTransform.position,wanderRange,out wanderTarget))
             {
                 myNavMeshAgent.SetDestination(wanderTarget);
-                Debug.Log(wanderTarget);
+                //Debug.Log(wanderTarget);
                 cowboyMaster.isOnRoute = true;
                 cowboyMaster.CallEventCowboyWander();
             }
