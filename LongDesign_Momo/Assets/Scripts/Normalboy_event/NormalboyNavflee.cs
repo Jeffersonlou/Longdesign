@@ -10,13 +10,13 @@ namespace Normalboy_event
         private float _checkRate;
         private float _nextCheck;
 
-        void OnEnable()
+        private void OnEnable()
         {
             SetinitialRefrence();
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if(Time.time > _nextCheck)
             {
@@ -36,12 +36,13 @@ namespace Normalboy_event
             _checkRate = Random.Range(0.1f,0.2f);
         }
 
-        void TryToFleeFormTarget()
+        private void TryToFleeFormTarget()
         {
             if(_normalboyMaster.myTarget != null && _myNavMeshAgent != null && !_normalboyMaster.isNavPaused)
             {
-                Vector3 dirToTarget = transform.position - _normalboyMaster.myTarget.position;
-                Vector3 fleeTarget = transform.position + dirToTarget;
+                var position = transform.position;
+                var dirToTarget = position - _normalboyMaster.myTarget.position;
+                var fleeTarget = position + dirToTarget;
                 _myNavMeshAgent.SetDestination(fleeTarget);
 
                 if(_myNavMeshAgent.remainingDistance > _myNavMeshAgent.stoppingDistance)
@@ -52,7 +53,7 @@ namespace Normalboy_event
             }
         }
 
-        void DisableThis()
+        private void DisableThis()
         {
             if(_myNavMeshAgent != null)
             {

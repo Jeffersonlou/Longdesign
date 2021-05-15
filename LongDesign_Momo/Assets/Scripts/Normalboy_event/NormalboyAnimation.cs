@@ -6,6 +6,9 @@ namespace Normalboy_event
         private NormalboyMaster _normalboyMaster; 
         private Animator _myAnimator;
         private float _forwardAmount;
+        private static readonly int Forward = Animator.StringToHash("Forward");
+        private static readonly int Turn = Animator.StringToHash("Turn");
+        private static readonly int Attack = Animator.StringToHash("Attack");
 
         void OnEnable() 
         {
@@ -38,8 +41,8 @@ namespace Normalboy_event
             {
                 if(_myAnimator.enabled)
                 {
-                    _myAnimator.SetFloat("Forward", 0);
-                    _myAnimator.SetFloat("Turn", 0);
+                    _myAnimator.SetFloat(Forward, 0);
+                    _myAnimator.SetFloat(Turn, 0);
                 }
             }
         }
@@ -50,7 +53,7 @@ namespace Normalboy_event
             {
                 if(_myAnimator.enabled)
                 {
-                    _myAnimator.SetFloat("Forward", _forwardAmount, 0.3f, Time.deltaTime);
+                    _myAnimator.SetFloat(Forward, _forwardAmount, 0.3f, Time.deltaTime);
                     _forwardAmount = Vector3.forward.z;
                 }
             }
@@ -62,7 +65,7 @@ namespace Normalboy_event
             {
                 if(_myAnimator.enabled)
                 {
-                    _myAnimator.SetTrigger("Attack");
+                    _myAnimator.SetTrigger(Attack);
                 }
             }
         }
@@ -73,7 +76,7 @@ namespace Normalboy_event
             {
                 if(_myAnimator.enabled)
                 {
-                    _myAnimator.SetFloat("Forward", _forwardAmount, 0.2f, Time.deltaTime);
+                    _myAnimator.SetFloat(Forward, _forwardAmount, 0.2f, Time.deltaTime);
                     _forwardAmount = Vector3.forward.z;
                 }
             }

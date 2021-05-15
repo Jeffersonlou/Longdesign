@@ -15,12 +15,6 @@ namespace Normalboy_event
             SetinitialRefrence();
         }
 
-
-        void OnDisable()
-        {
-        
-        }
-
         void Update() 
         {
             if(Time.time > _nextCheck)

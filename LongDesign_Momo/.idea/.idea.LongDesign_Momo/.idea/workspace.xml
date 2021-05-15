@@ -18,6 +18,7 @@
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Drone.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Drone.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Navmesh_move.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Navmesh_move.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalBoy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalBoy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/Normalboy_Master.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/Normalboy_Master.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/Normalboy_NavDestinationReached.cs" beforeDir="false" />
@@ -213,14 +214,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyNavDestinationReached.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
       <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/Normalboy_Master.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyMaster.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalBoy.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/Normalboy_navflee.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyNavwander.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyNavflee.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyNavwander.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyDetection.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyAnimation.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Normalboy_event/NormalboyNavDestinationReached.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1sZuWNhrQ38rgOXELtBPzWvtl8s" />
@@ -273,7 +280,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1621092467293</updated>
-      <workItem from="1621092481259" duration="1380000" />
+      <workItem from="1621092481259" duration="2035000" />
     </task>
     <servers />
   </component>
