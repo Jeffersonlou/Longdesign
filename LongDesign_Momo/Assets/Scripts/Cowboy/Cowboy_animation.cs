@@ -80,7 +80,7 @@ public class Cowboy_animation : MonoBehaviour{
         {
             if(myAnimator.enabled)
             {
-                myAnimator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
+                myAnimator.SetFloat("Forward", forwardAmount, 0.2f, Time.deltaTime);
                 forwardAmount = Vector3.forward.z;
             }
         }

@@ -1,28 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.AI;
 
-public class NormalBoy : MonoBehaviour
+namespace Normalboy_event
 {
-    public Animator anim;
-    public CheckAggroTest aggroScript;
-    public NavMeshAgent agent;
-    float forwardAmount;
-
-    private float _hideRange = 5f;
-    //private Vector3 _destination;
-    //private Quaternion _desiredRotation;
-    //private Vector3 _direction;
-    private Cowboy _target;
-    private NormalState _currentState;
- 
-    void Update()
+    public class NormalBoy : MonoBehaviour
     {
-        switch (_currentState)
+        public Animator anim;
+        public CheckAggroTest aggroScript;
+        public NavMeshAgent agent;
+        float _forwardAmount;
+
+        private float _hideRange = 5f;
+        //private Vector3 _destination;
+        //private Quaternion _desiredRotation;
+        //private Vector3 _direction;
+        private Cowboy _target;
+        private NormalState _currentState;
+ 
+        void Update()
         {
-            case NormalState.Wander:
+            switch (_currentState)
+            {
+                case NormalState.Wander:
                 {
                     //Debug.Log("N_Wander");
                     if (aggroScript.NeedsDestination())
@@ -33,8 +35,8 @@ public class NormalBoy : MonoBehaviour
                     Debug.Log("N des:"+aggroScript._destination);
                     transform.rotation = aggroScript._desiredRotation;
                     transform.Translate(Vector3.forward * Time.deltaTime);
-                    anim.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
-                    forwardAmount = Vector3.forward.z;
+                    anim.SetFloat("Forward", _forwardAmount, 0.1f, Time.deltaTime);
+                    _forwardAmount = Vector3.forward.z;
 
                     while (aggroScript.IsPathBlocked())
                     {
@@ -51,7 +53,7 @@ public class NormalBoy : MonoBehaviour
 
                     break;
                 }
-            case NormalState.Escape:
+                case NormalState.Escape:
                 {
                     Debug.Log("escaping");
                     if (_target == null)
@@ -64,14 +66,14 @@ public class NormalBoy : MonoBehaviour
                     float distance = Vector3.Distance(transform.position, _target.transform.position);
 
                     
-                        //Debug.Log("N_distance");
-                        Vector3 dirtoPlayer = transform.position - _target.transform.position;
-                        Vector3 newPos = (transform.position + dirtoPlayer);
-                        Debug.Log("newPos: "+newPos);
-                        if (agent.SetDestination(newPos) == false)
-                        {
-                            Debug.Log("N_SetDest Error: " + dirtoPlayer.ToString() + ":" + newPos.ToString());
-                        }
+                    //Debug.Log("N_distance");
+                    Vector3 dirtoPlayer = transform.position - _target.transform.position;
+                    Vector3 newPos = (transform.position + dirtoPlayer);
+                    Debug.Log("newPos: "+newPos);
+                    if (agent.SetDestination(newPos) == false)
+                    {
+                        Debug.Log("N_SetDest Error: " + dirtoPlayer.ToString() + ":" + newPos.ToString());
+                    }
                     Debug.Log("dis:"+distance+" hideR:"+_hideRange);
                     if (distance >= _hideRange)
                     {
@@ -81,21 +83,22 @@ public class NormalBoy : MonoBehaviour
                     
                     break;
                 }
-            case NormalState.Hide:
+                case NormalState.Hide:
                 {
                     Debug.Log("Hiding");
-
                     _currentState = NormalState.Wander;
                     break;
                 }
+                
+                
+            }
         }
-    }
 
 
-    //Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
-    //Quaternion stepAngle = Quaternion.AngleAxis(5, Vector3.up);
+        //Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
+        //Quaternion stepAngle = Quaternion.AngleAxis(5, Vector3.up);
 
-    /*private Transform CheckForAggro()
+        /*private Transform CheckForAggro()
     {
         float aggroRadius = 10f;
 
@@ -127,14 +130,12 @@ public class NormalBoy : MonoBehaviour
 
         return null;
     }*/
+    }
+
+    public enum NormalState
+    {
+        Wander,
+        Escape,
+        Hide
+    }
 }
-
-public enum NormalState
-{
-    Wander,
-    Escape,
-    Hide
-}
-
-
-
