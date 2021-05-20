@@ -76,6 +76,7 @@ public class Arthur : MonoBehaviour
                     var targetToAggro = GetComponent<CheckAggroTest>().CheckForAggro();
                     if(targetToAggro != null)
                     {
+                        Debug.Log("A_Chasing");
                         Vector3 newArthurPos = new Vector3(_target.transform.position.x - 5f, _target.transform.position.y, _target.transform.position.z);
                         agent.SetDestination(newArthurPos);
                         //anim.Play("Arthur_takeGun");
