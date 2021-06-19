@@ -23,12 +23,12 @@ public class Bullet : MonoBehaviour
             }
 
         }
-        rb.AddForce(gameObject.transform.right * (speed * Time.deltaTime));     
+        rb.AddForce(gameObject.transform.right * speed * Time.deltaTime);     
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.CompareTag("Cowboy"))
+        if(collision.collider.tag == "Cowboy")
         {
             Destroy(collision.gameObject);
             gGlobal.fShoot = true;
