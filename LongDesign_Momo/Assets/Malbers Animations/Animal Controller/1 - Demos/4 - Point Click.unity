@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -121,7 +121,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 0061c8a34863e84478a5488284644590, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 07d54807eb490e04584a3fe534284e90, type: 2}
 --- !u!1 &24960925
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +883,8 @@ MonoBehaviour:
     sent: 0
     Active: 1
   UseSendMessage: 0
+  SendToChildren: 1
+  debug: 1
   nextFrame: 0
   Pinned: {fileID: 0}
 --- !u!114 &261874668
@@ -2248,6 +2250,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: 
   ShowDescription: 0
   debug: 0
@@ -2325,8 +2328,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -3217,6 +3226,9 @@ MonoBehaviour:
   WanderWeight: 1
   nextWayPoints: []
   DebugColor: {r: 0, g: 1, b: 0, a: 0.15}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 971969477}
   ChildWanderAreas:
   - {fileID: 971969477}
@@ -5722,6 +5734,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: The Interactor receive the Interactable ID of the Active Interation
     and Interacts acordinly using Events
   ShowDescription: 1
@@ -6040,8 +6053,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -9368,6 +9387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 2148381889379906539}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &3695255249057304052
@@ -9503,6 +9523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 2148381889379906539}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &3695551658773058368
@@ -9831,6 +9852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 2148381889379906539}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &3695726136673184460
@@ -9846,6 +9868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 2148381889379906539}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &3695749506495526562
@@ -9884,7 +9907,9 @@ MonoBehaviour:
   ModeShowEvents: 1
   Editor_Tabs1: 2
   Editor_Tabs2: 4
+  Editor_EventTabs: 0
   SelectedMode: 1
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 1
@@ -9950,11 +9975,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 1
   center: {x: 0, y: 0, z: 0}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1
@@ -9991,6 +10013,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: {fileID: 0}
     Variable: {fileID: 0}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 0
@@ -10066,6 +10089,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10093,6 +10118,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10152,6 +10179,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10177,6 +10206,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10236,6 +10267,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10261,6 +10294,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10322,6 +10357,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10349,6 +10386,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 1
         OnEnter:
@@ -10376,6 +10415,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10403,6 +10444,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10430,6 +10473,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10457,6 +10502,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10971,6 +11018,9 @@ MonoBehaviour:
   OnGrounded:
     m_PersistentCalls:
       m_Calls: []
+  OnMovementDetected:
+    m_PersistentCalls:
+      m_Calls: []
   OnStateChange:
     m_PersistentCalls:
       m_Calls: []
@@ -11227,7 +11277,6 @@ MonoBehaviour:
   OnTargetSet:
     m_PersistentCalls:
       m_Calls: []
-  pointType: 0
   Editor_Tabs1: 2
 --- !u!1 &6389935953302467740
 GameObject:

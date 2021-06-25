@@ -937,8 +937,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -1115,121 +1121,6 @@ MonoBehaviour:
   DebugColor: {r: 0, g: 1, b: 0, a: 1}
   DrawAxis: 0
   AxisSize: 0.3
---- !u!1 &3361063909536161569
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3922882272575615788}
-  - component: {fileID: 1988283264105837859}
-  m_Layer: 2
-  m_Name: Stamina
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3922882272575615788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3361063909536161569}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4163079391868450953}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1988283264105837859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3361063909536161569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b02552e327ef8b047abd0dc3defd297a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowEvents: 1
-  ID:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  Description: "Connects the STAMINA Value(Float)\n to the UI Only When Mounting"
-  ShowDescription: 1
-  debug: 0
-  value:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  Raise:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 7cf722dd04e074d4eb5c291280cdd5aa, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!1 &3739368605407501633
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 198687078498062981}
-  - component: {fileID: 6781704043521139539}
-  m_Layer: 2
-  m_Name: On Mount
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &198687078498062981
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3739368605407501633}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 8489693677114918048}
-  - {fileID: 4163079391868450953}
-  m_Father: {fileID: 3824453610842356247}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6781704043521139539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3739368605407501633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0b5b9d4af0f31439aabd6b5de7b49e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: "Connections to Activate and Deactivate \nwhile Mounting and Dismounting"
 --- !u!1 &5711687015421909693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,264 +1219,84 @@ MonoBehaviour:
   DebugColor: {r: 0.3066038, g: 0.838564, b: 1, a: 0.23137255}
   DrawAxis: 1
   AxisSize: 0.3
---- !u!1 &6479562384252102485
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7853848348796482472}
-  - component: {fileID: 2214128791411868821}
-  m_Layer: 2
-  m_Name: Health
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7853848348796482472
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6479562384252102485}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4163079391868450953}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2214128791411868821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6479562384252102485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b02552e327ef8b047abd0dc3defd297a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowEvents: 1
-  ID:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  Description: "Connects the Health Value(Float)\n to the UI Only When Mounting"
-  ShowDescription: 1
-  debug: 0
-  value:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  Raise:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: bee0895a0f76ff840bfba0a11f37d898, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!1 &8422921744082151772
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4163079391868450953}
-  - component: {fileID: 8776261365857126160}
-  m_Layer: 2
-  m_Name: Mount UI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4163079391868450953
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8422921744082151772}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 7853848348796482472}
-  - {fileID: 3922882272575615788}
-  m_Father: {fileID: 198687078498062981}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8776261365857126160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8422921744082151772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 314d00f1b4c62c4439fe886f82ae5243, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnDeactive:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: bee0895a0f76ff840bfba0a11f37d898, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 7cf722dd04e074d4eb5c291280cdd5aa, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnActive:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Stats_Update
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: bee0895a0f76ff840bfba0a11f37d898, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: 7cf722dd04e074d4eb5c291280cdd5aa, type: 2}
-        m_MethodName: Invoke
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-  Description: 'Activate the UI when the Horse is Mounted
-
-
-    Deactivate the UI
-    when the Horse is Dismounted'
-  ShowDescription: 1
---- !u!1001 &8527975830974075624
+--- !u!1001 &1998433088841758400
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 198687078498062981}
+    m_TransformParent: {fileID: 3824453610842356247}
     m_Modifications:
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1876755508412715630, guid: 7e483ff5fdffb1c458978748835c8e5f,
-        type: 3}
-      propertyPath: onEnable.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1876755508412715630, guid: 7e483ff5fdffb1c458978748835c8e5f,
-        type: 3}
-      propertyPath: onEnable.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443200473248956955, guid: 7e483ff5fdffb1c458978748835c8e5f,
-        type: 3}
-      propertyPath: OnActive.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443200473248956955, guid: 7e483ff5fdffb1c458978748835c8e5f,
-        type: 3}
-      propertyPath: OnActive.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8098591121603023437, guid: 7e483ff5fdffb1c458978748835c8e5f,
+    - target: {fileID: 2909109447488138113, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
         type: 3}
       propertyPath: m_Name
-      value: CM Mount Camera State
+      value: On Mount
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7e483ff5fdffb1c458978748835c8e5f, type: 3}
---- !u!4 &8489693677114918048 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 3b6cce9140db1ce47a30aab2b3fc2b73, type: 3}
+--- !u!4 &198687078498062981 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 254461893954180680, guid: 7e483ff5fdffb1c458978748835c8e5f,
+  m_CorrespondingSourceObject: {fileID: 1835846413059810373, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
     type: 3}
-  m_PrefabInstance: {fileID: 8527975830974075624}
+  m_PrefabInstance: {fileID: 1998433088841758400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3739368605407501633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2909109447488138113, guid: 3b6cce9140db1ce47a30aab2b3fc2b73,
+    type: 3}
+  m_PrefabInstance: {fileID: 1998433088841758400}
   m_PrefabAsset: {fileID: 0}

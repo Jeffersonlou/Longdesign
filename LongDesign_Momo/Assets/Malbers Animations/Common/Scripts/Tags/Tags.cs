@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace MalbersAnimations
 {
     [HelpURL("https://malbersanimations.gitbook.io/animal-controller/secondary-components/scriptables/tags")]
     [AddComponentMenu("Malbers/Utilities/Tools/Tags")]
     public class Tags : MonoBehaviour, ITag
     {
-#if UNITY_EDITOR
-        [HelpBox]
-        public string Desc = "Duplicated tags will cause errors. Keep unique tags on the list";
-#endif
         /// <summary>Keep a Track of the game objects that has this component</summary>
         public static List<Tags> TagsHolders;
 
@@ -164,4 +164,24 @@ namespace MalbersAnimations
             return tagC != null ? tagC.HasTag(tags) : false;
         }
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(Tags)), CanEditMultipleObjects]
+    public class TagsEd : Editor
+    {
+        SerializedProperty tags;
+        private void OnEnable()
+        {
+            tags = serializedObject.FindProperty("tags");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            MalbersEditor.DrawDescription("Dupicated Tags will cause errors. Keep unique tags on the list");
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(tags, true);
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+#endif
 }

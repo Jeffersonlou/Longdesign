@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Wait")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Wait", order = 201)]
     public class WaitDecision : MAIDecision
     {
         [Space]

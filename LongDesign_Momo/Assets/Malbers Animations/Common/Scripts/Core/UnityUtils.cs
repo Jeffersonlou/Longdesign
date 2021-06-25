@@ -161,7 +161,7 @@ namespace MalbersAnimations
         { 
             UnityEditor.EditorGUILayout.BeginVertical();
             UnityEditor.EditorGUILayout.HelpBox("Use this component to execute simple unity logics\n" +
-                 "Like Parent, Instantiate, Destroy, Disable..\n Use it via Unity Events", UnityEditor.MessageType.None);
+                 "Like Parent, Instantiate, Destroy, Disable..\nUse it via Unity Events", UnityEditor.MessageType.None);
             UnityEditor.EditorGUILayout.EndVertical();
         }
     }

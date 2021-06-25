@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MalbersAnimations.Events;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace MalbersAnimations.Controller.AI
@@ -6,26 +7,24 @@ namespace MalbersAnimations.Controller.AI
     [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Tasks/Invoke Event")]
     public class InvokeEventTask : MTask
     {
-        [Space]
-        public float Delay = 0;
-        public UnityEvent Raise = new UnityEvent();
+        [Space, Tooltip("Apply the Task to the Animal(Self) or the Target(Target)")]
+        public Affected affect = Affected.Self;
+        public GameObjectEvent Raise = new GameObjectEvent();
 
         public override void StartTask(MAnimalBrain brain, int index)
         {
-            if (Delay == 0)
+            switch (affect)
             {
-                Raise.Invoke();
-                brain.TaskDone(index);
+                case Affected.Self:
+                    Raise.Invoke(brain.Animal.gameObject);
+                    break;
+                case Affected.Target:
+                    Raise.Invoke(brain.Target.gameObject);
+                    break;
+                default:
+                    break;
             }
-        }
-
-        public override void UpdateTask(MAnimalBrain brain, int index)
-        {
-            if (MTools.ElapsedTime(brain.TasksTime[index], Delay))
-            {
-                Raise.Invoke();
-                brain.TaskDone(index);
-            }
+            brain.TaskDone(index);
         }
 
         void Reset() { Description = "Raise the Event when the Task start. Use this only for Scriptable Assets"; }

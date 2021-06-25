@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1355568772}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -373,8 +373,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -483,6 +489,7 @@ RectTransform:
   m_Children:
   - {fileID: 1092392633}
   - {fileID: 532301193}
+  - {fileID: 331679411}
   - {fileID: 1587919117}
   - {fileID: 970057091}
   - {fileID: 1691284552}
@@ -928,6 +935,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266707187}
   m_CullTransparentMesh: 0
+--- !u!1001 &331679410
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 113764184}
+    m_Modifications:
+    - target: {fileID: 4170787566203013478, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba,
+        type: 3}
+      propertyPath: m_Name
+      value: Mobile JoyStick Dynamic (Movement)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4170787566203013479, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4170787566203013479, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4170787566203013479, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba, type: 3}
+--- !u!224 &331679411 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4170787566203013479, guid: 1c39c41a4ee80974eb9e4c9ce693e1ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 331679410}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &382398543 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1336854007389648, guid: ebb6ec3cc71da1644a3501639b83f4a9,
@@ -1120,12 +1162,12 @@ PrefabInstance:
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.3169937
+      value: 1.056473
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.938127
+      value: -7.775582
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -1140,12 +1182,12 @@ PrefabInstance:
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.3169937
+      value: 1.056473
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.938127
+      value: -7.775582
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -1160,12 +1202,12 @@ PrefabInstance:
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.3169937
+      value: 1.056473
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.938127
+      value: -7.775582
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -1263,33 +1305,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
-        type: 3}
       propertyPath: m_SizeDelta.x
-      value: 536.7
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 600.77
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
@@ -1299,11 +1321,6 @@ PrefabInstance:
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
-        type: 3}
-      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
@@ -1329,12 +1346,12 @@ PrefabInstance:
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -225
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 1417802782832420693, guid: 169b9ffd5ef82a74ba5778530d3ba4f5,
         type: 3}
@@ -2056,7 +2073,7 @@ RectTransform:
   m_Children:
   - {fileID: 996110922}
   m_Father: {fileID: 113764184}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -3043,6 +3060,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mobile JoyStick (Movement)
       objectReference: {fileID: 0}
+    - target: {fileID: 1168585467449506, guid: 1700fc7c9d792b24d8c26c844c73e953, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114782800894672020, guid: 1700fc7c9d792b24d8c26c844c73e953,
         type: 3}
       propertyPath: deathpoint
@@ -3243,7 +3264,7 @@ RectTransform:
   m_Children:
   - {fileID: 1377510469}
   m_Father: {fileID: 113764184}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -3369,7 +3390,7 @@ RectTransform:
   m_Children:
   - {fileID: 1544363913}
   m_Father: {fileID: 113764184}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5364,6 +5385,7 @@ MonoBehaviour:
   deathpoint: 0
   sensitivityX: 0.05
   sensitivityY: 0.05
+  Dynamic: 0
   pressed:
     UseConstant: 1
     ConstantValue: 0
@@ -5449,6 +5471,9 @@ MonoBehaviour:
   EventsEditor: 1
   ReferencesEditor: 1
   m_Drag: 0
+  bg: {fileID: 0}
+  DragRect: {fileID: 0}
+  Jbutton: {fileID: 0}
 --- !u!114 &114405350784314487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5721,6 +5746,7 @@ MonoBehaviour:
   deathpoint: 0
   sensitivityX: 0.05
   sensitivityY: 0.05
+  Dynamic: 0
   pressed:
     UseConstant: 1
     ConstantValue: 0
@@ -5806,6 +5832,9 @@ MonoBehaviour:
   EventsEditor: 1
   ReferencesEditor: 1
   m_Drag: 0
+  bg: {fileID: 0}
+  DragRect: {fileID: 0}
+  Jbutton: {fileID: 0}
 --- !u!114 &1096560668346767718
 MonoBehaviour:
   m_ObjectHideFlags: 0

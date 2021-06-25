@@ -12,8 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c084bb85b499301498518868eb44437c, type: 3}
   m_Name: Interact UI
   m_EditorClassIdentifier: 
-  Description: 'Check if an Item can be picked for UI
+  Description: 'Check if an Gameobject can be Focused or not.
 
-    Bool = True An animal
-    Can pick up an Item'
+
+    Bool: the Gameobject
+    is focused or not
+
+    Int: Category of the UI
+
+    Transform: Position of the
+    Gameobject.'
   debug: 0
+  m_int:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  m_float:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  m_string:
+    UseConstant: 1
+    ConstantValue: 
+    Variable: {fileID: 0}
+  m_bool:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  m_V2:
+    UseConstant: 1
+    ConstantValue: {x: 0, y: 0}
+    Variable: {fileID: 0}
+  m_V3:
+    UseConstant: 1
+    ConstantValue: {x: 0, y: 0, z: 0}
+    Variable: {fileID: 0}
+  m_go:
+    UseConstant: 1
+    ConstantValue: {fileID: 0}
+    Variable: {fileID: 0}
+  m_transform:
+    UseConstant: 1
+    ConstantValue: {fileID: 0}
+    Variable: {fileID: 0}
+  m_Sprite: {fileID: 0}

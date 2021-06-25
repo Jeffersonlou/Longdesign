@@ -11,7 +11,7 @@ namespace MalbersAnimations
         public bool Active = true;
         [Tooltip("Layer Mask used to find the ground")]
         public LayerReference GroundLayer = new LayerReference(1);
-        [Tooltip("Particle System for the Tracks")]
+        [Tooltip("Global Particle System for the Tracks, to have more individual tracks ")]
         public ParticleSystem Tracks;
         [Tooltip("Particle System for the Dust")]
         public ParticleSystem Dust;
@@ -32,6 +32,8 @@ namespace MalbersAnimations
         internal void EnterStep(StepTrigger foot)
         {
             if (!Active) return;
+
+            var Tracks = foot.Tracks != null ? foot.Tracks : this.Tracks;
 
             if (Tracks && Tracks.gameObject.IsPrefab() && !instantiateTracks)         //If is a prefab clone it!
             {

@@ -55,7 +55,7 @@ namespace MalbersAnimations.Controller
 
 
         /// <summary>Has the animal Arrived to their current destination</summary>
-        public bool HasArrived { get; internal set; }
+        public bool HasArrived  { get; internal set; }
         //{
         //    get => hasArriv;
         //    internal set
@@ -156,6 +156,9 @@ namespace MalbersAnimations.Controller
         /// <summary>Is the Target an AITarget</summary>
         public IAITarget IsAITarget { get; protected set; }
 
+        /// <summary>AITarget Position</summary>
+        public Vector3 AITargetPos { get; protected set; }
+
         /// <summary>Is the Target an AITarget</summary>
         public IInteractable IsTargetInteractable { get; protected set; }
         #endregion 
@@ -168,17 +171,10 @@ namespace MalbersAnimations.Controller
         #endregion
 
         #region Properties
-
-        public WayPointType pointType = WayPointType.Ground;
-
-        public virtual WayPointType TargetType => pointType;
-
+        public virtual WayPointType TargetType => IsAITarget.TargetType;
 
         /// <summary>Reference of the Nav Mesh Agent</summary>
-        public virtual NavMeshAgent Agent => agent;
-       
-
-     
+        public virtual NavMeshAgent Agent => agent; 
 
         /// <summary>Get the Position of this AI target</summary>
         public virtual Vector3 GetPosition() => Agent != null ? Agent.transform.position : Vector3.zero;
@@ -235,10 +231,9 @@ namespace MalbersAnimations.Controller
             animal.OnStateChange.AddListener(OnState);
             animal.OnModeStart.AddListener(OnModeStart);
             animal.OnModeEnd.AddListener(OnModeEnd);
-            animal.OnGrounded.AddListener(OnGrounded);
+            animal.OnGrounded.AddListener(OnGrounded);     
 
-            IsWaiting = true;                                                   //Wait until there's a destination
-            Invoke(nameof(StartAgent),0.001f);
+            Invoke(nameof(StartAgent),0.1f);
         }
 
         protected virtual void OnDisable()
@@ -257,12 +252,18 @@ namespace MalbersAnimations.Controller
 
         public virtual void StartAgent()
         {
+            FreeMove = (animal.ActiveState.General.FreeMovement);
+            if (FreeMove) Agent.enabled = false;
+            IsWaiting = true;
+
             if (agent == null) agent.FindComponent<NavMeshAgent>();
 
             Agent.updateRotation = false;                                       //The Animal will control the rotation . NOT THE AGENT
             Agent.updatePosition = false;                                       //The Animal will control the  postion . NOT THE AGENT
          
             Agent.stoppingDistance = StoppingDistance;
+
+          
             OnGrounded(animal.Grounded);
 
             HasArrived = false;
@@ -305,7 +306,8 @@ namespace MalbersAnimations.Controller
         {
             if (target)
             {
-                TargetIsMoving = (target.position -  TargetLastPosition).magnitude > 0.005f;
+               // TargetIsMoving = (target.position -  TargetLastPosition).sqrMagnitude > 0.005f;
+                TargetIsMoving = (target.position != TargetLastPosition);
                 TargetLastPosition = target.position;
                 if (TargetIsMoving)    Update_TargetPos();
             }
@@ -317,7 +319,7 @@ namespace MalbersAnimations.Controller
             if (!MoveAgent)
                 ResumeAgent();                              //Only Resume the Agent in case the Animal is set to move on moving Target.
             else
-                Agent.SetDestination(DestinationPosition);  //Go to the Current Destination;
+             if (Agent.isOnNavMesh) Agent.SetDestination(DestinationPosition);  //Go to the Current Destination;
         }
 
         /// <summary>Update The Target Position </summary>
@@ -325,17 +327,18 @@ namespace MalbersAnimations.Controller
         {
             if (UpdateTargetPosition)
             {
+               if (IsAITarget != null) AITargetPos = IsAITarget.GetPosition(); //Update the AI Target Pos if the Target moved
+
                 DestinationPosition = GetTargetPosition();              //Update the Target Position 
-               // MoveAgent = MoveAgentOnMovingTarget;
 
                 var DistanceOnMovingTarget = Vector3.Distance(DestinationPosition, Agent.transform.position); //Double check if the Animal is far from the target
 
-                if (DistanceOnMovingTarget >= StoppingDistance) HasArrived = false; //Check if the animal hasn't arrived to a moving target
-
-                if (MoveAgentOnMovingTarget)
+                if (DistanceOnMovingTarget >= StoppingDistance)
                 {
-                    Move();
+                    HasArrived = false; //Check if the animal hasn't arrived to a moving target
                 }
+
+                if (MoveAgentOnMovingTarget)  Move();
             }
         }
 
@@ -360,7 +363,7 @@ namespace MalbersAnimations.Controller
 
             RemainingDistance = Agent.remainingDistance;                //Store the remaining distance -- but if navMeshAgent is still looking for a path Keep Moving
 
-            if (RemainingDistance <= StoppingDistance)                   //if We Arrive to the Destination
+            if (!HasArrived && RemainingDistance <= StoppingDistance)                   //if We Arrive to the Destination
             {
                 Arrive_Destination();
             }
@@ -415,6 +418,7 @@ namespace MalbersAnimations.Controller
 
 
                 IsAITarget = target.gameObject.FindInterface<IAITarget>();
+                if (IsAITarget != null) AITargetPos = IsAITarget.GetPosition();
 
                 IsTargetInteractable = target.FindInterface<IInteractable>();
                 IsWayPoint = target.FindInterface<IWayPoint>(); 
@@ -448,12 +452,15 @@ namespace MalbersAnimations.Controller
 
         public virtual Vector3 GetTargetPosition()
         {
-            var TargetPos = (IsAITarget != null) ? IsAITarget.GetPosition() : target.position;
+            var TargetPos = (IsAITarget != null) ? AITargetPos : target.position;
             if (TargetPos == Vector3.zero) TargetPos = target.position; //HACK FOR WHEN THE TARGET REMOVED THEIR AI TARGET COMPONENT
             return TargetPos;
         }
 
         public virtual float GetTargetStoppingDistance() => IsAITarget != null ? IsAITarget.StopDistance() : DefaultStopDistance;
+
+        public virtual void SetNextTarget(GameObject next) => NextTarget = next.transform;
+
 
         /// <summary>Set the Target from  on the NextTargets Stored on the Waypoints or Zones</summary>
         public virtual void SetNextTarget()
@@ -479,7 +486,7 @@ namespace MalbersAnimations.Controller
             }
         }
 
-        private void StopWaitCoroutine()
+        internal void StopWaitCoroutine()
         {
             if (I_WaitToNextTarget != null) StopCoroutine(I_WaitToNextTarget);          //if there's a coroutine active then stop it
         }
@@ -487,19 +494,19 @@ namespace MalbersAnimations.Controller
         /// <summary> Check if the Next Target is a Air Target, if true then go to it</summary>
         internal virtual bool CheckAirTarget()
         {
-            if (IsAirDestination)    //If the animal can fly, there's a new wayPoint & is on the Air
+            if (IsAirDestination && !FreeMove)    //If the animal can fly, there's a new wayPoint & is on the Air
             {
                if (NextTarget) Debuging(": Next Waypoint is AIR",  NextTarget.gameObject);
                 animal.State_Activate(StateEnum.Fly);
                 FreeMove = true;
                 MoveAgent = false; //Stop the Agent
-
             }
 
             return IsAirDestination;
         }
 
-        internal bool IsAirDestination  => IsWayPoint != null && IsWayPoint.TargetType == WayPointType.Air;
+        internal bool IsAirDestination  => IsAITarget != null && IsAITarget.TargetType == WayPointType.Air;
+        internal bool IsGroundDestination  => IsAITarget != null && IsAITarget.TargetType == WayPointType.Ground;
         #endregion
 
 
@@ -599,7 +606,6 @@ namespace MalbersAnimations.Controller
             }
             else
             {
-              
                 Stop();
             }
         }
@@ -636,10 +642,19 @@ namespace MalbersAnimations.Controller
         {
             RemainingDistance = Vector3.Distance(animal.transform.position, DestinationPosition);
 
-            animal.Move((DestinationPosition - animal.transform.position));
+            animal.Move((DestinationPosition - animal.transform.position).normalized); //Important to be normalized!!
 
             if (RemainingDistance < StoppingDistance)   //We arrived to our destination
-                Arrive_Destination();
+            {
+                if (IsGroundDestination && !IsGrounded)
+                {
+                    //Keep Moving
+                }
+                else
+                {
+                    Arrive_Destination();
+                }
+            }
         }
 
         protected virtual void CheckOffMeshLinks()
@@ -776,10 +791,8 @@ namespace MalbersAnimations.Controller
                 }
                 else
                 {
-                    //if (Agent.isOnNavMesh) MoveAgent = false;               //Needs to pause the AGENT since the animal is no longer on the ground and NavMesh
-
-                    Agent.enabled = false; //Disable the Agent when the animal is not grounded
-                    animal.DeltaAngle = 0;
+                    Agent.enabled = false;      //Disable the Agent when the animal is not grounded
+                    animal.DeltaAngle = 0;      //???
 
                     CheckAirTarget();        //Check again the Air Target in case it was a miss Grounded.
                 }
@@ -858,10 +871,7 @@ namespace MalbersAnimations.Controller
             }
             animal.ActiveState.AllowExit();
 
-            Debuging("Exit Fly State Off Mesh");
-
-
-
+            Debuging("Exit Fly State Off Mesh");  
 
             IsMovingOffMesh = false;
         }
@@ -907,8 +917,7 @@ namespace MalbersAnimations.Controller
 
             Gizmos.color = Color.yellow;
 
-            Vector3 pos = Agent.transform.position;
-
+          
             for (int i = 1; i < Agent.path.corners.Length; i++)
             {
                 Gizmos.DrawLine(Agent.path.corners[i - 1], Agent.path.corners[i]);
@@ -921,7 +930,7 @@ namespace MalbersAnimations.Controller
 
             if (Application.isPlaying && target != null && IsAITarget != null)
             {
-                Pos = IsAITarget.GetPosition();
+                Pos = AITargetPos;
             }
 
             UnityEditor.Handles.color = Color.cyan;
@@ -932,7 +941,7 @@ namespace MalbersAnimations.Controller
 
             if (Application.isPlaying/* && !NullDestination*/)
             {
-                if (IsWayPoint != null && IsWayPoint.TargetType == WayPointType.Air)
+                if (IsAirDestination)
                     Gizmos.DrawWireSphere(DestinationPosition, StoppingDistance);
                 else
                     UnityEditor.Handles.DrawWireDisc(DestinationPosition, Vector3.up, StoppingDistance);

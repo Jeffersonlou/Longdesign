@@ -20,20 +20,19 @@ namespace MalbersAnimations
             set
             {
                 this.value.Value = value;
-                Invoke(value);
-
+                if (Auto) Invoke(value);
             }
         }
 
         void OnEnable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged += Invoke;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged += Invoke;
             Invoke(value);
         }
 
         void OnDisable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged -= Invoke;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged -= Invoke;
         }
 
         public virtual void Invoke(bool value)
@@ -44,15 +43,17 @@ namespace MalbersAnimations
                 else OnFalse.Invoke();
 
 #if UNITY_EDITOR
-                if (debug) Debug.Log($"BoolVar: ID [{ID.Value}] -> [{name}] -> [{value}]");
+                if (debug) Debug.Log($"<B><Color=cyan>[{name}] Bool Listener [{ID.Value}] -> [{value}]</color></B>");
 #endif
             }
         }
 
-        public virtual void Invoke_Toogle()
+        public virtual void Invoke() => Invoke(Value);
+
+
+        public virtual void Toggle_Value()
         {
-            if (Enable)
-                Value ^= true; //toogle the value
+            if (Enable) Value ^= true; //toggle the value
         }
 
 

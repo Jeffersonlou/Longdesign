@@ -40,11 +40,18 @@ namespace MalbersAnimations.Controller
           
         [HideInInspector] public int Editor_Tabs1;
 
+        private void Awake()
+        {
+            if (Trigger) Trigger.enabled = enabled;
+        }
+
         void OnEnable()
         {
             if (Owner == null) Owner = transform.root.gameObject;                         //Set which is the owner of this AttackTrigger
-            if (Trigger) Trigger.enabled = Trigger.isTrigger = true;
-
+            if (Trigger)
+            {
+                Trigger.enabled = Trigger.isTrigger = true;
+            }
 
             AlreadyHitted = new List<Collider>();
             OnAttackBegin.Invoke();
@@ -72,7 +79,8 @@ namespace MalbersAnimations.Controller
             var Newenemy = other.GetComponentInParent<IMDamage>();                  //Get the Animal on the Other collider
             if (!AlreadyHitted.Contains(other)) AlreadyHitted.Add(other);           //if the entering collider is not already on the list add it
 
-            Direction = (Owner.transform.position - other.bounds.center).normalized;              //Calculate the direction of the attack
+          //  Direction = (Owner.transform.position - other.bounds.center).normalized;              //Calculate the direction of the attack
+            Direction = (other.bounds.center - Owner.transform.position).normalized;              //Calculate the direction of the attack
 
             TryInteract(other.gameObject);                                              //Get the interactable on the Other collider
             TryPhysics(other.attachedRigidbody, other, Direction, Force);               //If the other has a riggid body and it can be pushed
@@ -128,9 +136,16 @@ namespace MalbersAnimations.Controller
 
 
         void OnDrawGizmos()
+        { if (Trigger != null)
+           MTools.DrawTriggers(transform, Trigger, DebugColor, false);
+        }
+
+        void OnDrawGizmosSelected()
         {
+            if (!Application.isPlaying)
             MTools.DrawTriggers(transform, Trigger, DebugColor, true);
         }
+
 #endif
     }
 

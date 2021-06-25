@@ -251,8 +251,6 @@ namespace MalbersAnimations.Utilities
 
         private void DrawEvents()
         {
-            EditorGUILayout.PropertyField(events, true);
-            events.isExpanded = true;
             EditorGUILayout.PropertyField(OnFocusedInteractable); 
             EditorGUILayout.PropertyField(OnUnfocusedInteractable); 
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>  Prefab Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Game Object", order = 3000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Game Object", order = 3000)]
     public class GameObjectVar : ScriptableVar
     {
         [SerializeField] private GameObject value;

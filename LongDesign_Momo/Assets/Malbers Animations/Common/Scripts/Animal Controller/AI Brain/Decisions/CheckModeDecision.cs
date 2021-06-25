@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Mode", order = 1)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Mode", order = 2)]
     public class CheckModeDecision : MAIDecision
     {
         [Space, Tooltip("Check the Decision on the Animal(Self) or the Target(Target)")]
@@ -58,12 +58,12 @@ namespace MalbersAnimations.Controller.AI
 
         private bool OnExitMode(MAnimal animal)
         {
-            if (animal.LastMode != 0 &&  animal.ModeStatus == MStatus.Completed || animal.ModeStatus == MStatus.Interrupted)
+            if (animal.LastMode != 0 &&  animal.ModeInternalStatus == MStatus.Completed || animal.ModeInternalStatus == MStatus.Interrupted)
             {
                 //Forget Last Mode (IMPORTANT)
                 animal.LastMode = 0;
                 animal.LastAbility = 0;
-                animal.ModeStatus = MStatus.None;
+                animal.ModeInternalStatus = MStatus.None;
                 return true;
             }
             return false;

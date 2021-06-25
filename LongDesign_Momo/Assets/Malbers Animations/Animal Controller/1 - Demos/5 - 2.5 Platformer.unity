@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -471,6 +471,10 @@ MonoBehaviour:
   debug: 0
   automatic: 1
   BoneOnly: 0
+  Angle: 360
+  Weight: 1
+  DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -1276,6 +1280,10 @@ MonoBehaviour:
   debug: 0
   automatic: 0
   BoneOnly: 0
+  Angle: 360
+  Weight: 1
+  DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -2080,7 +2088,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7771261, y: 1}
+    m_SensorSize: {x: 1.7791798, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

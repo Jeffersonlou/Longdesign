@@ -27,13 +27,17 @@ namespace MalbersAnimations.Controller
         [HideInInspector] public bool ModeShowEvents;
         [HideInInspector] public int Editor_Tabs1;
         [HideInInspector] public int Editor_Tabs2;
+        [HideInInspector] public int Editor_EventTabs;
         [HideInInspector] public int SelectedMode;
+        [HideInInspector] public int SelectedState;
         [HideInInspector] public bool debugStates;
         [HideInInspector] public bool debugModes;
         [HideInInspector] public bool ShowAnimParametersOptional = false;
         [HideInInspector] public bool ShowAnimParameters = false;
         [HideInInspector] public bool ShowLockInputs = false;
         [HideInInspector] public bool ShowMisc = false;
+
+      
         [HideInInspector] public bool debugGizmos = true;
         [HideInInspector] public bool ShowMovement = false;
         [HideInInspector] public bool ShowGround = true;
@@ -248,6 +252,8 @@ namespace MalbersAnimations.Controller
         {
             float sc = transform.localScale.y;
 
+            var pos = transform.position;
+
             if (showPivots)
             {
                 foreach (var pivot in pivots)
@@ -266,8 +272,9 @@ namespace MalbersAnimations.Controller
                 }
             }
 
-
             if (!debugGizmos) return;
+
+         
 
 
             foreach (var st in states)    st.StateGizmos(this);
@@ -275,8 +282,16 @@ namespace MalbersAnimations.Controller
             if (Application.isPlaying)
             {
 
+                Gizmos.color = Color.green;
+                // Gizmos.DrawRay(pos, TargetSpeed * 5);           //Draw the Target Direction 
+                MTools.Gizmo_Arrow(pos, TargetSpeed * 5 * sc);
+                Gizmos.color = Color.white;
+                MTools.Gizmo_Arrow(pos, InertiaPositionSpeed * 5 * sc);
+                Gizmos.color = Color.red;
+                MTools.Gizmo_Arrow(pos, Move_Direction * sc);
+
                 Gizmos.color = Color.black;
-                Gizmos.DrawSphere(transform.position + DeltaPos, 0.02f * sc);
+                Gizmos.DrawSphere(pos + DeltaPos, 0.02f * sc);
               
                 if (showPivots)
                 {
@@ -295,36 +310,7 @@ namespace MalbersAnimations.Controller
                     Gizmos.DrawSphere(Center + (CurrentExternalForce  * sc/10), 0.05f * sc);
                 }
             }
-
-         
         }
-
-        //private void OnGUI()
-        //{
-        //    if (MainAnimal)
-        //    {
-        //        var r = new Rect(10, 10, 200, 300);
-
-        //        GUI.Box(r, GUIContent.none);
-
-        //        if (Editor_Tabs2 == 3)
-        //        {
-        //            GUI.color = Color.yellow;
-
-        //            GUI.Label(r,$"  Debug [{name}]" );  
-        //            GUI.color = Color.white;
-        //            r.x += 10f;
-        //            var space = 16f;
-        //            r.y += space;
-
-        //            GUI.Label(r,$"Active State - [{ActiveState.ID.name}]"); r.y += space;
-        //            GUI.Label(r,$"[CanExit - {ActiveState.CanExit}]"); r.y += space;
-        //            GUI.Label(r,$"[IgnoreLower - {ActiveState.IgnoreLowerStates}]"); r.y += space;
-        //            GUI.Label(r,$"[IsPersistent - {ActiveState.IsPersistent}]"); r.y += space;
-
-        //        }
-        //    }
-        //}
 #endif
     }
 

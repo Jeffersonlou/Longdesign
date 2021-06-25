@@ -1,12 +1,9 @@
 ﻿using MalbersAnimations.Scriptables;
-using MalbersAnimations.Utilities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MalbersAnimations.Controller
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Mode Modifier/Attack Aligner")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Modifier/Mode/Attack Aligner")]
     public class MAttackAligner : ModeModifier
     {
         public FloatReference FindRadius = new FloatReference(5);

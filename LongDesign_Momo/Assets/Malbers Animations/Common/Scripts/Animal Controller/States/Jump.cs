@@ -7,20 +7,23 @@ namespace MalbersAnimations.Controller
 {
     public class Jump : State
     {
-        public override string StateName => "Jump/Rootmotion Jump";
-        public readonly static int JumpEnd = Animator.StringToHash("JumpEnd");
-        public readonly static int JumpStart = Animator.StringToHash("JumpStart");
-
+        public override string StateName => "Jump/Root Motion Jump";
+        
 
         /// <summary>If the Jump input is pressed, the Animal will keep going Up while the Jump Animation is Playing</summary>
         [Header("Jump Parameters")]
         [Tooltip("If the Jump input is pressed, the Animal will keep going Up while the Jump Animation is Playing")]
-        public bool JumpPressed;
+        public BoolReference JumpPressed;
+        [Tooltip("Check if the Animal can control the Forward Movement of the Jump")]
+        public BoolReference ForwardPressed;
+
         /// <summary>If the Forward input is pressed, the Animal will keep going Forward while the Jump Animation is Playing</summary>
         //[Tooltip("If the Forward input is pressed, the Animal will keep going Forward while the Jump Animation is Playing")]
         //public bool JumpForwardPressed;
         public float JumpPressedLerp = 5;
         private float JumpPressHeight_Value = 1;
+        private float JumpPressForward = 1;
+        private float JumpPressForwardAdditive = 0;
 
         //private float JumpPressForward_Value = 1;
         public BoolReference AirControl = new BoolReference(true);
@@ -44,7 +47,18 @@ namespace MalbersAnimations.Controller
         {
             CanJumpAgain = true;
             JumpPressHeight_Value = 1;
-            OneCastingFall_Ray = false;
+            JumpPressForward = 1;
+            JumpPressForwardAdditive = 0;
+            OneCastingFall_Ray = 
+            GoingDown = false;
+        }
+
+        public override void AwakeState()
+        {
+            if (string.IsNullOrEmpty(EnterTag)) EnterTag.Value = "JumpStart";
+            if (string.IsNullOrEmpty(ExitTag)) ExitTag.Value = "JumpEnd";
+
+            base.AwakeState();
         }
 
         //public override void StatebyInput()
@@ -70,14 +84,32 @@ namespace MalbersAnimations.Controller
            
             foreach (var jump in jumpProfiles)                          //Save/Search the Current Jump Profile by the Lowest Speed available
             {
-                if (jump.VerticalSpeed <= animal.VerticalSmooth) activeJump = jump;
+                if (jump.LastState == null)
+                {
+                    if (jump.VerticalSpeed <= animal.VerticalSmooth)
+                    {
+                        activeJump = jump;
+                    }
+                }
+                else
+                {
+                    if (jump.VerticalSpeed <= animal.VerticalSmooth && jump.LastState == animal.LastState.ID)
+                    {
+                        activeJump = jump;
+                    }
+                }
             }
+
+            Debugging($"Jump Profile: <B>[{ activeJump.name}]</B>");
+
         }
 
         public override void EnterTagAnimation()
         {
-            if (CurrentAnimTag == JumpStart)
+            if (CurrentAnimTag == EnterTagHash)
             {
+                Debugging($"[EnterTag - {EnterTag.Value}]");
+
                 if (!animal.RootMotion)
                 {
                     var JumpStartSpeed = new MSpeed(animal.CurrentSpeedModifier)
@@ -85,10 +117,10 @@ namespace MalbersAnimations.Controller
                         name = "JumpStartSpeed",
                         position = animal.HorizontalSpeed,
                         animator = 1,
-                        rotation = AirControl.Value ? (!animal.UseCameraInput ? AirRotation.Value : AirRotation.Value / 10f) : 0f,
+                        rotation = AirRotation.Value,
                     };
 
-                    animal.SetCustomSpeed(JumpStartSpeed);       //Set the Current Speed to the Jump Speed Modifier
+                    animal.SetCustomSpeed(JumpStartSpeed,true);       //Set the Current Speed to the Jump Speed Modifier
 
                 }
 
@@ -97,17 +129,39 @@ namespace MalbersAnimations.Controller
                 if (animal.TerrainSlope > 0) //Means we are jumping uphill
                     animal.UseCustomAlign = true;
             }
-            else if (CurrentAnimTag == JumpEnd)
+            else if (CurrentAnimTag == ExitTagHash)
             {
+                Debugging($"[EnterTag - {ExitTag.Value}] - Allow Exit");
                 AllowExit();
             }
         }
 
+        public override Vector3 Speed_Direction()
+        {
+            if (animal.HasExternalForce)
+            {
+                return Vector3.ProjectOnPlane(animal.ExternalForce, animal.UpVector).normalized;
+            }
+            else if (AirControl)
+            {
+                return base.Speed_Direction();
+            }
+            else
+            {
+                return JumpStartDirection;
+            }
+        }
+
+
         /// <summary> Make the Jump Start</summary>
         public override void EnterCoreAnimation()
         {
+            Debugging($"[Enter Core Tag - [Jump]");
+
             OneCastingFall_Ray = false;                                 //Reset Values IMPROTANT
             JumpPressHeight_Value = 1;
+            JumpPressForward = 1;
+            JumpPressForwardAdditive = 0;
             IsPersistent = true;
             animal.UseGravity = false;
             animal.ResetGravityValues();
@@ -116,8 +170,10 @@ namespace MalbersAnimations.Controller
             {
                 name = "JumpSpeed " + activeJump.name,
                 position = animal.RootMotion ? 0 : animal.HorizontalSpeed * activeJump.ForwardMultiplier, //Inherit the Horizontal Speed you have from the last state
-                animator = 1,
-                rotation = AirControl.Value ? (!animal.UseCameraInput ? AirRotation.Value : AirRotation.Value / 10f) : 0f,
+                animator = 1, 
+                rotation = (AirRotation.Value) ,
+                lerpPosAnim = JumpPressedLerp,
+                lerpPosition= JumpPressedLerp,
             };
 
 
@@ -136,7 +192,13 @@ namespace MalbersAnimations.Controller
 
                 if (JumpPressed)
                 {
-                    JumpPressHeight_Value = Mathf.Lerp(JumpPressHeight_Value, InputValue ? 1 : 0, deltaTime * JumpPressedLerp);
+                    JumpPressHeight_Value = Mathf.MoveTowards(JumpPressHeight_Value, InputValue ? 1 : 0, deltaTime * JumpPressedLerp);
+                }
+
+                if (ForwardPressed)
+                {
+                    JumpPressForward = Mathf.MoveTowards(JumpPressForward, animal.MovementAxis.z, deltaTime * JumpPressedLerp); 
+                    JumpPressForwardAdditive = Mathf.MoveTowards(JumpPressForwardAdditive, animal.MovementAxis.z, deltaTime * JumpPressedLerp); 
                 }
 
                 if (!General.RootMotion) //If the Jump is NOT Root Motion!!
@@ -152,46 +214,52 @@ namespace MalbersAnimations.Controller
 
                     if (isGoingUp)
                     {
-                        animal.AdditivePosition -= RootMotionUP;                                                            //Remove the default Root Motion Jump
-                        animal.AdditivePosition += RootMotionUP * activeJump.HeightMultiplier * JumpPressHeight_Value;      //Add the New Root Motion Jump scaled by the Height Multiplier 
+                        animal.AdditivePosition -= RootMotionUP;                                     //Remove the default Root Motion Jump
+                        animal.AdditivePosition += 
+                            (RootMotionUP * activeJump.HeightMultiplier * JumpPressHeight_Value);    //Add the New Root Motion Jump scaled by the Height Multiplier 
                     }
 
-                    Vector3 RootMotionForward = Vector3.ProjectOnPlane(Anim.deltaPosition, animal.Up);
+                  // Vector3 RootMotionForward = Vector3.ProjectOnPlane(Anim.deltaPosition, animal.Up);
+                    Vector3 RootMotionForward = Anim.deltaPosition - RootMotionUP;
 
                     animal.AdditivePosition -= RootMotionForward;                                                             //Remove the default Root Motion Jump
 
-                    if (!AirControl.Value)
+                    if (!AirControl.Value) //If is cannot controlled in air?
                     {
-                        animal.AdditivePosition += JumpStartDirection * RootMotionForward.magnitude * activeJump.ForwardMultiplier;// * JumpPressForward_Value;      //Add the New Root Motion Jump scaled by the Height Multiplier 
-                        return;
+                        //Add the New Root Motion Jump scaled by the Height Multiplier 
+                        animal.AdditivePosition += 
+                            JumpStartDirection * RootMotionForward.magnitude * activeJump.ForwardMultiplier;
+                      
                     }
-
-
-                    animal.AdditivePosition += RootMotionForward * activeJump.ForwardMultiplier;// * JumpPressForward_Value;      //Add the New Root Motion Jump scaled by the Height Multiplier 
+                    else
+                    animal.AdditivePosition += 
+                            (RootMotionForward * activeJump.ForwardMultiplier  * JumpPressForward ) 
+                            + (animal.Forward * activeJump.ForwardPressed * JumpPressForwardAdditive*deltaTime);      //Add the New Root Motion Jump scaled by the Height Multiplier 
                 }
             }
 
-                if (OneCastingFall_Ray && animal.StateTime >= activeJump.fallingTime) //Meaning it can complete the Land animation
-                {
-                    if (Physics.Raycast(animal.Main_Pivot_Point, animal.Gravity, out RaycastHit FallRayCast, JumpRay.distance, animal.GroundLayer, IgnoreTrigger))
-                    {
-                        if (debug)
-                            Debug.DrawRay(animal.Main_Pivot_Point, animal.Gravity * JumpRay.distance, Color.red, 0.25f);
+                //if (OneCastingFall_Ray && animal.StateTime >= activeJump.fallingTime) //Meaning it can complete the Land animation
+                //{
+                //    if (Physics.Raycast(animal.Main_Pivot_Point, animal.Gravity, out RaycastHit FallRayCast, JumpRay.distance, animal.GroundLayer, IgnoreTrigger))
+                //    {
+                //        if (debug)
+                //            Debug.DrawRay(animal.Main_Pivot_Point, animal.Gravity * JumpRay.distance, Color.red, 0.25f);
 
-                        var DistanceToGround = FallRayCast.distance;
-                        if (animal.Height > DistanceToGround)
-                        {
-                            animal.CheckIfGrounded();
-                        }
-                    }
-                }
+                //        var DistanceToGround = FallRayCast.distance;
+                //        if (animal.Height > DistanceToGround)
+                //        {
+                //            animal.CheckIfGrounded();
+                //        }
+                //    }
+                //}
         }
+
+        private bool GoingDown;
+     //   private bool DeltaGoingDown;
 
 
         public override void TryExitState(float DeltaTime)
         {
-            //Debug.Log($"StateTime {animal.StateTime:F3} : FallingTime {activeJump.fallingTime:F3}");
-
             if (animal.StateTime >= activeJump.fallingTime && !OneCastingFall_Ray)
             {
                 Check_for_Falling();
@@ -202,24 +270,36 @@ namespace MalbersAnimations.Controller
 
         private void Can_Jump_on_Cliff(float normalizedTime)
         {
-            if (activeJump.CliffTime.IsInRange(normalizedTime))
+            if (normalizedTime > 0.33f) //Need to happen the First 1/3 of the Root Jump Animation
             {
-                var MainPivot = animal.Main_Pivot_Point;
+                GoingDown = Vector3.Dot(animal.DeltaPos, animal.Gravity) > 0; //Check if is falling down
 
-                if (debug) Debug.DrawRay(MainPivot, -animal.Up * activeJump.CliffLandDistance * animal.ScaleFactor, Color.black);
-
-                if (Physics.Raycast(MainPivot, -animal.Up, out JumpRay, activeJump.CliffLandDistance * animal.ScaleFactor, animal.GroundLayer, IgnoreTrigger))
+                if (GoingDown)
+                // if (activeJump.CliffTime.IsInRange(normalizedTime))
                 {
-                    if (debug) MTools.DebugTriangle(JumpRay.point, 0.1f, Color.black);
+                    var MainPivot = animal.Main_Pivot_Point;
 
-                    var TerrainSlope = Vector3.Angle(JumpRay.normal, animal.UpVector);
-                    var DeepSlope = TerrainSlope > animal.maxAngleSlope;
+                    var RayLength = activeJump.CliffLandDistance * animal.ScaleFactor;
 
-                    if (!DeepSlope)       //Jump to a jumpable cliff not an inclined one
+                    if (debug)
+                        Debug.DrawRay(MainPivot, -animal.Up * RayLength, Color.black, 0.1f);
+
+                    if (Physics.Raycast(MainPivot, -animal.Up, out JumpRay, RayLength, animal.GroundLayer, IgnoreTrigger))
                     {
-                        Debugging("[Allow Exit] on a Cliff");
-                        AllowExit();
-                        animal.CheckIfGrounded();
+                        if (debug) MTools.DebugTriangle(JumpRay.point, 0.1f, Color.black);
+
+                        var TerrainSlope = Vector3.Angle(JumpRay.normal, animal.UpVector);
+                        var DeepSlope = TerrainSlope > animal.maxAngleSlope;
+
+                        if (!DeepSlope)       //Jump to a jumpable cliff not an inclined one
+                        {
+                            Debugging("[Allow Exit] on a Cliff");
+                            AllowExit();
+                            animal.CheckIfGrounded();
+                            GoingDown = false;
+
+                          //  Debug.Break();
+                        }
                     }
                 }
             }
@@ -233,7 +313,7 @@ namespace MalbersAnimations.Controller
 
             if (activeJump.JumpLandDistance == 0)
             {
-                animal.Grounded = true; //We are still on the ground
+                animal.CheckIfGrounded(); //We are still on the ground
                 return;  //Meaning that is a False Jump (like Neigh on the Horse)
             }
 
@@ -272,13 +352,7 @@ namespace MalbersAnimations.Controller
             }
         }
 
-        //public override void JustWakeUp()
-        //{
-        //    if (animal.ActiveStateID == StateEnum.UnderWater) //Means is Underwater State..
-        //    {
-        //        IsSleepFromState = true; //Keep Sleeping if you are in Underwater
-        //    }
-        //}
+       
 
 
 #if UNITY_EDITOR
@@ -290,6 +364,9 @@ namespace MalbersAnimations.Controller
             SleepFromState = new List<StateID>() { MTools.GetInstance<StateID>("Fall"), MTools.GetInstance<StateID>("Fly") };
             SleepFromMode = new List<ModeID>() { MTools.GetInstance<ModeID>("Action"), MTools.GetInstance<ModeID>("Attack1") };
 
+
+            EnterTag.Value = "JumpStart";
+            ExitTag.Value = "JumpEnd";
 
             General = new AnimalModifier()
             {
@@ -327,7 +404,7 @@ namespace MalbersAnimations.Controller
         public string name;
 
         /// <summary>Maximum Vertical Speed to Activate this Jump</summary>
-        [Tooltip("Maximum Vertical Speed to Activate this Jump")]
+        [Tooltip("Minimal Vertical Speed to Activate this Jump")]
         public float VerticalSpeed;
 
         /// <summary>Min Distance to Complete the Land when the Jump is on the Highest Point, this needs to be calculate manually</summary>
@@ -355,6 +432,11 @@ namespace MalbersAnimations.Controller
         public float HeightMultiplier;
         ///// <summary>Forward multiplier to increase/decrease the Forward Speed of the Jump</summary>
         public float ForwardMultiplier;
+       
+        [Tooltip("Extra forward Movement to move the Animal Forward")]
+        public float ForwardPressed;
 
+        [Tooltip("Last State the animal was before making the Jump")]
+        public StateID LastState;
     }
 }

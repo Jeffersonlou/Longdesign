@@ -46,7 +46,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 
     Variable: {fileID: 0}
-  ExitFrame: 0
+  ExitFrame: 1
   ExitOnMain: 1
   ExitCooldown:
     UseConstant: 1

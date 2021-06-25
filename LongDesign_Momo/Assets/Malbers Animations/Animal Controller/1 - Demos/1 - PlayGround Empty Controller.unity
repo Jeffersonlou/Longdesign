@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 2.338638, z: -7.034233}
+  m_FollowOffset: {x: 0, y: 1.359035, z: -7.003325}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -446,8 +446,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -531,8 +537,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -793,8 +805,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -896,8 +914,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -1591,7 +1615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 2.338638, z: -7.034233}
+  m_FollowOffset: {x: 0, y: 1.359035, z: -7.003325}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -2087,7 +2111,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7763497, y: 1}
+    m_SensorSize: {x: 1.778607, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2163,7 +2187,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7763497, y: 1}
+    m_SensorSize: {x: 1.778607, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2330,8 +2354,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2549,8 +2579,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2622,8 +2658,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2957,8 +2999,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -3429,8 +3477,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -3528,8 +3582,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -3812,7 +3872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 2.338638, z: -7.034233}
+  m_FollowOffset: {x: 0, y: 1.359035, z: -7.003325}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -4007,8 +4067,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -4107,8 +4173,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -4184,7 +4256,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7763497, y: 1}
+    m_SensorSize: {x: 1.778607, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4315,10 +4387,130 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 54279645329307990, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: CloneStates
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: debugGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: debugStates
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
         type: 3}
       propertyPath: Editor_Tabs1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: Editor_Tabs2
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: SelectedMode
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: SelectedState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: additivePosLog
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].active
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].showIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].showGeneral
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].showProperties
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].CoolDown.UseConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].DefaultIndex.UseConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].m_AbilityIndex.UseConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].Name
+      value: AbilityName
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].m_AbilityIndex.ConstantValue
+      value: -99
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].Index.UseConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].active.UseConstant
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].Index.ConstantValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].active.ConstantValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114485145315289786, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
+        type: 3}
+      propertyPath: modes.Array.data[0].Abilities.Array.data[0].Properties.HoldByTime.UseConstant
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 136563349588773418, guid: 1f27d2e99f3b7fd45aed329b6dc2da82,
         type: 3}

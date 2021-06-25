@@ -97,7 +97,8 @@ namespace MalbersAnimations.Utilities
                 if (AlignLookAt)
                 {
                     StartCoroutine(AlignLookAtTransform(TargetToAlign, mainPoint, AlignTime, AlignCurve));  //Align Look At the Zone
-                    if (LookAtRadius > 0) StartCoroutine(MTools.AlignTransformRadius(TargetToAlign, mainPoint.position, LookAtRadiusTime, LookAtRadius, AlignCurve));  //Align Look At the Zone
+                    if (LookAtRadius > 0)
+                        StartCoroutine(MTools.AlignTransformRadius(TargetToAlign, mainPoint.position, LookAtRadiusTime, LookAtRadius, AlignCurve));  //Align Look At the Zone
                 }
                 else
                 {
@@ -162,6 +163,8 @@ namespace MalbersAnimations.Utilities
         {
             float elapsedTime = 0;
 
+            var Wait = new WaitForFixedUpdate();
+
             Quaternion CurrentRot = t1.rotation;
             Vector3 direction = (t2.position - t1.position).normalized;
             direction.y = t1.forward.y;
@@ -173,9 +176,9 @@ namespace MalbersAnimations.Utilities
 
                 t1.rotation = Quaternion.SlerpUnclamped(CurrentRot, FinalRot, result);
 
-                elapsedTime += Time.deltaTime;
+                elapsedTime += Time.fixedDeltaTime;
 
-                yield return null;
+                yield return Wait;
             }
             t1.rotation = FinalRot;
         }

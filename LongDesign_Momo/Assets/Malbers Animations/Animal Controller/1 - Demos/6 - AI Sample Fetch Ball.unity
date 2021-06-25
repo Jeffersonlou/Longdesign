@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1281922324}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -120,7 +120,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 876749335afbbb146aed50b52db3acc0, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 899bea4082a9d824ebf741d13ec658ac, type: 2}
 --- !u!1 &27602743
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,6 +193,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 1
     Variable: {fileID: 0}
+  Auto: 1
   Description: "Stores in this Bool Listener if the Wolf can Pick Up Ball \n(USED
     BY THE BRAIN)"
   ShowDescription: 1
@@ -1989,6 +1990,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: 
   ShowDescription: 0
   debug: 0
@@ -3073,9 +3075,10 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 1
     Variable: {fileID: 0}
-  Description: Check True if the Ball is Picked and false if the ball is dropped
+  Auto: 1
+  Description: True if the Ball is Picked and false if the ball is dropped
   ShowDescription: 1
-  debug: 0
+  debug: 1
   value:
     UseConstant: 1
     ConstantValue: 0

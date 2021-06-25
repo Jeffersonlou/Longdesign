@@ -2,7 +2,7 @@
 
 namespace MalbersAnimations.Scriptables
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Preset/Capsule Collider Preset")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Preset/Capsule Collider", order = 200)]
     public class CapsuleColliderPreset : ScriptableObject
     {
        public OverrideCapsuleCollider modifier;

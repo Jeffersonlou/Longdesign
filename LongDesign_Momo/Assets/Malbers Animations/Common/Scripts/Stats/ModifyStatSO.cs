@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalbersAnimations.Controller.Reactions
 {
     /// <summary> Reaction Script for Making the Animal do something </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Stat Modifier",  fileName = "New Stat Modifier",order = 1)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Modifier/Stats",  fileName = "New Stat Modifier",order = -100)]
     public class ModifyStatSO : ScriptableObject
     {
         public StatModifier modifier;

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2298,6 +2298,61 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1493041070}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &719133630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3175084251341700850, guid: aec39908c6f0b8e4e882d49039c80a24,
+    type: 3}
+  m_PrefabInstance: {fileID: 907108511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &719133634 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3645421009986516271, guid: aec39908c6f0b8e4e882d49039c80a24,
+    type: 3}
+  m_PrefabInstance: {fileID: 907108511}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719133630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e018d88fdcd394a4c8254460a5394eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &719133636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719133630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 1
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  Repeat: 0
+  onEnable:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 719133634}
+        m_MethodName: SetTarget
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1680127891}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Description: 
+  ShowDescription: 0
 --- !u!1001 &722935883
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3419,12 +3474,12 @@ PrefabInstance:
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.5974052
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.879425
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -3439,12 +3494,12 @@ PrefabInstance:
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.5974052
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.879425
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -3459,12 +3514,12 @@ PrefabInstance:
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 0.5974052
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.879425
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -7827,6 +7882,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: 
   ShowDescription: 0
   debug: 0

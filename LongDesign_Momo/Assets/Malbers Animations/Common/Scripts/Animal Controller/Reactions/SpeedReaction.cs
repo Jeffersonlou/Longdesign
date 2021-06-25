@@ -1,15 +1,12 @@
-﻿using MalbersAnimations.Scriptables;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿ using UnityEngine;
 
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Speed Reaction", order = 3)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Speed Reaction"/*, order = 3*/)]
     public class SpeedReaction : MReaction
     {
-        public enum Speed_Reaction { Activate, Increase, Decrease, LockSpeedChange, TopSpeed, AnimationSpeed , GlobalAnimatorSpeed, SetRandomSpeed }
+        public enum Speed_Reaction { Activate, Increase, Decrease, LockSpeedChange, TopSpeed, AnimationSpeed , GlobalAnimatorSpeed, SetRandomSpeed ,  Sprint }
 
         public Speed_Reaction type = Speed_Reaction.Activate;
 
@@ -18,8 +15,8 @@ namespace MalbersAnimations.Controller.Reactions
         [Hide("showSpeed_Index", true, false), Tooltip("Index of the Speed Set on the Animal to make the changes (E.g. 'Walk-1' 'Trot-2', 'Run-3')")]
         public int Index = 1;
 
-        [Hide("showLockSpeedChange",true,false)]
-        public bool LockSpeedChanges = true;
+        [Hide("ShowBoolValue",true,false)]
+        public bool Value = true;
         [Hide("showAnimSpeed", true, false)]
         public float animatorSpeed = 1;
 
@@ -28,7 +25,7 @@ namespace MalbersAnimations.Controller.Reactions
             switch (type)
             {
                 case Speed_Reaction.LockSpeedChange:
-                    animal.Speed_Change_Lock(LockSpeedChanges);
+                    animal.Speed_Change_Lock(Value);
                     break;
                 case Speed_Reaction.Increase:
                     animal.SpeedUp();
@@ -52,6 +49,9 @@ namespace MalbersAnimations.Controller.Reactions
                 case Speed_Reaction.SetRandomSpeed:
                     var topspeed = animal.SpeedSet_Get(SpeedSet);
                     if (topspeed != null) animal.SpeedSet_Set_Active(SpeedSet, Random.Range(1, topspeed.TopIndex + 1));
+                    break;
+                case Speed_Reaction.Sprint:
+                    animal.Sprint = Value;
                     break;
                 default:
                     break;
@@ -78,7 +78,7 @@ namespace MalbersAnimations.Controller.Reactions
         {
             fullName = reactionName + type.ToString();
 
-            showLockSpeedChange = false;
+            ShowBoolValue = false;
             showAnimSpeed = false;
             showSpeed_Set = false;
             showSpeed_Index = false;
@@ -89,7 +89,7 @@ namespace MalbersAnimations.Controller.Reactions
                     description = "Activate a Speed by its Index on a Speed Set";
                     showSpeed_Set = true;
                     showSpeed_Index = true;
-                    fullName += " [" + SpeedSet + "("+Index+")]";
+                    fullName += " [" + SpeedSet + "(" + Index + ")]";
                     break;
                 case Speed_Reaction.Increase:
                     description = "Increase a Speed on the Active Speed Set";
@@ -100,8 +100,8 @@ namespace MalbersAnimations.Controller.Reactions
                     fullName += "-1";
                     break;
                 case Speed_Reaction.LockSpeedChange:
-                    fullName += " ["+ LockSpeedChanges+"]";
-                    showLockSpeedChange = true;
+                    fullName += " [" + Value + "]";
+                    ShowBoolValue = true;
                     description = "Lock Speed changes";
                     break;
                 case Speed_Reaction.TopSpeed:
@@ -114,7 +114,7 @@ namespace MalbersAnimations.Controller.Reactions
                     showSpeed_Set = true;
                     showSpeed_Index = true;
                     showAnimSpeed = true;
-                    fullName += "["+animatorSpeed+"] - " + SpeedSet + "[" + Index + ")";
+                    fullName += "[" + animatorSpeed + "] - " + SpeedSet + "[" + Index + ")";
                     description = "Modify the Animator multiplier Speed for a Speed Set.";
                     break;
                 case Speed_Reaction.GlobalAnimatorSpeed:
@@ -123,16 +123,21 @@ namespace MalbersAnimations.Controller.Reactions
                     break;
                 case Speed_Reaction.SetRandomSpeed:
                     showSpeed_Set = true;
-                   // showAnimSpeed = true;
+                    // showAnimSpeed = true;
                     fullName += " [" + SpeedSet + "(?)]";
                     description = "Set a Random Spede modifier on the SpeedSet";
+                    break;
+                case Speed_Reaction.Sprint:
+                    fullName += " [" + Value + "]";
+                    ShowBoolValue = true;
+                    description = "Set the Sprint on the Animal";
                     break;
                 default:
                     break;
             }
         }
 
-        [HideInInspector] public bool showLockSpeedChange;
+        [HideInInspector] public bool ShowBoolValue;
         [HideInInspector] public bool showAnimSpeed;
         [HideInInspector] public bool showSpeed_Set;
         [HideInInspector] public bool showSpeed_Index;

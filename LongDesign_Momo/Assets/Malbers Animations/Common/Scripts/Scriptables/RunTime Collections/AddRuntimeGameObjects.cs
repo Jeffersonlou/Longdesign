@@ -33,7 +33,7 @@ namespace MalbersAnimations.Scriptables
             var Collection = serializedObject.FindProperty("Collection");
             UnityEditor.EditorGUILayout.PropertyField(Collection);
 
-            if (M.Collection)
+            if (M.Collection && M.Collection.Description != string.Empty)
             {
                 UnityEditor.EditorGUILayout.BeginVertical(StyleBlue); ;
                 UnityEditor.EditorGUILayout.HelpBox(M.Collection.Description, UnityEditor.MessageType.None);

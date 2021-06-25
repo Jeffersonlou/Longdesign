@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngineInternal;
+﻿using UnityEngine;
+
 
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/State Reaction", order = 0)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/State Reaction"/*, order = 0*/)]
     public class StateReaction : MReaction
     {
         public State_Reaction type = State_Reaction.Activate;

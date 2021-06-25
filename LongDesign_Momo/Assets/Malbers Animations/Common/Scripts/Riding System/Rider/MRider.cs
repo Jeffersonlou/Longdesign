@@ -17,6 +17,7 @@ namespace MalbersAnimations.HAP
 {
     public enum DismountType { Random, Input, Last }
     [AddComponentMenu("Malbers/Riding/Rider")]
+    [HelpURL("https://malbersanimations.gitbook.io/animal-controller/riding/mrider")]
     public class MRider : MonoBehaviour, IAnimatorListener, IRider
     {
         #region Public Variables
@@ -304,10 +305,8 @@ namespace MalbersAnimations.HAP
                     CleanCol.Add(col);
             }
 
-            colliders = new List<Collider>(CleanCol);
-
-
-          //  if (MainCollider == null) MainCollider = GetComponent<CapsuleCollider>();
+            colliders = new List<Collider>(CleanCol); 
+             
 
             if (MainCollider)
             {
@@ -622,6 +621,7 @@ namespace MalbersAnimations.HAP
                 SetAnimParameter(Montura.Animal.hash_Grounded, Montura.Animal.Grounded);
                 SetAnimParameter(Montura.Animal.hash_State, Montura.Animal.ActiveStateID.ID);
                 SetAnimParameter(Montura.Animal.hash_Mode, Montura.Animal.ModeAbility);
+                SetAnimParameter(Montura.Animal.hash_ModeStatus, Montura.Animal.ModeStatus);
                 SetAnimParameter(Montura.Animal.hash_Stance, Montura.ID);
                 Anim.speed = Montura.Anim.speed; //In case the Mount is not using Speed Modifiers
                 ConnectWithMount();
@@ -646,6 +646,11 @@ namespace MalbersAnimations.HAP
             if (Anim)
             {
                 Anim.updateMode = Default_Anim_UpdateMode;                               //Restore Update mode to its original
+
+                SetAnimParameter(Montura.Animal.hash_Stance, 0); //Reset  the Stance.
+                SetAnimParameter(Montura.Animal.hash_Mode, 0);
+                SetAnimParameter(Montura.Animal.hash_ModeStatus, 0);
+
                 DisconnectWithMount();
                 Anim.speed = 1f;
             }
@@ -688,6 +693,7 @@ namespace MalbersAnimations.HAP
                 Anim.speed = 1;                                                             //Reset AnimatorSpeed
 
                 MTools.ResetFloatParameters(Anim);
+                
             }
 
             RiderRoot.rotation = Quaternion.FromToRotation(RiderRoot.up, -Gravity.Value) * RiderRoot.rotation;    //Reset the Up Vector; ****IMPORTANT when  CHANGE THE GRAVIY
@@ -950,7 +956,7 @@ namespace MalbersAnimations.HAP
             SetAnimParameter(animal.hash_Horizontal, animal.HorizontalSmooth);
             SetAnimParameter(animal.hash_Slope, animal.SlopeNormalized);
             SetAnimParameter(animal.hash_Grounded, animal.Grounded);
-            SetAnimParameter(animal.hash_ModeStatus, animal.ModeInt);
+            SetAnimParameter(animal.hash_ModeStatus, animal.ModeStatus);
             SetAnimParameter(animal.hash_StateFloat, animal.State_float);
 
             if (!Montura.UseSpeedModifiers) SpeedMultiplier = animal.SpeedMultiplier; //In case the Mount is not using Speed Modifiers
@@ -1027,7 +1033,7 @@ namespace MalbersAnimations.HAP
                     //if (Montura.MountBase)
                     //{
                     //    var targetRot = Quaternion.FromToRotation(Montura.MountBase.up, Montura.Animal.UpVector) * Montura.MountBase.rotation;
-                    //    Montura.MountBase.rotation = Quaternion.Lerp(Montura.MountBase.rotation,targetRot,SP_Weight);
+                    //    Montura.MountBase.rotation = Quaternion.Lerp(Montura.MountBase.rotation, targetRot, SP_Weight);
                     //}
 
                     Anim.SetLookAtPosition(Montura.MonturaSpineOffset);

@@ -6,12 +6,13 @@ namespace MalbersAnimations.Scriptables
 {
     public abstract class RuntimeCollection<T> : ScriptableObject where T : Object
     {
+        public List<T> items = new List<T>();
+
+
 #if UNITY_EDITOR
         [TextArea(3,5)]
         public string Description;
 #endif
-        protected List<T> items = new List<T>();
-
         public UnityEvent OnSetEmpty = new UnityEvent();
 
         /// <summary>Ammount of object on the list</summary>
@@ -35,8 +36,6 @@ namespace MalbersAnimations.Scriptables
         public virtual T Item_Get(string name) => items.Find(x => x.name == name);
 
        
-
-
         /// <summary>Gets a rando first object of the list</summary>
         public virtual T Item_GetRandom()
         {
@@ -61,14 +60,5 @@ namespace MalbersAnimations.Scriptables
 
             if (items == null || items.Count == 0) OnSetEmpty.Invoke();
         }
-    }
-
-    public abstract class RegisterRunTimeCollection<T> : MonoBehaviour
-    {
-        public RuntimeGameObjects Collection;
-
-        private void OnEnable() => Collection.Item_Add(gameObject);
-
-        private void OnDisable() => Collection.Item_Remove(gameObject);
     }
 }

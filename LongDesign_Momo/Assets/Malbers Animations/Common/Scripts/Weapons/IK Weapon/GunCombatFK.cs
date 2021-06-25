@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Weapons
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/HAP/Gun Combat FK")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Weapons/Gun Combat FK")]
     public class GunCombatFK : OldIKProfile
     {
         public float AimHorizontalOffset = 20;                          //Adjusment for the Aim body Offet (to view better the hand)

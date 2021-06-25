@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace MalbersAnimations.Utilities
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Material Property Lerp", order = 2000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Extras/Material Property Lerp", order = 2100)]
     public class MaterialPropertyLerpSO : ScriptableCoroutine
     {
         [Tooltip("Index of the Material")]

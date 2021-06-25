@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Force Reaction", order = 10)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Force Reaction"/*, order = 10*/)]
     public class ForceReaction : MReaction
     {
         public enum DirectionType { Local, World}

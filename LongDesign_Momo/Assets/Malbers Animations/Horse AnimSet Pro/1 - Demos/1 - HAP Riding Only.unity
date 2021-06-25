@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1355568772}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1168,7 +1168,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -1397,8 +1399,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -1482,8 +1490,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2027,8 +2041,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2126,8 +2146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2514,6 +2540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!135 &379131774
@@ -3867,8 +3894,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -4635,8 +4668,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -5130,8 +5169,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -5825,7 +5870,9 @@ MonoBehaviour:
   ModeShowEvents: 0
   Editor_Tabs1: 3
   Editor_Tabs2: 4
+  Editor_EventTabs: 0
   SelectedMode: 0
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 0
@@ -5893,11 +5940,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 1.48
   center: {x: 0, y: 1.5, z: 0}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1
@@ -5934,6 +5978,7 @@ MonoBehaviour:
     UseConstant: 0
     ConstantValue: {fileID: 0}
     Variable: {fileID: 11400000, guid: 82b56333ef707594286dde72d69ebafd, type: 2}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 0
@@ -6009,6 +6054,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -6272,7 +6319,7 @@ MonoBehaviour:
       Variable: {fileID: 0}
     position:
       UseConstant: 1
-      ConstantValue: 0
+      ConstantValue: 4.908939
       Variable: {fileID: 0}
     lerpPosition:
       UseConstant: 1
@@ -6300,7 +6347,7 @@ MonoBehaviour:
       Variable: {fileID: 0}
     lerpAnimator:
       UseConstant: 1
-      ConstantValue: 4
+      ConstantValue: 5
       Variable: {fileID: 0}
     strafeSpeed:
       UseConstant: 1
@@ -6396,6 +6443,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   OnGrounded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMovementDetected:
     m_PersistentCalls:
       m_Calls: []
   OnStateChange:
@@ -7213,8 +7263,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -7836,6 +7892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!135 &1596508027
@@ -8652,8 +8709,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -8812,8 +8875,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -9135,7 +9204,7 @@ PrefabInstance:
     - target: {fileID: 114794346622778406, guid: 7721b17458de7274da9fb6df12db1326,
         type: 3}
       propertyPath: m_ShowDebugText
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7721b17458de7274da9fb6df12db1326, type: 3}
@@ -9589,6 +9658,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: 
   ShowDescription: 0
   debug: 0
@@ -9915,12 +9985,12 @@ PrefabInstance:
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 1.3094
+      value: 0.9911822
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.71439
+      value: -7.790924
       objectReference: {fileID: 0}
     - target: {fileID: 3103585188836317991, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -9935,12 +10005,12 @@ PrefabInstance:
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 1.3094
+      value: 0.9911822
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.71439
+      value: -7.790924
       objectReference: {fileID: 0}
     - target: {fileID: 3210610273563704849, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -9960,12 +10030,12 @@ PrefabInstance:
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 1.3094
+      value: 0.9911822
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
       propertyPath: m_FollowOffset.z
-      value: -7.71439
+      value: -7.790924
       objectReference: {fileID: 0}
     - target: {fileID: 4726250600722074370, guid: af2ad8199d5ca9443952bbca7671bf18,
         type: 3}
@@ -10184,8 +10254,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -10315,8 +10391,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -15517,6 +15599,11 @@ PrefabInstance:
       objectReference: {fileID: 44191267}
     - target: {fileID: 859910308527374903, guid: 85619393e2ae68643983e6a096c811b0,
         type: 3}
+      propertyPath: ShowGround
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 859910308527374903, guid: 85619393e2ae68643983e6a096c811b0,
+        type: 3}
       propertyPath: Editor_Tabs1
       value: 0
       objectReference: {fileID: 0}
@@ -15539,11 +15626,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5324820343413019014, guid: 85619393e2ae68643983e6a096c811b0,
-        type: 3}
-      propertyPath: Editor_Tabs1
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85619393e2ae68643983e6a096c811b0, type: 3}

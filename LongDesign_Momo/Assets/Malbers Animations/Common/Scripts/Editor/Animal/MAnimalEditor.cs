@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller
 {
-    [CustomEditor(typeof(MAnimal))/*, CanEditMultipleObjects*/]
+    [CustomEditor(typeof(MAnimal)) , CanEditMultipleObjects ]
     public class MAnimalEditor : Editor 
     {
         public static GUIStyle StyleGray => MTools.Style(new Color(0.5f, 0.5f, 0.5f, 0.3f));
@@ -32,7 +32,8 @@ namespace MalbersAnimations.Controller
              m_CanStrafe, m_strafe, OnStrafe, m_StrafeNormalize,  FallForward, m_StrafeLerp,
 
 
-            alwaysForward,  AnimatorSpeed, OnMovementLocked, OnInputLocked, OnSprintEnabled, OnGrounded, OnStanceChange, OnStateChange, OnModeStart, OnModeEnd, OnTeleport,
+            alwaysForward,  AnimatorSpeed, OnMovementLocked, OnMovementDetected,
+            OnInputLocked, OnSprintEnabled, OnGrounded, OnStanceChange, OnStateChange, OnModeStart, OnModeEnd, OnTeleport,
             OnSpeedChange, OnAnimationChange, GroundLayer, maxAngleSlope, AlignPosLerp, AlignPosDelta, AlignRotDelta,
             AlignRotLerp, m_gravity, m_gravityPower, useCameraUp, ground_Changes_Gravity,
              useSprintGlobal,  SmoothVertical, TurnMultiplier, UpDownLerp, Player, OverrideStartState, CloneStates, S_Speed_List, UseCameraInput,
@@ -42,8 +43,8 @@ namespace MalbersAnimations.Controller
 
         //EditorStuff
         SerializedProperty 
-            ShowMovement, ShowAnimParametersOptional, ShowAnimParameters, SelectedMode, ModeShowEvents,showPivots, ShowGround, m_StrafeAngle,
-            ShowLockInputs, ShowMisc, showReferences, showGravity/*, showExposedVariables, InteractionArea, m_InteracterID,*/;
+            ShowMovement, ShowAnimParametersOptional, ShowAnimParameters, SelectedMode, SelectedState, ModeShowEvents, showPivots, ShowGround, m_StrafeAngle,
+            ShowLockInputs, ShowMisc, showReferences, showGravity, Editor_EventTabs/*, showExposedVariables, InteractionArea, m_InteracterID,*/;
 
         MAnimal m;
        // private MonoScript script;
@@ -59,6 +60,7 @@ namespace MalbersAnimations.Controller
 
 
             SelectedMode = serializedObject.FindProperty("SelectedMode");
+            SelectedState = serializedObject.FindProperty("SelectedState");
             ShowMovement = serializedObject.FindProperty("ShowMovement");
             ShowGround = serializedObject.FindProperty("ShowGround");
             ShowMisc = serializedObject.FindProperty("ShowMisc");
@@ -149,12 +151,14 @@ namespace MalbersAnimations.Controller
            
 
             OnMovementLocked = serializedObject.FindProperty("OnMovementLocked");
+            OnMovementDetected = serializedObject.FindProperty("OnMovementDetected");
             OnInputLocked = serializedObject.FindProperty("OnInputLocked");
             OnSprintEnabled = serializedObject.FindProperty("OnSprintEnabled");
             OnGrounded = serializedObject.FindProperty("OnGrounded");
             OnStanceChange = serializedObject.FindProperty("OnStanceChange");
             OnStateChange = serializedObject.FindProperty("OnStateChange");
             OnModeStart = serializedObject.FindProperty("OnModeStart");
+
             OnModeEnd = serializedObject.FindProperty("OnModeEnd"); 
             OnSpeedChange = serializedObject.FindProperty("OnSpeedChange");
             OnTeleport = serializedObject.FindProperty("OnTeleport");
@@ -184,6 +188,7 @@ namespace MalbersAnimations.Controller
             OverrideStartState = serializedObject.FindProperty("OverrideStartState");
             CloneStates = serializedObject.FindProperty("CloneStates");
             RootBone = serializedObject.FindProperty("RootBone");
+            Editor_EventTabs = serializedObject.FindProperty("Editor_EventTabs");
 
 
             ShowLockInputs = serializedObject.FindProperty("ShowLockInputs");
@@ -208,7 +213,8 @@ namespace MalbersAnimations.Controller
                 // onReorderCallback = OnReorderCallback_States,
                 onReorderCallbackWithDetails = OnReorderCallback_States_Details,
                 onAddCallback = OnAddCallback_State,
-                onRemoveCallback = OnRemove_State,
+                onRemoveCallback = OnRemove_State, 
+                onSelectCallback = Selected_State,
             };
 
             Reo_List_Modes = new ReorderableList(serializedObject, S_Mode_List, true, true, true, true)
@@ -237,6 +243,7 @@ namespace MalbersAnimations.Controller
         }
 
         private void Selected_Mode(ReorderableList list) => SelectedMode.intValue = list.index;
+        private void Selected_State(ReorderableList list) => SelectedState.intValue = list.index;
 
         public override void OnInspectorGUI()
         {
@@ -288,16 +295,8 @@ namespace MalbersAnimations.Controller
             {
                 EditorGUILayout.LabelField("Stances", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(defaultStance, new GUIContent("Default Stance", "Default Stance ID to reset to when the animal exit an Stance"));
-                EditorGUI.BeginChangeCheck();
-
-                EditorGUILayout.PropertyField(currentStance, new GUIContent("Current Stance", "Current Stance ID the animal is on"));
-                if (EditorGUI.EndChangeCheck())
-                {
-                    m.Stance = currentStance.intValue;
-                }
-
-
-                MalbersEditor.Arrays(OnEnterExitStances, new GUIContent("On Enter / Exit Stance Events"));
+                EditorGUILayout.PropertyField(currentStance, new GUIContent("Current Stance", "Current Stance ID the animal is On"));
+                 
             }
             EditorGUILayout.EndVertical();
         }
@@ -459,23 +458,50 @@ namespace MalbersAnimations.Controller
 
         private void ShowEvents()
         {
+
+
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Events", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(OnMovementLocked);
-            EditorGUILayout.PropertyField(OnInputLocked);
-            EditorGUILayout.PropertyField(OnSprintEnabled, new GUIContent("On Sprint"));
-            EditorGUILayout.PropertyField(OnGrounded);
-            EditorGUILayout.PropertyField(OnTeleport);
-            EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(OnStanceChange);
-            EditorGUILayout.PropertyField(OnStateChange);
-            EditorGUILayout.PropertyField(OnStrafe);
-            EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(OnModeStart);
-            EditorGUILayout.PropertyField(OnModeEnd);
-            EditorGUILayout.Space();
-            EditorGUILayout.PropertyField(OnSpeedChange);
-            EditorGUILayout.PropertyField(OnAnimationChange);
+            Editor_EventTabs.intValue = GUILayout.Toolbar(Editor_EventTabs.intValue, new string[] { "Movement", "State", "Stance","Modes", "Extras" }, EditorStyles.toolbarButton);
+
+            switch (Editor_EventTabs.intValue)
+            {
+                case 0:
+                    EditorGUILayout.PropertyField(OnSprintEnabled, new GUIContent("On Sprint"));
+                    EditorGUILayout.PropertyField(OnMovementDetected);
+                    EditorGUILayout.Space();
+                    
+                    if (m.CanStrafe)
+                    {
+                        EditorGUILayout.PropertyField(OnStrafe);
+                    }
+                    EditorGUILayout.PropertyField(OnGrounded);
+                    EditorGUILayout.PropertyField(OnTeleport);
+                    EditorGUILayout.Space();
+                    break;
+                case 1:
+                    EditorGUILayout.PropertyField(OnStateChange);
+                    EditorGUILayout.PropertyField(OnEnterExitStates);
+
+                    break;
+                case 2:
+                    EditorGUILayout.PropertyField(OnStanceChange);
+                    EditorGUILayout.PropertyField(OnEnterExitStances);
+                    break;
+                case 3:
+                    EditorGUILayout.PropertyField(OnModeStart);
+                    EditorGUILayout.PropertyField(OnModeEnd);
+                    break;
+                case 4:
+                    EditorGUILayout.PropertyField(OnMovementLocked);
+                    EditorGUILayout.PropertyField(OnInputLocked);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.PropertyField(OnSpeedChange);
+                    EditorGUILayout.PropertyField(OnAnimationChange);
+                    break;
+                default:
+                    break;
+            }  
             EditorGUILayout.EndVertical();
         }
 
@@ -519,9 +545,9 @@ namespace MalbersAnimations.Controller
                 if (m.ActiveState)
                 {
                     EditorGUILayout.Space();
-                    EditorGUILayout.ToggleLeft($"Active[{m.ActiveState.ID.name}] - [CanExit] ", m.ActiveState.CanExit);
-                    EditorGUILayout.ToggleLeft($"Active[{m.ActiveState.ID.name}] - [IgnoreLower] ", m.ActiveState.IgnoreLowerStates);
-                    EditorGUILayout.ToggleLeft($"Active[{m.ActiveState.ID.name}] - [IsPersistent] ", m.ActiveState.IsPersistent);
+                    EditorGUILayout.ToggleLeft($"[{m.ActiveState.ID.name}] - [CanExit] ", m.ActiveState.CanExit);
+                    EditorGUILayout.ToggleLeft($"[{m.ActiveState.ID.name}] - [IgnoreLower] ", m.ActiveState.IgnoreLowerStates);
+                    EditorGUILayout.ToggleLeft($"[{m.ActiveState.ID.name}] - [IsPersistent] ", m.ActiveState.IsPersistent);
                    // EditorGUILayout.ObjectField("Queued State", m.StateQueued != null ? m.StateQueued.ID : null, typeof(StateID), true);
                     EditorGUILayout.Space();
                 }
@@ -547,6 +573,7 @@ namespace MalbersAnimations.Controller
                 EditorGUILayout.Space();
                 EditorGUILayout.ToggleLeft("Gravity", m.UseGravity);
                 EditorGUILayout.FloatField("Gravity Time", m.GravityTime);
+                EditorGUILayout.FloatField("Gravity Mult", m.GravityMultiplier);
                 EditorGUILayout.Space();
                 EditorGUILayout.ToggleLeft("Use Sprint", m.UseSprint);
                 EditorGUILayout.ToggleLeft("Sprint", m.Sprint);
@@ -565,13 +592,13 @@ namespace MalbersAnimations.Controller
                 EditorGUILayout.FloatField("Mode Time",m.ModeTime);
                 EditorGUILayout.ToggleLeft("Mode In Transition", m.ActiveMode != null && m.ActiveMode.IsInTransition);
                 EditorGUILayout.IntField("Last Mode", m.LastMode);
-                EditorGUILayout.EnumPopup("Mode Status", m.ModeStatus);
+                EditorGUILayout.EnumPopup("Mode Status", m.ModeInternalStatus);
           
                 EditorGUILayout.ToggleLeft("Use Pos Speed", m.UseAdditivePos);
                 EditorGUILayout.ToggleLeft("Use Rot Speed", m.UseAdditiveRot);
                 EditorGUILayout.Space();
                 EditorGUILayout.FloatField("Terrain Slope", m.TerrainSlope);
-               // EditorGUILayout.FloatField("Main Pivot Slope", m.MainPivotSlope);
+                EditorGUILayout.FloatField("Main Pivot Slope", m.MainPivotSlope);
                 EditorGUILayout.FloatField("Slope Normalized", m.SlopeNormalized);
                 EditorGUILayout.Space();
                 EditorGUILayout.Vector3Field("Raw Input Axis" ,m.RawInputAxis);
@@ -623,6 +650,11 @@ namespace MalbersAnimations.Controller
                 var OnEnterMode = SelectedMode.FindPropertyRelative("OnEnterMode");
                 var OnExitMode = SelectedMode.FindPropertyRelative("OnExitMode");
 
+
+                var ID = SelectedMode.FindPropertyRelative("ID").objectReferenceValue;
+
+                var ModeName = ID != null? ID.name : "";
+
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                
 
@@ -646,8 +678,13 @@ namespace MalbersAnimations.Controller
                 EditorGUIUtility.labelWidth = 70;
                 EditorGUILayout.PropertyField(AbilityIndex, G_AbilityIndex, GUILayout.MinWidth(50));
                 EditorGUILayout.PropertyField(DefaultIndex, G_DefaultIndex, GUILayout.MinWidth(50));
-                ResetToDefault.boolValue = GUILayout.Toggle(ResetToDefault.boolValue, G_ResetToDefault, EditorStyles.miniButton, GUILayout.MinWidth(20));
                 EditorGUIUtility.labelWidth = 0;
+
+                var currentGUIColor = GUI.color;
+                GUI.color = ResetToDefault.boolValue ? Color.green : currentGUIColor;
+                ResetToDefault.boolValue = GUILayout.Toggle(ResetToDefault.boolValue, G_ResetToDefault, EditorStyles.miniButton, GUILayout.Width(20));
+                GUI.color = currentGUIColor;
+
                 EditorGUILayout.EndHorizontal();
 
 
@@ -655,11 +692,11 @@ namespace MalbersAnimations.Controller
 
               //  EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-                if (MalbersEditor.Foldout(ModeShowEvents, "Mode Events"))
+                if (MalbersEditor.Foldout(ModeShowEvents, $"Mode ({ModeName}) Events"))
                 {
-                    EditorGUILayout.PropertyField(OnEnterMode);
-                    EditorGUILayout.PropertyField(OnExitMode);
-                    EditorGUILayout.PropertyField(OnAbilityIndex, new GUIContent("On Ability Index Changed"));
+                    EditorGUILayout.PropertyField(OnEnterMode, new GUIContent($"On Enter [{ModeName}]"));
+                    EditorGUILayout.PropertyField(OnExitMode, new GUIContent($"On Exit [{ModeName}]"));
+                    EditorGUILayout.PropertyField(OnAbilityIndex, new GUIContent($"On Active Index Changed [{ModeName}]"));
                 }
               //  EditorGUILayout.EndVertical();
 
@@ -801,7 +838,9 @@ namespace MalbersAnimations.Controller
         {
             EditorGUI.indentLevel++;
             var showStates = serializedObject.FindProperty("showStates");
-            
+
+            Reo_List_States.index = SelectedState.intValue;
+
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.BeginHorizontal();
@@ -830,9 +869,9 @@ namespace MalbersAnimations.Controller
             }
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            MalbersEditor.Arrays(OnEnterExitStates, new GUIContent("On Enter/Exit States Events"));
-            EditorGUILayout.EndVertical();
+            //EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            //MalbersEditor.Arrays(OnEnterExitStates, new GUIContent("On Enter/Exit States Events"));
+            //EditorGUILayout.EndVertical();
              
         }
 
@@ -873,8 +912,7 @@ namespace MalbersAnimations.Controller
                 EditorGUILayout.PropertyField(cpM, true);
                 EditorGUI.EndDisabledGroup();
             }
-        }
-
+        } 
         private void ShowGeneral()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -949,9 +987,7 @@ namespace MalbersAnimations.Controller
 
             ShowStrafingVars();
 
-        }
-
-
+        } 
         private void ShowStrafingVars()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);

@@ -8,10 +8,13 @@ namespace MalbersAnimations.Scriptables
     public class GetRuntimeGameObjects : MonoBehaviour
     {
         [RequiredField] public RuntimeGameObjects Collection;
+
+        public FloatReference delay = new FloatReference();
         public enum RuntimeSetTypeGameObject {First, Random, Index, ByName , Closest }
         public RuntimeSetTypeGameObject type = RuntimeSetTypeGameObject.Random; 
         [Hide("showIndex",true,false)]
         public int Index = 0;
+       
         [Hide("showName", true, false)]
         public string m_name;
         public GameObjectEvent Raise = new GameObjectEvent();
@@ -19,6 +22,19 @@ namespace MalbersAnimations.Scriptables
         public void SetCollection(RuntimeGameObjects col) => Collection = col;
 
         private void Start()
+        {
+            if (Collection != null && Collection.items != null && Collection.items.Count > 0)
+            {
+                if (delay > 0)
+                    Invoke(nameof(GetSet), delay);
+                else
+                    GetSet();
+            }
+        }
+
+
+
+        private void GetSet()
         {
             if (Collection != null)
             {

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>  Int Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple  </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Integer", order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Integer", order = 1000)]
     public class IntVar : ScriptableVar
     {
         /// <summary> The current value</summary>

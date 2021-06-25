@@ -1020,6 +1020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 3390758603254792585}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 351014525399589216}
 --- !u!114 &114903519271137442
@@ -1596,6 +1597,14 @@ MonoBehaviour:
     - {fileID: 1982461822524714}
     - {fileID: 1548003520301798}
     - {fileID: 1762374800557130}
+  - name: Root Axis
+    tooltip: 'Shows the Exact position and Rotation of the Root
+
+      Used for Debug
+      purposes'
+    active: 0
+    gameObjects:
+    - {fileID: 1517622598339786180}
   edit: 0
 --- !u!114 &114392047167580918
 MonoBehaviour:
@@ -1992,10 +2001,12 @@ MonoBehaviour:
   showPivots: 1
   PivotPosDir: 0
   showStates: 1
-  ModeShowEvents: 1
-  Editor_Tabs1: 0
+  ModeShowEvents: 0
+  Editor_Tabs1: 3
   Editor_Tabs2: 4
-  SelectedMode: 1
+  Editor_EventTabs: 0
+  SelectedMode: 3
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 1
@@ -2017,43 +2028,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 47af1b04b47957f4ca466d23cbb16cf6, type: 2}
   - {fileID: 11400000, guid: bdb4bb76e2b782f42b909978af887428, type: 2}
   - {fileID: 11400000, guid: c31051ac4cd486e4f9ac40015fdef3a6, type: 2}
-  OnEnterExitStates:
-  - ID: {fileID: 11400000, guid: 9ae07cd2f8f4c054687fecf634f8e5b3, type: 2}
-    OnEnter:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: set_enabled
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    OnExit:
-      m_PersistentCalls:
-        m_Calls: []
-  - ID: {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
-    OnEnter:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: set_enabled
-          m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-    OnExit:
-      m_PersistentCalls:
-        m_Calls: []
+  OnEnterExitStates: []
   OnEnterExitStances: []
   OverrideStartState: {fileID: 0}
   isPlayer:
@@ -2068,11 +2043,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 0.7
   center: {x: 0, y: 0.7, z: 0.25}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1
@@ -2109,6 +2081,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: {fileID: 0}
     Variable: {fileID: 0}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 1
@@ -2127,11 +2100,11 @@ MonoBehaviour:
     Variable: {fileID: 0}
   AlignPosDelta:
     UseConstant: 1
-    ConstantValue: 2.5
+    ConstantValue: 10
     Variable: {fileID: 0}
   AlignRotDelta:
     UseConstant: 1
-    ConstantValue: 2.5
+    ConstantValue: 5
     Variable: {fileID: 0}
   AlignRotLerp:
     UseConstant: 1
@@ -2182,8 +2155,10 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 1
         affectStates:
-        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2209,8 +2184,10 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 1
         affectStates:
-        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2236,8 +2213,10 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 1
         affectStates:
-        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2267,7 +2246,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     ModeActivationTime: 0
-    showGeneral: 1
+    showGeneral: 0
     showIndex: 1
     showProperties: 1
   - active: 1
@@ -2295,8 +2274,12 @@ MonoBehaviour:
           UseConstant: 1
           ConstantValue: 0
           Variable: {fileID: 0}
-        affect: 0
-        affectStates: []
+        affect: 1
+        affectStates:
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2320,8 +2303,12 @@ MonoBehaviour:
           UseConstant: 1
           ConstantValue: 0
           Variable: {fileID: 0}
-        affect: 0
-        affectStates: []
+        affect: 1
+        affectStates:
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2383,6 +2370,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2410,6 +2399,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2471,6 +2462,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2498,8 +2491,10 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
-        ShowEvents: 1
+        ShowEvents: 0
         OnEnter:
           m_PersistentCalls:
             m_Calls: []
@@ -2525,6 +2520,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2552,6 +2549,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2579,6 +2578,8 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -2606,6 +2607,37 @@ MonoBehaviour:
         affectStates:
         - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
         - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
+        TransitionFrom: 
+        ShowEvents: 0
+        OnEnter:
+          m_PersistentCalls:
+            m_Calls: []
+        OnExit:
+          m_PersistentCalls:
+            m_Calls: []
+    - active:
+        UseConstant: 1
+        ConstantValue: 1
+        Variable: {fileID: 0}
+      Name: Open Chest
+      Index:
+        UseConstant: 1
+        ConstantValue: 18
+        Variable: {fileID: 0}
+      Properties:
+        Status: 0
+        HoldByTime:
+          UseConstant: 1
+          ConstantValue: 0
+          Variable: {fileID: 0}
+        affect: 1
+        affectStates:
+        - {fileID: 11400000, guid: 7370df9c769c2764381ad7c76eb3d949, type: 2}
+        - {fileID: 11400000, guid: 3787b6d94d5454740bf36d57436185b0, type: 2}
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -3118,6 +3150,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   OnGrounded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMovementDetected:
     m_PersistentCalls:
       m_Calls: []
   OnStateChange:
@@ -4697,6 +4732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 3390758603254792585}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 625409927216197015}
 --- !u!114 &114843356156681700
@@ -4951,8 +4987,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -5129,6 +5171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 3390758603254792585}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 6836389832434945427}
 --- !u!114 &114562061110379712
@@ -5722,6 +5765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 3390758603254792585}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 4983039511049748778}
 --- !u!114 &114384585059907928
@@ -6373,7 +6417,7 @@ MonoBehaviour:
   MaxDistance: 100
   m_UseRaycasting:
     UseConstant: 1
-    ConstantValue: 1
+    ConstantValue: 0
     Variable: {fileID: 0}
   rayRadius:
     UseConstant: 1
@@ -6438,6 +6482,19 @@ MonoBehaviour:
     gameObjects:
     - {fileID: 1438017827249262}
   edit: 0
+--- !u!114 &5551927995339739343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517622598339786180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0b5b9d4af0f31439aabd6b5de7b49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: Helper to know the exact Root Position and Rotation
 --- !u!1 &1735110541734373478
 GameObject:
   m_ObjectHideFlags: 0
@@ -6736,7 +6793,6 @@ MonoBehaviour:
   OnTargetSet:
     m_PersistentCalls:
       m_Calls: []
-  pointType: 0
   Editor_Tabs1: 0
 --- !u!114 &9093388111725446460
 MonoBehaviour:
@@ -6913,6 +6969,7 @@ Transform:
   - {fileID: 1087265524608481677}
   - {fileID: 1735110541734373472}
   - {fileID: 4894973548784198}
+  - {fileID: 1514704916385020198}
   m_Father: {fileID: 4417229628137580}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6930,3 +6987,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: Internal/Optional Components that does not need to be on the Root of the
     Hiearchy
+--- !u!1001 &1516362519093323776
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7341256332303435102}
+    m_Modifications:
+    - target: {fileID: 1299739519999428, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_Name
+      value: Axis
+      objectReference: {fileID: 0}
+    - target: {fileID: 1299739519999428, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f09ceca33ea0e554f92eb2f15e8dce44, type: 3}
+--- !u!4 &1514704916385020198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4050282840101158, guid: f09ceca33ea0e554f92eb2f15e8dce44,
+    type: 3}
+  m_PrefabInstance: {fileID: 1516362519093323776}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1517622598339786180 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1299739519999428, guid: f09ceca33ea0e554f92eb2f15e8dce44,
+    type: 3}
+  m_PrefabInstance: {fileID: 1516362519093323776}
+  m_PrefabAsset: {fileID: 0}

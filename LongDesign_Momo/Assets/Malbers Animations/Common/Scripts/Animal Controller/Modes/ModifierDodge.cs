@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Mode Modifier/Directional Dodge")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Modifier/Mode/Directional Dodge")]
     public class ModifierDodge : ModeModifier
     {
         [HelpBox]

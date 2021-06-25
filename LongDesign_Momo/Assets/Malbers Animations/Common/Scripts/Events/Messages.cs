@@ -1,4 +1,4 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using MalbersAnimations.Scriptables;
 
@@ -15,21 +15,20 @@ namespace MalbersAnimations.Utilities
     {
         public MesssageItem[] messages;                                     //Store messages to send it when Enter the animation State
         public bool UseSendMessage = true;
+        public bool SendToChildren = true;
+        public bool debug = true;
+
         public bool nextFrame = false;
-        public GameObject Pinned;
+        public Component Pinned;
+         
 
-        public virtual void SendMessage(Component component)
-        {
-            SendMessage(component.gameObject);
-        }
+        public virtual void SendMessage(GameObject component) => SendMessage(component.transform);
 
-        public virtual void Pin_Receiver(Component component) => Pinned = component.gameObject;
-        public virtual void Pin_Receiver(GameObject component) => Pinned = component;
+        public virtual void Pin_Receiver(GameObject component) => Pinned = component.transform;
+        public virtual void Pin_Receiver(Component component) => Pinned = component;
         public virtual void SendMessage(int index)
         {
-            var m = messages[index];
-
-            if (m.message == string.Empty || !m.Active) return;
+            var m = messages[index];  
 
             if (nextFrame)
             {
@@ -41,12 +40,10 @@ namespace MalbersAnimations.Utilities
             }
         }
 
-        public virtual void SendMessage(GameObject go)
+        public virtual void SendMessage(Component go)
         {
             foreach (var m in messages)
-            {
-                if (m.message == string.Empty || !m.Active) break;          //If the messaje is empty or disabled break.... ignore it
-
+            { 
                 if (nextFrame)
                 {
                     StartCoroutine(CNextFrame(m, go));
@@ -59,134 +56,32 @@ namespace MalbersAnimations.Utilities
         }
 
 
-        IEnumerator CNextFrame(MesssageItem m, GameObject component)
+        IEnumerator CNextFrame(MesssageItem m, Component component)
         {
             yield return null;
             Deliver(m, component);
         }
 
-        private void Deliver(MesssageItem m, GameObject component)
+        private void Deliver(MesssageItem m, Component go)
         {
             if (UseSendMessage)
-                DeliverMessage(m, component.transform.root.gameObject);
+               m.DeliverMessage(go, SendToChildren, debug);
             else
             {
-                var listeners = component.transform.root.GetComponentsInChildren<IAnimatorListener>();
+                IAnimatorListener[] listeners;
+
+                if (SendToChildren)
+                    listeners = go.GetComponentsInChildren<IAnimatorListener>();
+                else
+                    listeners = go.GetComponents<IAnimatorListener>();
+
                 if (listeners != null && listeners.Length > 0)
                 {
-                    foreach (var list in listeners)
-                        DeliverListener(m, list);
+                    foreach (var animListeners in listeners)
+                        m.DeliverAnimListener(animListeners,debug);
                 }
             }
-        }
-
-        public static void DeliverMessage(MesssageItem m, GameObject component)
-        {
-            switch (m.typeM)
-            {
-                case TypeMessage.Bool:
-                    component.SendMessage(m.message, m.boolValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Int:
-                    component.SendMessage(m.message, m.intValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Float:
-                    component.SendMessage(m.message, m.floatValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.String:
-                    component.SendMessage(m.message, m.stringValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Void:
-                    component.SendMessage(m.message, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.IntVar:
-                    component.SendMessage(m.message, (int)m.intVarValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Transform:
-                    component.SendMessage(m.message, m.transformValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.GameObject:
-                    component.SendMessage(m.message, m.GoValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Component:
-                    component.SendMessage(m.message, m.ComponentValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public static void BroadcastMessage(MesssageItem m, GameObject component)
-        {
-            switch (m.typeM)
-            {
-                case TypeMessage.Bool:
-                    component.BroadcastMessage(m.message, m.boolValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Int:
-                    component.BroadcastMessage(m.message, m.intValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Float:
-                    component.BroadcastMessage(m.message, m.floatValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.String:
-                    component.BroadcastMessage(m.message, m.stringValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Void:
-                    component.BroadcastMessage(m.message, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.IntVar:
-                    component.BroadcastMessage(m.message, (int)m.intVarValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Transform:
-                    component.BroadcastMessage(m.message, m.transformValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.GameObject:
-                    component.BroadcastMessage(m.message, m.GoValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Component:
-                    component.BroadcastMessage(m.message, m.ComponentValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public static void DeliverListener(MesssageItem m, IAnimatorListener listener)
-        {
-            switch (m.typeM)
-            {
-                case TypeMessage.Bool:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.boolValue);
-                    break;
-                case TypeMessage.Int:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.intValue);
-                    break;
-                case TypeMessage.Float:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.floatValue);
-                    break;
-                case TypeMessage.String:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.stringValue);
-                    break;
-                case TypeMessage.Void:
-                    listener.OnAnimatorBehaviourMessage(m.message, null);
-                    break;
-                case TypeMessage.IntVar:
-                    listener.OnAnimatorBehaviourMessage(m.message, (int)m.intVarValue);
-                    break;
-                case TypeMessage.Transform:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.transformValue);
-                    break;
-                case TypeMessage.GameObject:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.GoValue);
-                    break;
-                case TypeMessage.Component:
-                    listener.OnAnimatorBehaviourMessage(m.message, m.ComponentValue);
-                    break;
-                default:
-                    break;
-            }
-        }
+        } 
     }
 
     [System.Serializable]
@@ -212,129 +107,283 @@ namespace MalbersAnimations.Utilities
             message = string.Empty;
             Active = true;
         }
+
+        public bool IsActive => Active && !string.IsNullOrEmpty(message);
+
+
+        public void DeliverAnimListener(IAnimatorListener listener, bool debug = false)
+        {
+            if (!IsActive) return; //Mean the Message cannot be sent
+
+            string val = "";
+            bool succesful = false;
+            switch (typeM)
+            {
+                case TypeMessage.Bool:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, boolValue);
+                    val = boolValue.ToString();
+                    break;
+                case TypeMessage.Int:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, intValue);
+                    val = intValue.ToString();
+                    break;
+                case TypeMessage.Float:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, floatValue);
+                    val = floatValue.ToString();
+                    break;
+                case TypeMessage.String:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, stringValue);
+                    val = stringValue.ToString();
+                    break;
+                case TypeMessage.Void:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, null);
+                    val = "Void";
+                    break;
+                case TypeMessage.IntVar:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, (int)intVarValue);
+                    val = intVarValue.name.ToString();
+                    break;
+                case TypeMessage.Transform:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, transformValue);
+                    val = transformValue.name.ToString();
+                    break;
+                case TypeMessage.GameObject:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, GoValue);
+                    val = GoValue.name.ToString();
+                    break;
+                case TypeMessage.Component:
+                    succesful = listener.OnAnimatorBehaviourMessage(message, ComponentValue);
+                    val = GoValue.name.ToString();
+                    break;
+                default:
+                    break;
+            }
+
+            if (debug && succesful) Debug.Log($"<b>[Msg: {message}->{val}] [{typeM}]</b> T:{Time.time:F3}");  //Debug
+        }
+
+
+        /// <summary>  Using Message to the Monovehaviours asociated to this animator delivery with Send Message  </summary>
+        public void DeliverMessage(Component anim, bool SendToChildren, bool debug = false)
+        {
+            if (!IsActive) return; //Mean the Message cannot be sent
+
+            switch (typeM)
+            {
+                case TypeMessage.Bool:
+                    SendMessage(anim, message, boolValue, SendToChildren);
+
+                    break;
+                case TypeMessage.Int:
+                    SendMessage(anim, message, intValue, SendToChildren);
+                    break;
+                case TypeMessage.Float:
+                    SendMessage(anim, message, floatValue, SendToChildren);
+                    break;
+                case TypeMessage.String:
+                    SendMessage(anim, message, stringValue, SendToChildren);
+                    break;
+                case TypeMessage.Void:
+                    SendMessageVoid(anim, message, SendToChildren);
+                    break;
+                case TypeMessage.IntVar:
+                    SendMessage(anim, message, (int)intVarValue, SendToChildren);
+                    break;
+                case TypeMessage.Transform:
+                    SendMessage(anim, message, transformValue, SendToChildren);
+                    break;
+                case TypeMessage.GameObject:
+                    SendMessage(anim, message, GoValue, SendToChildren);
+                    break;
+                case TypeMessage.Component:
+                    SendMessage(anim, message, ComponentValue, SendToChildren);
+                    break;
+                default:
+                    break;
+            }
+
+            if (debug) Debug.Log($"<b>[Send Msg: {message}->] [{typeM}]</b> T:{Time.time:F3}");  //Debug
+        }
+
+        private void SendMessage(Component anim, string message, object value, bool SendToChildren)
+        {
+            if (SendToChildren)
+                anim.BroadcastMessage(message, value, SendMessageOptions.DontRequireReceiver);
+            else
+                anim.SendMessage(message, value, SendMessageOptions.DontRequireReceiver);
+        }
+
+
+        private void SendMessageVoid(Component anim, string message, bool SendToChildren)
+        {
+            if (SendToChildren)
+                anim.BroadcastMessage(message, SendMessageOptions.DontRequireReceiver);
+            else
+                anim.SendMessage(message, SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
+#if UNITY_EDITOR
+    [CustomPropertyDrawer(typeof(MesssageItem))]
+    public class MessageDrawer : PropertyDrawer
+    {
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            // position.y += 2;
+
+            EditorGUI.BeginProperty(position, label, property);
+            //GUI.Box(position, GUIContent.none, EditorStyles.helpBox);
+            var indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            //var height = EditorGUIUtility.singleLineHeight;
+
+            //PROPERTIES
+
+            var Active = property.FindPropertyRelative("Active");
+            var message = property.FindPropertyRelative("message");
+            var typeM = property.FindPropertyRelative("typeM");
+
+            var rect = new Rect(position);
+
+            rect.y += 2;
+
+            Rect R_0 = new Rect(rect.x, rect.y, 15, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(R_0, Active, GUIContent.none);
+
+            Rect R_1 = new Rect(rect.x + 15, rect.y, (rect.width / 3) + 15, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(R_1, message, GUIContent.none);
+
+
+            Rect R_3 = new Rect(rect.x + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            EditorGUI.PropertyField(R_3, typeM, GUIContent.none);
+
+
+            Rect R_5 = new Rect(rect.x + ((rect.width) / 3) * 2 + 5 + 15, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            var TypeM = (TypeMessage)typeM.intValue;
+
+            SerializedProperty messageValue = property.FindPropertyRelative("boolValue");
+
+            switch (TypeM)
+            {
+                case TypeMessage.Bool:
+                    messageValue.boolValue = EditorGUI.ToggleLeft(R_5, messageValue.boolValue ? " True" : " False", messageValue.boolValue);
+                    break;
+                case TypeMessage.Int:
+                    messageValue = property.FindPropertyRelative("intValue");
+                    break;
+                case TypeMessage.Float:
+                    messageValue = property.FindPropertyRelative("floatValue");
+                    break;
+                case TypeMessage.String:
+                    messageValue = property.FindPropertyRelative("stringValue");
+                    break;
+                case TypeMessage.IntVar:
+                    messageValue = property.FindPropertyRelative("intVarValue");
+                    break;
+                case TypeMessage.Transform:
+                    messageValue = property.FindPropertyRelative("transformValue");
+                    break;
+                case TypeMessage.Void:
+                    break;
+                case TypeMessage.GameObject:
+                    messageValue = property.FindPropertyRelative("GoValue");
+                    break;
+                case TypeMessage.Component:
+                    messageValue = property.FindPropertyRelative("ComponentValue");
+                    break;
+                default:
+                    break;
+            }
+
+            if (TypeM != TypeMessage.Void && TypeM != TypeMessage.Bool)
+            {
+                EditorGUI.PropertyField(R_5, messageValue, GUIContent.none);
+            }
+
+
+            EditorGUI.indentLevel = indent;
+            EditorGUI.EndProperty();
+        }
     }
 
 
-
     //INSPECTOR
-
-#if UNITY_EDITOR
     [CustomEditor(typeof(Messages))]
     public class MessagesEd : Editor
     {
         private ReorderableList list;
 
-        private Messages MMessage;
-        private SerializedProperty sp_messages;
-
-        private MonoScript script;
+       // private Messages MMessage;
+        private SerializedProperty sp_messages, debug, SendToChildren, UseSendMessage;
 
         private void OnEnable()
         {
-            MMessage = ((Messages)target);
-            script = MonoScript.FromMonoBehaviour(MMessage);
             sp_messages = serializedObject.FindProperty("messages");
+            debug = serializedObject.FindProperty("debug");
+            SendToChildren = serializedObject.FindProperty("SendToChildren");
+            UseSendMessage = serializedObject.FindProperty("UseSendMessage");
 
-            list = new ReorderableList(serializedObject, sp_messages, true, true, true, true);
-
-            list.drawElementCallback = drawElementCallback1;
-            list.drawHeaderCallback = HeaderCallbackDelegate1;
+            list = new ReorderableList(serializedObject, sp_messages, true, true, true, true)
+            {
+                drawHeaderCallback = HeaderCallbackDelegate1,
+               
+                drawElementCallback = ( rect,  index,  isActive,  isFocused) => 
+                {
+                    EditorGUI.PropertyField(rect, sp_messages.GetArrayElementAtIndex(index), GUIContent.none);
+                }
+            };
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            MalbersEditor.DrawDescription("Send Messages to all the MonoBehaviours that uses the Interface |IAnimatorListener| ");
+            MalbersEditor.DrawDescription("Send Messages to all the MonoBehaviours that uses the Interface |IAnimatorListener|." +
+                "\nEnable [SendMessage] to use Component.SendMessage() instead");
 
-            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.BeginVertical(MTools.StyleGray);
             {
-                EditorGUILayout.BeginVertical(MTools.StyleGray);
-                {
-                    MalbersEditor.DrawScript(script);
+                list.DoLayoutList();
 
-                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                    list.DoLayoutList();
-                    EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginHorizontal();
+                var currentGUIColor = GUI.color;
 
-                    var UseSendMessage = serializedObject.FindProperty("UseSendMessage");
-                    UseSendMessage.boolValue = EditorGUILayout.ToggleLeft(new GUIContent("Use Send Message", "Uses the SendMessage() instead"), UseSendMessage.boolValue);
-                    var nextFrame = serializedObject.FindProperty("nextFrame");
-                    nextFrame.boolValue = EditorGUILayout.ToggleLeft(new GUIContent("Next Frame", "Send the Message the frame after"), nextFrame.boolValue);
-                }
+                GUI.color = SendToChildren.boolValue ? (Color.green) : currentGUIColor;
 
-                EditorGUILayout.EndVertical();
+                SendToChildren.boolValue = GUILayout.Toggle(SendToChildren.boolValue,
+                    new GUIContent("Children", "The Messages will be sent also to the gameobject children"), EditorStyles.miniButton);
+                 
+
+                GUI.color = UseSendMessage.boolValue ? (Color.green) : currentGUIColor;
+                UseSendMessage.boolValue = GUILayout.Toggle(UseSendMessage.boolValue,
+                    new GUIContent("SendMessage()", "Uses the SendMessage() method, instead of checking for IAnimator Listener Interfaces"), EditorStyles.miniButton);
+                GUI.color = currentGUIColor;
+
+                MalbersEditor.DrawDebugIcon(debug);
+
+                EditorGUILayout.EndHorizontal();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(target, "Messages Inspector");
-            }
+
+            EditorGUILayout.EndVertical();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        void HeaderCallbackDelegate1(Rect rect)
+        static void HeaderCallbackDelegate1(Rect rect)
         {
-            Rect R_1 = new Rect(rect.x + 10, rect.y, (rect.width / 3) + 30, EditorGUIUtility.singleLineHeight);
+            var width = (rect.width / 3);
+            var height = EditorGUIUtility.singleLineHeight;
+
+            Rect R_1 = new Rect(rect.x + 10, rect.y, width + 30, height);
             EditorGUI.LabelField(R_1, "Message");
 
-            Rect R_3 = new Rect(rect.x + 10 + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            Rect R_3 = new Rect(rect.x + 10 + width + 5 + 30, rect.y, width - 20, height);
             EditorGUI.LabelField(R_3, "Type");
 
-            Rect R_5 = new Rect(rect.x + 10 + ((rect.width) / 3) * 2 + 5 + 15, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            Rect R_5 = new Rect(rect.x + 10 + width * 2 + 20, rect.y, width - 20, height);
             EditorGUI.LabelField(R_5, "Value");
-        }
-
-        void drawElementCallback1(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            var element = MMessage.messages[index];
-            var sp_element = sp_messages.GetArrayElementAtIndex(index);
-
-            rect.y += 2;
-
-            Rect R_0 = new Rect(rect.x, rect.y, 15, EditorGUIUtility.singleLineHeight);
-            element.Active = EditorGUI.Toggle(R_0, element.Active);
-
-            Rect R_1 = new Rect(rect.x + 15, rect.y, (rect.width / 3) + 15, EditorGUIUtility.singleLineHeight);
-            element.message = EditorGUI.TextField(R_1, element.message);
-
-
-            Rect R_3 = new Rect(rect.x + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
-            element.typeM = (TypeMessage)EditorGUI.EnumPopup(R_3, element.typeM);
-
-            Rect R_5 = new Rect(rect.x + ((rect.width) / 3) * 2 + 5 + 15, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
-            switch (element.typeM)
-            {
-                case TypeMessage.Bool:
-                    element.boolValue = EditorGUI.ToggleLeft(R_5, element.boolValue ? " True" : " False", element.boolValue);
-                    break;
-                case TypeMessage.Int:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("intValue"), GUIContent.none);
-                    break;
-                case TypeMessage.Float:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("floatValue"), GUIContent.none);
-                    break;
-                case TypeMessage.String:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("stringValue"), GUIContent.none);
-                    break;
-                case TypeMessage.IntVar:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("intVarValue"), GUIContent.none);
-                    break;
-                case TypeMessage.Transform:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("transformValue"), GUIContent.none);
-                    break;
-                case TypeMessage.Void:
-                    break;
-                case TypeMessage.GameObject:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("GOValue"), GUIContent.none);
-                    break;
-                case TypeMessage.Component:
-                    EditorGUI.PropertyField(R_5, sp_element.FindPropertyRelative("ComponentValue"), GUIContent.none); 
-                    break;
-                default:
-                    break;
-            }
-        }
+        } 
     }
 #endif
 }

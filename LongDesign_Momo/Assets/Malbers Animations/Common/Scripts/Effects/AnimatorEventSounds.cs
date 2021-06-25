@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace MalbersAnimations.Utilities
 {
-    [AddComponentMenu("Malbers/Utilities/Effects - Audio/Animator Event Sound")] 
+    [AddComponentMenu("Malbers/Utilities/Effects - Audio/Animator Event Sound")]
 
     public class AnimatorEventSounds : MonoBehaviour, IAnimatorListener
     {
@@ -69,7 +69,7 @@ namespace MalbersAnimations.Utilities
         public virtual void PlaySound(string sound)
         {
             var SoundEvent = m_EventSound.Find(item => item.name == sound && item.active == true);
-            
+
             if (SoundEvent != null)
             {
                 SoundEvent.VolumeWeight = 1;
@@ -111,7 +111,7 @@ namespace MalbersAnimations.Utilities
             StopAllCoroutines();
         }
 
-        IEnumerator C_Playforever(  EventSound E_sound)
+        IEnumerator C_Playforever(EventSound E_sound)
         {
             if (E_sound.interval <= 0)
             {
@@ -144,7 +144,7 @@ namespace MalbersAnimations.Utilities
 
         public float pitch = 1;
         public bool active = true;
-        [Tooltip("Interval Time to play a sound forever. Remember to call")]
+        [Tooltip("Interval Time to play a sound forever. Remember to call [PlaySoundForever]")]
         public float interval = 0f;
         public AudioSource source;
         public AudioClip[] Clips;
@@ -160,8 +160,8 @@ namespace MalbersAnimations.Utilities
 
             source.spatialBlend = 1;                                 //Set the sound to 3D
 
-            source.clip = Clips[Random.Range(0, Clips.Length)];      //Set a random clip to the audio Source
-            source.pitch *= pitch;                                   //Depending the animator speed modify the pitch
+            source.clip = Clips[Random.Range(0, Clips.Length)];     //Set a random clip to the audio Source
+            source.pitch = pitch;                                   //Depending the animator speed modify the pitch
             source.volume = Mathf.Clamp01(volume * VolumeWeight);    //Depending the weight of the animation clip modify the volume
             source.Play();                                           //Play the Audio
         }
@@ -195,7 +195,7 @@ namespace MalbersAnimations.Utilities
         {
             serializedObject.Update();
 
-            MalbersEditor.DrawDescription("Receive Animations Events from the Animations Clips to play Sounds using the function (PlaySound (string Name))");
+            MalbersEditor.DrawDescription("Receive animations events from the animations clips to play sounds using the method: PlaySound(string Name)");
 
             EditorGUI.BeginChangeCheck();
             {

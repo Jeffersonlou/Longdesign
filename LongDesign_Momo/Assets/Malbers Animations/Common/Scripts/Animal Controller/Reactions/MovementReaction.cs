@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Movement Reaction", order = 4)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Movement Reaction"/*, order = 4*/)]
     public class MovementReaction : MReaction
     {
         public Move_Reaction type = Move_Reaction.Sleep;

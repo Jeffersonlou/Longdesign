@@ -14,7 +14,7 @@ namespace MalbersAnimations.Controller.AI
     public enum LookFor { AnimalPlayer, Tags, UnityTags, Zones, GameObject, ClosestWayPoint, CurrentTarget, TransformVar, GameObjectVar }
 
 
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Look", order = 5)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Look", order = -101)]
     public class LookDecision : MAIDecision
     {
         /// <summary>Range for Looking forward and Finding something</summary>

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Arrived to Target")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Arrived to Target",order = -100)]
     public class ArriveDecision : MAIDecision
     {
         [Space,Tooltip("(OPTIONAL)Use it if you want to know if we have arrived to a specific Target")]

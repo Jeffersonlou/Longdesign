@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Utilities
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Preset/BlendShape Preset")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Preset/BlendShape", order = 200)]
     [HelpURL("https://malbersanimations.gitbook.io/animal-controller/utilities/blend-shapes/blend-shape-preset")]
     public class BlendShapePreset : ScriptableCoroutine
     {

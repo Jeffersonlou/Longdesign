@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2143,7 +2143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.342436, z: -5.060426}
+  m_FollowOffset: {x: 0, y: 2.03229, z: -5.015966}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -2256,31 +2256,6 @@ PrefabInstance:
     - target: {fileID: 4417229628137580, guid: a578de702f2191b4fa9cdcec1ad493c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114222225517902476, guid: a578de702f2191b4fa9cdcec1ad493c5,
-        type: 3}
-      propertyPath: debugStates
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114222225517902476, guid: a578de702f2191b4fa9cdcec1ad493c5,
-        type: 3}
-      propertyPath: Editor_Tabs1
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114222225517902476, guid: a578de702f2191b4fa9cdcec1ad493c5,
-        type: 3}
-      propertyPath: Editor_Tabs2
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114222225517902476, guid: a578de702f2191b4fa9cdcec1ad493c5,
-        type: 3}
-      propertyPath: useCameraUp.ConstantValue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114222225517902476, guid: a578de702f2191b4fa9cdcec1ad493c5,
-        type: 3}
-      propertyPath: useCameraInput.UseConstant
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1485951915348890352, guid: a578de702f2191b4fa9cdcec1ad493c5,
         type: 3}
@@ -3139,7 +3114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.342436, z: -5.060426}
+  m_FollowOffset: {x: 0, y: 2.03229, z: -5.015966}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -3387,7 +3362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 4.342436, z: -5.060426}
+  m_FollowOffset: {x: 0, y: 2.03229, z: -5.015966}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -12270,7 +12245,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 1
   stateAction: 0
@@ -12752,7 +12729,9 @@ MonoBehaviour:
   automatic: 1
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 1
   stateAction: 0
@@ -13543,7 +13522,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -13656,7 +13637,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -13922,7 +13905,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -15234,7 +15219,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 1
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -15749,7 +15736,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -16626,7 +16615,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -17396,7 +17387,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -17987,7 +17980,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 1
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -18747,7 +18742,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 1
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -19228,7 +19225,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0
@@ -19608,7 +19607,9 @@ MonoBehaviour:
   automatic: 0
   BoneOnly: 0
   Angle: 360
+  Weight: 1
   DoubleSide: 0
+  Flip: 0
   BoneName: Head
   zoneType: 0
   stateAction: 0

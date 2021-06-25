@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MalbersAnimations
 {
     [System.Serializable]
-    [UnityEngine.CreateAssetMenu(menuName = "Malbers Animations/ID/Holster ID")]
+    [UnityEngine.CreateAssetMenu(menuName = "Malbers Animations/ID/Holster", fileName = "New Holster ID", order = -1000)]
     public class HolsterID : IDs { }
 
 

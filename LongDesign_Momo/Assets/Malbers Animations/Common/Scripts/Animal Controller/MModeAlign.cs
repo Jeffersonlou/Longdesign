@@ -39,6 +39,8 @@ namespace MalbersAnimations
 
         void FindMode(int ModeID, int ability)
         {
+            if (!isActiveAndEnabled) return;
+
             if (this.ModeID.ID == ModeID || (extraModes?.Find(x => x.ID == ModeID) != null))
             {
                 if (AnimalsOnly)

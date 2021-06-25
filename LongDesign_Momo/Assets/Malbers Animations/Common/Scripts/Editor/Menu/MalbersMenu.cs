@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace MalbersAnimations
@@ -20,12 +21,29 @@ namespace MalbersAnimations
 
 
 
-        [MenuItem("Tools/Malbers Animations/Create Test Plane", false, 2)]
+        [MenuItem("Tools/Malbers Animations/Create Test Scene", false, 2)]
         public static void CreateTestPlane()
         {
+            var all = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects().ToList();
+
+            var mainCam = all.Find(x => x.name == "Main Camera");
+            if (mainCam)
+            { DestroyImmediate(mainCam); }
+
+
             var TestPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
             TestPlane.transform.localScale = new Vector3(20, 1, 20);
             TestPlane.GetComponent<MeshRenderer>().sharedMaterial = AssetDatabase.LoadAssetAtPath("Assets/Malbers Animations/Common/Shaders/Ground_20.mat", typeof(Material)) as Material;
+            TestPlane.isStatic = true;
+
+            var BrainCam = AssetDatabase.LoadAssetAtPath("Assets/Malbers Animations/Common/Cinemachine/CM Brain.prefab", typeof(GameObject)) as GameObject;
+            var CMFreeLook = AssetDatabase.LoadAssetAtPath("Assets/Malbers Animations/Common/Cinemachine/CM FreeLook Main.prefab", typeof(GameObject)) as GameObject;
+
+            if (BrainCam && CMFreeLook)
+            {
+                PrefabUtility.InstantiatePrefab(BrainCam);
+                PrefabUtility.InstantiatePrefab(CMFreeLook);
+            }
         }
 
 
@@ -35,21 +53,21 @@ namespace MalbersAnimations
 
     }
 
-        [CreateAssetMenu()]
-        public class PrefabReferenceFixer : ScriptableObject
-        {
-            [MenuItem("Assets/Force Reserialize")]
-            private static void ForceReserialize()
-            {
-                GameObject[] selection = Selection.gameObjects;
-                string[] objectPaths = new string[selection.Length];
+        //[CreateAssetMenu()]
+        //public class PrefabReferenceFixer : ScriptableObject
+        //{
+        //    [MenuItem("Assets/Force Reserialize")]
+        //    private static void ForceReserialize()
+        //    {
+        //        GameObject[] selection = Selection.gameObjects;
+        //        string[] objectPaths = new string[selection.Length];
 
-                for (int i = 0; i < selection.Length; ++i)
-                {
-                    objectPaths[i] = AssetDatabase.GetAssetPath(selection[i]);
-                }
+        //        for (int i = 0; i < selection.Length; ++i)
+        //        {
+        //            objectPaths[i] = AssetDatabase.GetAssetPath(selection[i]);
+        //        }
 
-                AssetDatabase.ForceReserializeAssets(objectPaths);
-            }
-        }
+        //        AssetDatabase.ForceReserializeAssets(objectPaths);
+        //    }
+        //}
 }

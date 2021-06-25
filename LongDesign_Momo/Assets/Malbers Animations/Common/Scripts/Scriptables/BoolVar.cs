@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>  Bool Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Bool", order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Bool", order = 1000)]
     public class BoolVar : ScriptableVar
     {
         [SerializeField] private bool value;

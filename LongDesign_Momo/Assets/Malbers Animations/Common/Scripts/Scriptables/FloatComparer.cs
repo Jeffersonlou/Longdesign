@@ -19,7 +19,7 @@ namespace MalbersAnimations
             set
             {
                 base.Value = value;
-                Compare();
+                if (Auto) Compare(); 
             }
         }
 
@@ -31,10 +31,10 @@ namespace MalbersAnimations
 
         void OnEnable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged += Compare;
-                value.Variable.OnValueChanged += InvokeFloat;
+                value.Variable.OnValueChanged += Invoke;
             }
 
             Raise.Invoke(Value);
@@ -42,10 +42,10 @@ namespace MalbersAnimations
 
         void OnDisable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged -= Compare;
-                value.Variable.OnValueChanged -= InvokeFloat;
+                value.Variable.OnValueChanged -= Invoke;
             }
         }
 

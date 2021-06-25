@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MalbersAnimations.Events;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -20,7 +21,9 @@ namespace MalbersAnimations
 
         [Tooltip("Type of Area to wander")]
         public AreaType m_AreaType = AreaType.Circle;
-        public float radius = 5;
+
+        [Min(0)] public float radius = 5;
+
         public Vector3 BoxArea = new Vector3(10, 1, 10);
 
         public WayPointType TargetType => pointType;
@@ -36,6 +39,9 @@ namespace MalbersAnimations
 
         public Color DebugColor = new Color(0, 1, 0, 0.15f);
 
+
+        [Space]
+        public GameObjectEvent OnTargetArrived = new GameObjectEvent();
 
         #region Properties
         public float WaitTime => m_WaitTime.RandomValue;
@@ -54,11 +60,28 @@ namespace MalbersAnimations
 
         void OnEnable()
         {
-            MainArea = transform.parent != null ? (transform.parent.GetComponentInParent<AIWanderArea>()) : this;
-            if (MainArea == null) MainArea = this; //Re-check in case this wander area is child of something else
+            FindWanderAreas();  
 
             if (!IsChild) GetNextDestination(); //Find the first random destination if it is a Main Wander Area
             currentNextTarget = MainArea.transform; //Store the current next target as this transform
+        }
+
+        private void FindWanderAreas()
+        {
+            MainArea = transform.parent != null ? (transform.parent.GetComponentInParent<AIWanderArea>()) : this;
+            if (MainArea == null) MainArea = this; //Re-check in case this wander area is child of something else
+
+            ChildWanderAreas = null;
+
+            if (!IsChild)
+            {
+                ChildWanderAreas = GetComponentsInChildren<AIWanderArea>();
+                if (ChildWanderAreas != null) foreach (var wa in ChildWanderAreas)
+                    { 
+                        wa.DebugColor = DebugColor;
+                        wa.stoppingDistance = stoppingDistance;
+                    }   
+            }
         }
 
         public void GetNextDestination()
@@ -94,7 +117,11 @@ namespace MalbersAnimations
             MTools.DrawWireSphere(Destination, Color.red, 0.1f, 3);
         }
 
-        public virtual Vector3 GetPosition() => MainArea.Destination;
+        public virtual Vector3 GetPosition()
+        {
+            MainArea.GetNextDestination();
+            return MainArea.Destination;
+        }
 
         public float StopDistance() => MainArea.stoppingDistance;
         public Transform NextTarget() => MainArea.currentNextTarget;
@@ -102,6 +129,8 @@ namespace MalbersAnimations
 
         public void TargetArrived(GameObject target)
         {
+            MainArea.OnTargetArrived.Invoke(target);
+
             if (NextTargets != null && NextTargets.Count > 0)
             {
                 var probability = UnityEngine.Random.Range(0f, 1f);
@@ -121,9 +150,7 @@ namespace MalbersAnimations
                 GetNextDestination();
             }
         }
-
-
-
+         
         private Vector3 RandomPointInBox(Vector3 size)
         {
             return new Vector3(
@@ -136,21 +163,14 @@ namespace MalbersAnimations
 
         private void OnValidate()
         {
-            MainArea = transform.parent != null ? (transform.parent.GetComponentInParent<AIWanderArea>()) : this;
-            if (MainArea == null) MainArea = this; //Re-check in case this wander area is child of something else
+            FindWanderAreas(); //for the colors
 
-            ChildWanderAreas = null;
-
-            if (!IsChild) ChildWanderAreas = GetComponentsInChildren<AIWanderArea>();
-
-
-            if (ChildWanderAreas != null) foreach (var wa in ChildWanderAreas) { wa.DebugColor = DebugColor; }
-
-            if (radius < 0) radius = 0;
             if (BoxArea.x < 0) BoxArea.x = 0;
             if (BoxArea.y < 0) BoxArea.y = 0;
             if (BoxArea.z < 0) BoxArea.z = 0;
         }
+
+      
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -217,7 +237,7 @@ namespace MalbersAnimations
     public class AIWanderAreaEditor : UnityEditor.Editor
     {
         UnityEditor.SerializedProperty
-            pointType, stoppingDistance, m_AreaType, radius, BoxArea, WaitTime, WanderWeight, nextWayPoints, DebugColor;
+            pointType, stoppingDistance, m_AreaType, radius, BoxArea, WaitTime, WanderWeight, nextWayPoints, DebugColor, OnTargetArrived;
         AIWanderArea M;
 
         private bool isChild;
@@ -234,6 +254,7 @@ namespace MalbersAnimations
             WanderWeight = serializedObject.FindProperty("WanderWeight");
             nextWayPoints = serializedObject.FindProperty("nextWayPoints");
             DebugColor = serializedObject.FindProperty("DebugColor");
+            OnTargetArrived = serializedObject.FindProperty("OnTargetArrived");
 
             isChild = M.transform.parent != null && (M.transform.parent.GetComponentInParent<AIWanderArea>() != null);
         }
@@ -295,6 +316,7 @@ namespace MalbersAnimations
                         UnityEditor.EditorGUI.indentLevel--;
                     }
                     UnityEditor.EditorGUILayout.EndVertical();
+                    UnityEditor.EditorGUILayout.PropertyField(OnTargetArrived);
                 }
             }
             UnityEditor.EditorGUILayout.EndVertical();

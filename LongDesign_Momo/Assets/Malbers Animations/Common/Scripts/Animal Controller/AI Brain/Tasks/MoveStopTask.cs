@@ -43,7 +43,7 @@ namespace MalbersAnimations.Controller.AI
 
         /// <summary> If the Targets Move, or you want to keep an eye of the Target this Option should be enable </summary>
         public bool UpdateFleeMovingTarget = true;
-        public bool LookAtTarget = true;
+        public bool LookAtTarget = false;
         public bool Interact = true;
 
 
@@ -76,7 +76,8 @@ namespace MalbersAnimations.Controller.AI
                     break;
                 case MoveType.Stop:
                     brain.AIMovement.Stop();
-                    brain.AIMovement.UpdateTargetPosition = false;  //IMPORTANT or the animal will try to Move if the Target moves
+                    brain.AIMovement.UpdateTargetPosition = false;              //IMPORTANT or the animal will try to Move if the Target moves
+                    brain.AIMovement.LookAtTargetOnArrival = LookAtTarget;      //IMPORTANT or the animal will try to Move if the Target moves
                     brain.TaskDone(index);
                     break;
                 case MoveType.StopAnimal:
@@ -437,8 +438,10 @@ namespace MalbersAnimations.Controller.AI
                     EditorGUILayout.PropertyField(Interact, new GUIContent("Interact", "If we Arrived to the Target and is Interactable, Interact!"));
                     break;
                 case MoveStopTask.MoveType.StopAnimal:
+                    EditorGUILayout.PropertyField(LookAtTarget, new GUIContent("Look at Target", "If we Arrived to the Target then Keep Looking At it"));
                     break;
                 case MoveStopTask.MoveType.Stop:
+                    EditorGUILayout.PropertyField(LookAtTarget, new GUIContent("Look at Target", "If we Arrived to the Target then Keep Looking At it"));
                     break;
                 case MoveStopTask.MoveType.RotateInPlace:
                     break;

@@ -20,7 +20,7 @@ namespace MalbersAnimations
             set
             {
                 base.Value = value;
-                Compare();
+                if (Auto) Compare();
             }
         }
 
@@ -33,10 +33,10 @@ namespace MalbersAnimations
 
         void OnEnable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged += Compare;
-                value.Variable.OnValueChanged += InvokeInt;
+                value.Variable.OnValueChanged += Invoke;
             }
 
             Raise.Invoke(Value);
@@ -44,10 +44,10 @@ namespace MalbersAnimations
 
         void OnDisable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged -= Compare;
-                value.Variable.OnValueChanged -= InvokeInt;
+                value.Variable.OnValueChanged -= Invoke;
             }
         }
 
@@ -130,14 +130,8 @@ namespace MalbersAnimations
                     UnityEditor.EditorGUI.LabelField(rectName, "    Name");
                     UnityEditor.EditorGUI.LabelField(rectComparer, " Compare");
                     UnityEditor.EditorGUI.LabelField(rectValue, " Value");
-
-
-                    Debug.boolValue = GUI.Toggle(DebugRect, Debug.boolValue, DebugCont, UnityEditor.EditorStyles.miniButton);
                 },
             };
-
-            DebugCont = new GUIContent((Texture)(UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/Malbers Animations/Common/Scripts/Editor/Icons/Debug_Icon.png", typeof(Texture))), "Debug");
-
         }
 
        

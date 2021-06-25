@@ -3,7 +3,7 @@
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Mode Reaction", order = 1)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Mode Reaction"/*, order = 1*/)]
     public class ModeReaction : MReaction
     {
         public Mode_Reaction type = Mode_Reaction.Activate;

@@ -10,24 +10,34 @@ namespace MalbersAnimations
     {
         public FloatReference value;
         public FloatEvent Raise = new FloatEvent();
-        
-        public virtual float Value { get => value; set => this.value.Value = value; }
+
+        public virtual float Value
+        {
+            get => value;
+            set
+            {
+                this.value.Value = value;
+                if (Auto) Invoke(value);
+            }
+        }
 
         void OnEnable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged += InvokeFloat;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged += Invoke;
             Raise.Invoke(value);
         }
 
         void OnDisable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged -= InvokeFloat;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged -= Invoke;
         }
 
-        public virtual void InvokeFloat(float value)   
-        {
-            if (Enable)  Raise.Invoke(value);
-        }
+        public virtual void Invoke(float value)
+        { if (Enable) Raise.Invoke(value); }
+
+        public virtual void InvokeFloat(float value) => Invoke(value);
+
+        public virtual void Invoke() => Invoke(Value);
     }
 
 

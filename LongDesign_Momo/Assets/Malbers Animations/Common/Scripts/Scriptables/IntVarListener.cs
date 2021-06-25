@@ -16,25 +16,31 @@ namespace MalbersAnimations
             get => value;
             set
             {
-                this.value.Value = value;
-                Raise.Invoke(value);
+                if (Auto) this.value.Value = value;
+                Invoke(value);
             }
         }
 
         void OnEnable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged += InvokeInt;
-            Raise.Invoke(value);
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged += Invoke;
+            Invoke();
         }
 
         void OnDisable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged -= InvokeInt;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged -= Invoke;
         }
 
-        public virtual void InvokeInt(int value)
-        { if (Enable) Raise.Invoke(value);}
+        public virtual void Invoke(int value)
+        { if (Enable) Raise.Invoke(value); }
+
+        public virtual void InvokeInt(int value) => Invoke(value);
+
+        public virtual void Invoke() => Invoke(Value);
     }
+
+
 
     //INSPECTOR
 #if UNITY_EDITOR
@@ -49,11 +55,7 @@ namespace MalbersAnimations
             Raise = serializedObject.FindProperty("Raise");
         }
 
-        protected override void DrawEvents()
-        {
-            UnityEditor.EditorGUILayout.PropertyField(Raise);
-            base.DrawEvents();
-        }
+        protected override void DrawEvents() => UnityEditor.EditorGUILayout.PropertyField(Raise);
     }
 #endif
 }

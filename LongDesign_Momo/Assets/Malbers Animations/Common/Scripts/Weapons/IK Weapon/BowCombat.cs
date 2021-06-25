@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalbersAnimations.Weapons
 {
     /// <summary>Ability that it will Manage the Bow Combat System while Riding</summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/HAP/Bow Profile")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Weapons/Bow Profile")]
     public class BowCombat : OldIKProfile
     {
         [Space, Header("Right Handed Bow Offsets")]

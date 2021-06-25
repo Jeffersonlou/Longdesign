@@ -15,8 +15,8 @@ MonoBehaviour:
   animTrans: 0
   time: 3
   delay: 0
-  UsePosition: 0
-  Position: {x: 0, y: 0, z: 0}
+  UsePosition: 1
+  Position: {x: 0, y: 0.1, z: 0}
   PosCurve:
     serializedVersion: 2
     m_Curve:
@@ -30,13 +30,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
+      time: 0.5
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11875854
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

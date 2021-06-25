@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 namespace MalbersAnimations.Scriptables
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Material", order = 2000)]
-    public class MaterialVar : ScriptableObject
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Material", order = 2000)]
+    public class MaterialVar : ScriptableVar
     {
         /// <summary> The current value</summary>
         [SerializeField] private Material value;
@@ -14,7 +13,13 @@ namespace MalbersAnimations.Scriptables
         public Material Value
         {
             get => value;
-            set =>  this.value = value;
+            set
+            {
+                this.value = value;
+#if UNITY_EDITOR
+                if (debug) Debug.Log($"<B>{name} -> [<color=red> {value} </color>] </B>", this);
+#endif
+            }
         }
 
         public virtual void SetValue(MaterialVar var) => Value = var.Value;

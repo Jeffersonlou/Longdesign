@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -120,7 +120,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: ebd8547632c255049bb6ca124932c0d2, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 811224cb69c20a448ba03b4e58d281bc, type: 2}
 --- !u!1 &16152
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +268,9 @@ MonoBehaviour:
   WanderWeight: 1
   nextWayPoints: []
   DebugColor: {r: 0, g: 1, b: 0, a: 0.15}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 469384922}
   ChildWanderAreas: []
   ShowRadius: 0
@@ -490,6 +493,9 @@ MonoBehaviour:
   nextWayPoints:
   - {fileID: 499238710}
   DebugColor: {r: 1, g: 0.56976867, b: 0, a: 0.21960784}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 149722253}
   ChildWanderAreas:
   - {fileID: 149722253}
@@ -728,6 +734,9 @@ MonoBehaviour:
   WanderWeight: 1
   nextWayPoints: []
   DebugColor: {r: 0, g: 1, b: 0, a: 0.15}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 469384922}
   ChildWanderAreas: []
   ShowRadius: 0
@@ -788,6 +797,9 @@ MonoBehaviour:
   WanderWeight: 1
   nextWayPoints: []
   DebugColor: {r: 0, g: 1, b: 0, a: 0.15}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 469384922}
   ChildWanderAreas:
   - {fileID: 469384922}
@@ -1939,8 +1951,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:
@@ -2237,6 +2255,9 @@ MonoBehaviour:
   WanderWeight: 1
   nextWayPoints: []
   DebugColor: {r: 0, g: 1, b: 0, a: 0.15}
+  OnTargetArrived:
+    m_PersistentCalls:
+      m_Calls: []
   MainArea: {fileID: 469384922}
   ChildWanderAreas: []
   ShowRadius: 0
@@ -3017,7 +3038,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7792553, y: 1}
+    m_SensorSize: {x: 1.7791798, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3033,8 +3054,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130707890}
-  m_LocalRotation: {x: 0.17764147, y: -0.000000022819888, z: 0.0000000041192747, w: 0.9840953}
-  m_LocalPosition: {x: 0, y: 1.0832989, z: -0.017313004}
+  m_LocalRotation: {x: 0.3058969, y: -2.8824738e-16, z: 1.200429e-16, w: 0.95206463}
+  m_LocalPosition: {x: 0, y: 2.9143682, z: -0.06300402}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1898840008}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Weapons
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/IK Profile", order =2000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Weapons/IK Profile")]
     public class IKProfile : ScriptableObject
     {
         public bool LookAtIK = false;

@@ -8,8 +8,8 @@ namespace MalbersAnimations
 {
     public class CameraInputMapper : MonoBehaviour
     {
-        public string TouchXInputMapTo = "Camera X";
-        public string TouchYInputMapTo = "Camera Y";
+        public string TouchXInputMapTo = "Mouse X";
+        public string TouchYInputMapTo = "Mouse Y";
 
         Vector2 delta;
         void Start()

@@ -59,7 +59,7 @@ namespace MalbersAnimations.Utilities
         public float MaxDistance = 100f;
 
 
-        [SerializeField, Tooltip("Use Raycasting for finding the Hit Point. Disable this if you don't need to know which was the object hitted. This will increase performance")]
+        [SerializeField, Tooltip("Use Raycasting for finding the Hit Point. Disable this if you don't need to know which was the object hitted.")]
         private BoolReference m_UseRaycasting = new BoolReference(true);
 
         /// <summary>Radius for the Sphere Casting, if this is set to Zero they I will use a Ray Casting</summary>
@@ -693,14 +693,6 @@ namespace MalbersAnimations.Utilities
                 EditorGUILayout.HelpBox("Please Select an Aim Origin Reference", MessageType.Error);
             EditorGUILayout.EndVertical();
 
-
-
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("Layer Interaction", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(m_aimLayer, new GUIContent("Layer"));
-            EditorGUILayout.PropertyField(m_Triggers);
-            EditorGUILayout.EndVertical();
-
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
            // EditorGUILayout.LabelField("Ray Casting", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(m_UseRaycasting);
@@ -711,6 +703,16 @@ namespace MalbersAnimations.Utilities
                 EditorGUILayout.PropertyField(RayHits);
             }
             EditorGUILayout.EndVertical();
+
+
+            if (m.UseRaycasting)
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.LabelField("Layer Interaction", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(m_aimLayer, new GUIContent("Layer"));
+                EditorGUILayout.PropertyField(m_Triggers);
+                EditorGUILayout.EndVertical();
+            }
 
             if (Application.isPlaying && debug.boolValue)
             {

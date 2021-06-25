@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Scriptable Variable")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Scriptable Variable", order = 6)]
     public class CheckScriptableVar : MAIDecision
     {
         [Space, Tooltip("Check on the Target or Self if it has a Listener Variable Component <Int><Bool><Float> and compares it with the local variable)")]

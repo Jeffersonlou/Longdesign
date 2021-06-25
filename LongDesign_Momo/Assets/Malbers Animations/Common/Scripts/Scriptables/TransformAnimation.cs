@@ -5,7 +5,7 @@ namespace MalbersAnimations
 {
   //  public enum AnimCycle { None, Loop, Repeat, PingPong }
 
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Anim Transform", order = 2000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Extras/Anim Transform", order = 2100)]
     public class TransformAnimation : ScriptableCoroutine
     {
         public enum AnimTransType { TransformAnimation, MountTriggerAdjustment }
@@ -40,19 +40,36 @@ namespace MalbersAnimations
         public Vector3 Scale = Vector3.one;
         public AnimationCurve ScaleCurve = new AnimationCurve(K);
 
+        public Vector3 TargetPos { get; private set; }
+        public Vector3 TargetRot { get; private set; }
+        public Vector3 TargetScale { get; private set; }
+
+        public Vector3 StartPos { get; private set; }
+        public Vector3 StartRot { get; private set; }
+        public Vector3 StartScale { get; private set; }
+
         public void Play(Transform item)
         {
             SetCoroutine(item.gameObject);
-            Stop();
-            coroutine.StartCoroutine(ICoroutine = PlayTransformAnimation(item));
+
+            if (ICoroutine != null)
+            {
+                FinalValue(item);
+                Stop();
+            }
+
+            coroutine?.StartCoroutine(ICoroutine = PlayTransformAnimation(item));
         }
 
         public void PlayForever(Transform item)
         {
             SetCoroutine(item.gameObject);
-            Stop();
+           
+            if (ICoroutine != null) Stop();
+            
+            coroutine?.StartCoroutine(ICoroutine = PlayTransformAnimationForever(item));
 
-            coroutine.StartCoroutine(ICoroutine = PlayTransformAnimationForever(item));
+            CleanCoroutine();
         }
 
 
@@ -65,13 +82,13 @@ namespace MalbersAnimations
 
                 float elapsedTime = 0;
 
-                Vector3 StartPos = item.localPosition;                                          //Store the Current Position Rotation and Scale
-                Vector3 StartRot = item.localEulerAngles;
-                Vector3 StartScale = item.localScale;
+                StartPos = item.localPosition;                                          //Store the Current Position Rotation and Scale
+                StartRot = item.localEulerAngles;
+                StartScale = item.localScale;
 
-                var TargetPos = StartPos + Position;
-                var TargetRot = StartRot + (Rotation);
-                var TargetScale = Vector3.Scale(StartScale, Scale);
+                TargetPos = StartPos + Position;
+                TargetRot = StartRot + (Rotation);
+                TargetScale = Vector3.Scale(StartScale, Scale);
 
                 //Debug.Log("TargetScale = " + TargetScale);
 
@@ -84,7 +101,7 @@ namespace MalbersAnimations
 
                     if (UsePosition) item.localPosition = Vector3.LerpUnclamped(StartPos, TargetPos, resultPos);
 
-                    if (UseRotation) item.transform.localEulerAngles = Vector3.LerpUnclamped(StartRot, TargetRot, resultRot); 
+                    if (UseRotation) item.transform.localEulerAngles = Vector3.LerpUnclamped(StartRot, TargetRot, resultRot);
 
                     if (UseScale) item.transform.localScale = Vector3.LerpUnclamped(StartScale, TargetScale, resultSca);
 
@@ -92,26 +109,31 @@ namespace MalbersAnimations
                     yield return null;
                 }
 
-                if (UsePosition)
-                {
-                    float FresultPos = PosCurve.Evaluate(1 / time);               //Evaluation of the Pos curve
-                    item.localPosition = Vector3.LerpUnclamped(StartPos, TargetPos, FresultPos);
-                }
-                if (UseRotation)
-                {
-                    float FresultRot = RotCurve.Evaluate(1 / time);               //Evaluation of the Rot curve
-                    item.transform.localEulerAngles = Vector3.LerpUnclamped(StartRot, TargetRot, FresultRot);
-                }
-                if (UseScale)
-                {
-                    float FresultSca = ScaleCurve.Evaluate(1 / time);               //Evaluation of the Scale curve
-                    item.transform.localScale = Vector3.LerpUnclamped(StartScale, TargetScale, FresultSca);
-                }
+                FinalValue(item);
             }
+
             yield return null;
+            CleanCoroutine();
         }
 
-
+        private void FinalValue(Transform item)
+        {
+            if (UsePosition)
+            {
+                float FresultPos = PosCurve.Evaluate(1 / time);               //Evaluation of the Pos curve
+                item.localPosition = Vector3.LerpUnclamped(StartPos, TargetPos, FresultPos);
+            }
+            if (UseRotation)
+            {
+                float FresultRot = RotCurve.Evaluate(1 / time);               //Evaluation of the Rot curve
+                item.transform.localEulerAngles = Vector3.LerpUnclamped(StartRot, TargetRot, FresultRot);
+            }
+            if (UseScale)
+            {
+                float FresultSca = ScaleCurve.Evaluate(1 / time);               //Evaluation of the Scale curve
+                item.transform.localScale = Vector3.LerpUnclamped(StartScale, TargetScale, FresultSca);
+            }
+        } 
         /// <summary> Plays the Transform Animations for the Selected item   </summary>
         protected IEnumerator PlayTransformAnimationForever(Transform item)
         {
@@ -148,8 +170,7 @@ namespace MalbersAnimations
                 }
             }
             yield return null;
+            CleanCoroutine();
         }
-    }
-
-   
+    } 
 }

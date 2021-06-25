@@ -134,8 +134,7 @@ namespace MalbersAnimations.Controller
         {
             base.transform.position = newPos;
             LastPos = base.transform.position;
-            platform = null;
-
+            platform = null; 
         }
 
         #endregion
@@ -185,14 +184,16 @@ namespace MalbersAnimations.Controller
         #endregion
 
         #region Stances
-        /// <summary>Toogle the New Stance with the Default Stance▼▲ </summary>
-        public void Stance_Toggle(int NewStance) => Stance = (Stance == NewStance) ? DefaultStance : NewStance;
 
-        /// <summary>Toogle the New Stance with the Default Stance▼▲ </summary>
-        public void Stance_Toggle(StanceID NewStance) => Stance_Toggle(NewStance.ID);
+        ///// <summary>Toggle the New Stance with the Default Stance▼▲ </summary>
+        //public void Stance_Toggle(int NewStance) => Stance = (Stance == NewStance) ? DefaultStance : NewStance;
 
-        public void Stance_Set(StanceID id) => Stance = id ?? 0;
-        public void Stance_Set(int id) => Stance = id;
+        /// <summary>Toggle the New Stance with the Default Stance▼▲ </summary>
+        public void Stance_Toggle(StanceID NewStance) => Stance = (Stance.ID == NewStance.ID) ? DefaultStance : NewStance;
+
+        public void Stance_Set(StanceID id) => Stance = id;
+
+       // public void Stance_Set(int id) => Stance = id;
         public void Stance_Reset() => Stance = defaultStance;
 
         #endregion
@@ -302,7 +303,7 @@ namespace MalbersAnimations.Controller
         public bool HasState(int ID) => State_Get(ID) != null;
 
         /// <summary>Returns if the Animal has a state by its name</summary>
-        public bool HasState(string statename) => states.Find(s => s.name == statename) != null;
+        public bool HasState(string statename) => states.Exists(s => s.name == statename);
 
         /// <summary>Set the State Status on the Animator</summary>
         public virtual void State_SetStatus(int status)
@@ -443,7 +444,7 @@ namespace MalbersAnimations.Controller
         public virtual Mode Mode_Get(int ModeID) => modes.Find(m => m.ID == ModeID);
 
         /// <summary> Set the Parameter Int ID to a value and pass it also to the Animator </summary>
-        public void SetModeStatus(int value) => SetIntParameter?.Invoke(hash_ModeStatus, ModeInt = value);
+        public void SetModeStatus(int value) => SetIntParameter?.Invoke(hash_ModeStatus, ModeStatus = value);
         public void Mode_SetPower(float value) => SetOptionalAnimParameter(hash_ModePower, ModePower = value);
 
         /// <summary>Activate a Random Ability on the Animal using a Mode ID</summary>
@@ -583,7 +584,7 @@ namespace MalbersAnimations.Controller
             else
             {
                 SetModeStatus(ModeAbility = Int_ID.Available);
-                ModeStatus = MStatus.None; //IMPORTANT!
+                ModeInternalStatus = MStatus.None; //IMPORTANT!
                 return;
             }
 
@@ -600,7 +601,7 @@ namespace MalbersAnimations.Controller
         public virtual void Mode_Interrupt()
         {
             SetModeStatus(Int_ID.Interrupted);//Means the Mode is interrupted
-            if (IsPlayingMode) ModeStatus = MStatus.Interrupted;
+            if (IsPlayingMode) ModeInternalStatus = MStatus.Interrupted;
             //Debug.Log("Mode Interrupt");
         }
 
@@ -775,7 +776,10 @@ namespace MalbersAnimations.Controller
             currentSpeedSet = null; //IMPORTANT SET THE CURRENT SPEED SET TO NULL
 
             if (keepInertiaSpeed)
+            {
+                CalculateTargetSpeed(); //Important needs to calculate the Target Speed again
                 InertiaPositionSpeed = TargetSpeed; //Set the Target speed to the Fall Speed so there's no Lerping when the speed changes
+            }
         }
 
         private void Speed_Add(int change) => CurrentSpeedIndex += change;
@@ -875,17 +879,16 @@ namespace MalbersAnimations.Controller
         }
 
         /// <summary> If the Animal has touched the ground then Grounded will be set to true  </summary>
-        public void CheckIfGrounded()
+        public bool CheckIfGrounded()
         {
-            if (!Grounded)
-            {
-                AlignRayCasting();
+            AlignRayCasting();
 
-                if (MainRay && FrontRay)
-                {
-                    Grounded = true;   //Activate the Grounded Parameter so the Idle and the Locomotion State can be activated
-                }
+            if (MainRay && FrontRay && !DeepSlope)
+            {
+                return Grounded = true;   //Activate the Grounded Parameter so the Idle and the Locomotion State can be activated
             }
+            
+            return false;
         }
 
        public void Always_Forward(bool value) => AlwaysForward = value;

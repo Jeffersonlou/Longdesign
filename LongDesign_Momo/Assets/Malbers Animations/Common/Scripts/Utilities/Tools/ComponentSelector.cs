@@ -131,7 +131,7 @@ namespace MalbersAnimations
                         var currentGUIColor = GUI.color;
                         GUI.color = active.boolValue ? (GUI.color + Color.green)/2 : (GUI.color + Color.black) / 2;
                         active.boolValue = GUILayout.Toggle(active.boolValue, new GUIContent( active.boolValue ? "ON" : "OFF","Enable/Disable the "+ name.stringValue),
-                            EditorStyles.miniButton, GUILayout.Width(33));
+                            EditorStyles.miniButton, GUILayout.Width(40));
                         GUI.color = currentGUIColor;
                         if (EditorGUI.EndChangeCheck())
                         {

@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1640189129854389440}
-  - component: {fileID: 1572720064}
+  - component: {fileID: 560526345}
   m_Layer: 30
   m_Name: Cross
   m_TagString: Untagged
@@ -191,7 +191,7 @@ Transform:
   m_Father: {fileID: 1061974485845700983}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1572720064
+--- !u!114 &560526345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,28 +200,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3616083704450878159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
+  m_Script: {fileID: 11500000, guid: de6f169dc7cedcb46a2ad97a93a383cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
-  Repeat: 0
-  onEnable:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: d5d2d74a610761140bfd39a6e4655da1, type: 2}
-        m_MethodName: PlayForever
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1640189129854389440}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  Description: 
-  ShowDescription: 0
+  anim: {fileID: 11400000, guid: d5d2d74a610761140bfd39a6e4655da1, type: 2}
+  m_transform: {fileID: 1640189129854389440}
+  PlayOnStart: 1
+  PlayForever: 1
 --- !u!1 &8624860055167494257
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1061974485845700983}
   - component: {fileID: 8057817980249081385}
-  - component: {fileID: 2338703625055220798}
+  - component: {fileID: 2941296932141083483}
   - component: {fileID: 7177122813556889754}
   m_Layer: 30
   m_Name: Health Pack
@@ -269,7 +254,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.6
   m_Center: {x: 0, y: 0.6, z: 0}
---- !u!114 &2338703625055220798
+--- !u!114 &2941296932141083483
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,21 +263,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 8624860055167494257}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42b20103f05ec694e9515e126d8eb956, type: 3}
+  m_Script: {fileID: 11500000, guid: 4dbb8d1e86287c2498b5ab8eaeb5a1a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ID:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
-  hitLayer:
+  Layer:
     UseConstant: 1
     ConstantValue:
       serializedVersion: 2
       m_Bits: 1048576
     Variable: {fileID: 0}
   triggerInteraction: 1
-  OnTrigger_Enter:
+  onTriggerEnter:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 2e6083f125e2f7c409a69b19911d011f, type: 2}
@@ -317,9 +298,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnTrigger_Exit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7177122813556889754
 MonoBehaviour:
   m_ObjectHideFlags: 0

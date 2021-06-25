@@ -60,7 +60,7 @@ namespace MalbersAnimations.Scriptables
     {
         private ReorderableList Reo_ScriptVars;
         private MonoScript script;
-        private SerializedProperty vars;
+        private SerializedProperty vars, ResetOnDisable, ResetOnEnable;
         private ResetScriptableVars m;
 
         /// <summary>  Options to display in the popup to select constant or variable. </summary>
@@ -74,6 +74,8 @@ namespace MalbersAnimations.Scriptables
             script = MonoScript.FromMonoBehaviour(target as MonoBehaviour);
             m = (ResetScriptableVars)target;
             vars = serializedObject.FindProperty("vars");
+            ResetOnEnable = serializedObject.FindProperty("ResetOnEnable");
+            ResetOnDisable = serializedObject.FindProperty("ResetOnDisable");
 
 
             Reo_ScriptVars = new ReorderableList(serializedObject, vars, true, true, true, true)
@@ -108,15 +110,19 @@ namespace MalbersAnimations.Scriptables
 
             EditorGUILayout.BeginVertical(MalbersEditor.StyleGray);
             {
-                MalbersEditor.DrawScript(script);
+               // MalbersEditor.DrawScript(script);
 
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.BeginHorizontal();
                 {
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ResetOnEnable"), new GUIContent("Reset on Enable", "Reset the values when this Script is Enabled"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ResetOnDisable"), new GUIContent("Reset on Disable", "Reset the values when this Script is Disabled, and when the Play button is Off (in the Editor)"));
-                    Reo_ScriptVars.DoLayoutList();
+                    ResetOnEnable.boolValue =  GUILayout.Toggle(ResetOnEnable.boolValue, 
+                        new GUIContent("Reset on Enable", "Reset the values when this Script is Enabled"), EditorStyles.miniButton);
+
+                    ResetOnDisable.boolValue = GUILayout.Toggle(ResetOnDisable.boolValue, 
+                        new GUIContent("Reset on Disable", "Reset the values when this Script is Disabled, and when the Play button is Off (in the Editor)"), EditorStyles.miniButton);
+
                 }
-                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+                    Reo_ScriptVars.DoLayoutList();
             }
             EditorGUILayout.EndVertical();
             serializedObject.ApplyModifiedProperties();

@@ -74,8 +74,8 @@ namespace MalbersAnimations.Controller
         protected float FlyStyleTime = 1;
        // private float DistanceToGround;
        
-        /// <summary> This is used to find Physics errors when the animal goes to fast and looses the land </summary>
-        private bool FoundLand;
+        ///// <summary> This is used to find Physics errors when the animal goes to fast and looses the land </summary>
+        //private bool FoundLand;
         /// <summary> Check when the Animal has touched some ground</summary>
         private bool TouchedLand;
         private bool GoingDown;
@@ -250,11 +250,17 @@ namespace MalbersAnimations.Controller
 
             if (canLand.Value && !TouchedLand)
             {
+                if (Physics.Raycast(animal.Main_Pivot_Point, animal.Gravity, out RaycastHit landHit, (LandMultiplier) * animal.ScaleFactor, LandOn))
+                {
+                    // FoundLand = true;
+                    Debugging($"[AllowExit] Can land on <{landHit.collider.name}>");
+                    TouchedLand = true;
+                    animal.UseGravity = true;
+                    AllowExit();
+                }
                 if (BlockingBone)
                 {
                     var HitPoint = BlockingBone.TransformPoint(BoneOffsetPos);
-
-                 //   if (debug) Debug.DrawRay(HitPoint, animal.Gravity * BlockLandDist * animal.ScaleFactor, Color.yellow); //Draw the Ray for the Blocking Bone
 
                     if (Physics.Raycast(HitPoint, animal.Gravity, out RaycastHit landHitBone, BlockLandDist * animal.ScaleFactor, LandOn, IgnoreTrigger))
                     {
@@ -262,34 +268,6 @@ namespace MalbersAnimations.Controller
                         TouchedLand = true;
                         animal.UseGravity = true;
                         AllowExit();
-                        return;
-                    }
-                } 
-
-                var MainPivot = animal.Main_Pivot_Point + animal.AdditivePosition;
-                float LandDistance = (LandMultiplier) * animal.ScaleFactor;
-
-                if (debug) Debug.DrawRay(MainPivot, animal.Gravity * LandDistance, Color.yellow);
-
-                if (Physics.Raycast(MainPivot, animal.Gravity, out RaycastHit landHit, 100f, LandOn))
-                {
-                    FoundLand = true;
-                    if (landHit.distance < LandDistance)
-                    {
-                        Debugging($"[AllowExit] Can land on <{landHit.collider.name}>");
-                        TouchedLand = true;
-                        animal.UseGravity = true;
-                        AllowExit();
-                    }
-                }
-                else
-                {
-                    //Means that has lost the RayCastHit that it had
-                    if (FoundLand)
-                    {
-                        Debugging("The Animal Tried to go below the terrain.... Unity Physic Bug  :( ");
-                        animal.Teleport_Internal(animal.LastPos);            //HACK WHEN THE ANIMAL Goes UnderGround
-                        animal.ResetUPVector();
                     }
                 }
             }
@@ -313,15 +291,15 @@ namespace MalbersAnimations.Controller
         {
             var Gravity = animal.Gravity;
             //Add more speed when going Down
-            float downAcceleration = DownAcceleration * animal.ScaleFactor;
+            //float downAcceleration = DownAcceleration * animal.ScaleFactor;
 
             if (animal.MovementAxis.y < 0f)
             {
-                acceleration += downAcceleration * deltaTime;
+                acceleration += DownAcceleration * deltaTime;
             }
             else
             {
-                acceleration = Mathf.MoveTowards(acceleration, 0, deltaTime * 2);            //Deacelerate slowly all the acceleration you earned..
+                acceleration = Mathf.MoveTowards(acceleration, 0, deltaTime * DownAcceleration);            //Deacelerate slowly all the acceleration you earned..
             }
 
             if (acceleration != 0) animal.AdditivePosition += animal.InertiaPositionSpeed.normalized * acceleration * deltaTime; //USE INERTIA SPEED INSTEAD OF TARGET POSITION
@@ -354,7 +332,7 @@ namespace MalbersAnimations.Controller
             acceleration = 0;
             isGliding = false;
             InputValue = false;
-            FoundLand = false;
+           // FoundLand = false;
             TouchedLand = false;
             elapsedImpulseTime = 0;
         }

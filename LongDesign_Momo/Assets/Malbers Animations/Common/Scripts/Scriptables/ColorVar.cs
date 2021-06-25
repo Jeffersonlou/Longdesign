@@ -3,7 +3,7 @@
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>  Float Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Color", order = 2000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Color", order = 2000)]
     public class ColorVar : ScriptableVar
     {
         /// <summary>The current value </summary>

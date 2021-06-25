@@ -1,11 +1,8 @@
-﻿using MalbersAnimations.Weapons;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MalbersAnimations.Utilities
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Effect Modifiers/FireBall")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Modifier/Effects/FireBall")]
     public class FireBallEffectM : EffectModifier
     {
         public float Power = 20;

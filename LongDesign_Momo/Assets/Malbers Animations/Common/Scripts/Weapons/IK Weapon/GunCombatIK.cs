@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MalbersAnimations.Weapons
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/HAP/Gun Combat IK")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Weapons/Gun Combat IK")]
     public class GunCombatIK : OldIKProfile
     {
         private static readonly Keyframe[] KeyFrames = { new Keyframe(0, 0.61f), new Keyframe(1.25f, 0.61f), new Keyframe(2, 0.4f) };

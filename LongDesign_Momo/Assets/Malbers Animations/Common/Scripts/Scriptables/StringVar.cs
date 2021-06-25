@@ -4,11 +4,12 @@ using UnityEngine;
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>String Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple</summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/String", order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/String", order = 1000)]
     public class StringVar : ScriptableVar
     {
         [SerializeField]
         /// <summary> The current value</summary>
+        [TextArea(0, 20)] 
         private string value = "";
 
         /// <summary>Invoked when the value changes </summary>
@@ -19,15 +20,13 @@ namespace MalbersAnimations.Scriptables
         {
             get => value;
             set
-            {
-                if (this.value != value)                   //If the value is different change it
-                {
-                    this.value = value;
-                    OnValueChanged(value);         //If we are using OnChange event Invoked
+            { 
+                this.value = value;
+                OnValueChanged(value);         //If we are using OnChange event Invoked
+
 #if UNITY_EDITOR
-                    if (debug) Debug.Log($"<B>{name} -> [<color=green> {value} </color>] </B>", this);
-#endif
-                }
+                if (debug) Debug.Log($"<B>{name} -> [<color=green> {value} </color>] </B>", this);
+#endif 
             }
         }
 

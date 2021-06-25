@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 using MalbersAnimations.Events;
 
 #if UNITY_EDITOR
@@ -8,13 +7,11 @@ using UnityEditor;
 
 namespace MalbersAnimations.Scriptables
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Collections/Game Object Collection", fileName = "New GameObject Collection")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Collections/Runtime GameObject Set", order = 1000,  fileName = "New Runtime Gameobject Collection")]
     public class RuntimeGameObjects : RuntimeCollection<GameObject> 
     {
         public GameObjectEvent OnItemAdded = new GameObjectEvent();
         public GameObjectEvent OnItemRemoved = new GameObjectEvent();
-
-       
 
         public override void Item_Remove(GameObject newItem)
         {
@@ -66,15 +63,25 @@ namespace MalbersAnimations.Scriptables
     {
         RuntimeGameObjects M;
 
+        SerializedProperty items, OnItemAdded, OnItemRemoved, OnSetEmpty, Description;
+
         private void OnEnable()
         {
             M = (RuntimeGameObjects)target;
+
+            items = serializedObject.FindProperty("items");
+            OnItemAdded = serializedObject.FindProperty("OnItemAdded");
+            OnItemRemoved = serializedObject.FindProperty("OnItemRemoved");
+            OnSetEmpty = serializedObject.FindProperty("OnSetEmpty");
+            Description = serializedObject.FindProperty("Description");
         }
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            serializedObject.Update();
 
+            //EditorGUILayout.PropertyField(items);
+            //base.OnInspectorGUI();
 
             if (Application.isPlaying)
             {
@@ -89,9 +96,15 @@ namespace MalbersAnimations.Scriptables
                 EditorGUI.EndDisabledGroup();
             }
 
+            EditorGUILayout.PropertyField(Description);
+            EditorGUILayout.PropertyField(OnItemAdded);
+            EditorGUILayout.PropertyField(OnItemRemoved);
+            EditorGUILayout.PropertyField(OnSetEmpty);
+
+
+            serializedObject.ApplyModifiedProperties();
         }
     }
 #endif
-
 }
 

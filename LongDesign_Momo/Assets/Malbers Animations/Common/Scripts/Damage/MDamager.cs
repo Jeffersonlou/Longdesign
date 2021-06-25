@@ -198,6 +198,12 @@ namespace MalbersAnimations.Controller
                 {
                     var HitPoint = col.ClosestPoint(transform.position);
                     rb.AddForceAtPosition(Direction * force, HitPoint, forceMode);
+                    
+                    if (debug)
+                    { 
+                        MTools.DrawWireSphere(HitPoint, Color.red, 0.1f, 2f); 
+                       Debug.DrawRay(HitPoint,Direction, Color.red, 2f); 
+                    }
                 }
                 else
                     rb.AddForce(Direction * force, forceMode);

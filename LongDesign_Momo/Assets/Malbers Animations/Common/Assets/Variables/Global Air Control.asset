@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Global Air Control
   m_EditorClassIdentifier: 
   Description: Global Air Control for Jump and Falling
+  debug: 0
   value: 1

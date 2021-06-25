@@ -406,9 +406,9 @@ namespace MalbersAnimations.Events
 
             EditorGUILayout.BeginVertical(MalbersEditor.StyleGray);
             {
-                MalbersEditor.DrawScript(script);
+              //  MalbersEditor.DrawScript(script);
 
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.BeginVertical(/*EditorStyles.helpBox*/);
                 {
                     list.DoLayoutList();
 

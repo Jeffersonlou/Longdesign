@@ -17,10 +17,12 @@ namespace MalbersAnimations.Controller
           //  var stepHeight = property.FindPropertyRelative("stepHeight");
             var JumpLandDistance = property.FindPropertyRelative("JumpLandDistance");
             var fallingTime = property.FindPropertyRelative("fallingTime");
-            var CliffTime = property.FindPropertyRelative("CliffTime");
+          //  var CliffTime = property.FindPropertyRelative("CliffTime");
             var CliffLandDistance = property.FindPropertyRelative("CliffLandDistance");
             var HeightMultiplier = property.FindPropertyRelative("HeightMultiplier");
             var ForwardMultiplier = property.FindPropertyRelative("ForwardMultiplier");
+            var ForwardPressed = property.FindPropertyRelative("ForwardPressed");
+            var LastState = property.FindPropertyRelative("LastState");
 
          
 
@@ -70,10 +72,14 @@ namespace MalbersAnimations.Controller
                 float Division = line.width / 2;
                 var lineSplitted = line;
 
+                EditorGUI.PropertyField(lineSplitted, LastState, new GUIContent("Last State", "Last State for the Jump"));
+                line.y += height + 2;
+                lineSplitted = line;
+
                 lineSplitted.width = Division + 20;
 
 
-                EditorGUI.PropertyField(lineSplitted, VerticalSpeed, new GUIContent("Vertical Speed", "Root Motion:\nEnable/Disable the Root Motion on the Animator"));
+                EditorGUI.PropertyField(lineSplitted, VerticalSpeed, new GUIContent("Min Vertical", "Minimal Vertical speed on the Animator to activate this profile"));
 
                 lineSplitted.x += Division + 42;
                 lineSplitted.width -= 62;
@@ -105,16 +111,31 @@ namespace MalbersAnimations.Controller
 
                 EditorGUI.PropertyField(lineSplitted, fallingTime, new GUIContent("Fall Time", "Animation normalized time to change to fall animation if the ray checks if the animal is falling"));
 
-                ///NEW LINE
-                line.y += height + 8;
+            
 
-                EditorGUI.PropertyField(line, CliffTime);
+              
+
+
+                ///NEW LINE
+                //line.y += height + 8;
+
+                // EditorGUI.PropertyField(line, CliffTime);
 
                 line.y += height + 2;
                 EditorGUI.PropertyField(line, CliffLandDistance);
 
                 line.y += height + 8;
-                EditorGUI.LabelField(line, "Jump Multipliers", EditorStyles.boldLabel);
+                EditorGUI.LabelField(line, "Multipliers", EditorStyles.boldLabel);
+                line.y += height + 2;
+                lineSplitted = line;
+
+
+                EditorGUI.PropertyField(lineSplitted, ForwardPressed);
+
+             
+
+
+                ///NEW LINE
                 line.y += height + 2;
                 lineSplitted = line;
 
@@ -129,6 +150,12 @@ namespace MalbersAnimations.Controller
                 EditorGUIUtility.labelWidth = 55;
                 EditorGUI.PropertyField(lineSplitted, ForwardMultiplier, new GUIContent("Forward", "Forward multiplier for the Jump. Default:1"));
                 EditorGUIUtility.labelWidth = 0;
+
+                lineSplitted.x += Division + 35;
+                lineSplitted.width -= 65;
+
+                
+                
             }
 
             EditorGUI.indentLevel = indent;
@@ -139,8 +166,8 @@ namespace MalbersAnimations.Controller
         {
             if (!property.isExpanded) return base.GetPropertyHeight(property, label)+5;
          
-            float lines = 8;
-            return base.GetPropertyHeight(property, label) * lines + (2 * lines) + 5;
+            float lines = 9;
+            return base.GetPropertyHeight(property, label) * lines + (2 * lines) ;
         }
 
     }

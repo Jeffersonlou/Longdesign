@@ -1,6 +1,8 @@
 ﻿using MalbersAnimations.Scriptables;
-using System.Linq;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MalbersAnimations.Utilities
 {
@@ -8,7 +10,7 @@ namespace MalbersAnimations.Utilities
     [DefaultExecutionOrder(500)/*,[RequireComponent(typeof(Aim))*/]
     [AddComponentMenu("Malbers/Utilities/Aiming/Look At")]
 
-    public class LookAt : MonoBehaviour, IAnimatorListener 
+    public class LookAt : MonoBehaviour, IAnimatorListener, ILookAtActivation
     {
         [System.Serializable]
         public class BoneRotation
@@ -127,7 +129,7 @@ namespace MalbersAnimations.Utilities
         {
             for (int i = 0; i < Bones.Length; i++)
             {
-              Bones[i].bone.localRotation =  LocalRot[i]; //Save the Local Rotation of the Bone
+                Bones[i].bone.localRotation = LocalRot[i]; //Save the Local Rotation of the Bone
             }
         }
 
@@ -160,8 +162,48 @@ namespace MalbersAnimations.Utilities
 
         public virtual void SetTargetOnly(bool val) => OnlyTargets = val;
 
+
+        public virtual void EnableByPriority(int priority)
+        {
+            if (priority >= DisablePriority)
+            {
+                EnablePriority = priority;
+                if (DisablePriority == EnablePriority) DisablePriority = 0;
+            }
+            ActiveByAnimation = (EnablePriority > DisablePriority);
+
+            //Debug.Log("en");
+        }
+        
+        public virtual void ResetByPriority(int priority)
+        {
+            if (EnablePriority == priority) EnablePriority = 0;
+            if (DisablePriority == priority) DisablePriority = 0;
+
+            ActiveByAnimation = (EnablePriority > DisablePriority);
+          //  Debug.Log("Res");
+        }
+
+
+        public virtual void DisableByPriority(int priority)
+        {
+            if (priority >= EnablePriority)
+            {
+                DisablePriority = priority;
+                if (DisablePriority == EnablePriority)  EnablePriority = 0;
+            }
+
+           // Debug.Log("Dis");
+            ActiveByAnimation = (EnablePriority > DisablePriority);
+        }
+
+
         bool OverridePriority;
         bool lastActivation;
+        public int EnablePriority { get; private set; }
+        public int DisablePriority { get; private set; }
+
+        //private int[] LayersPriority = new int[20];
 
         public void DisableLookAt(bool value)
         {
@@ -258,4 +300,32 @@ namespace MalbersAnimations.Utilities
         }
 #endif
     }
+
+
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(LookAt))]
+    public class LookAtED : Editor
+    {
+        LookAt M;
+        void OnEnable()
+        {
+            M = (LookAt) target;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            EditorGUI.BeginDisabledGroup(true);
+            if (Application.isPlaying)
+            {
+                EditorGUILayout.IntField("Enable Priority", M.EnablePriority);
+                EditorGUILayout.IntField("Disable Priority", M.DisablePriority);
+                Repaint();
+            }
+            EditorGUI.EndDisabledGroup();
+
+        }
+    }
+#endif
 }

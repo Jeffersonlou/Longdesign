@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MalbersAnimations.Controller
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Mode Modifier/Directional Damage")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Modifier/Mode/Directional Damage")]
     public class MDirectionalDamage : ModeModifier
     {
         public enum HitDirection { TwoSides, FourSides, SixSides }

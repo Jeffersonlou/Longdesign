@@ -54,8 +54,10 @@ namespace MalbersAnimations.Controller
 
         void SetDefaultRespawnPoint() => RespawnPoint.Value = transform;
 
-        void Start()
+        void OnEnable()
         {
+            if (!isActiveAndEnabled) return;
+
             if (RespawnPoint.Value == null) SetDefaultRespawnPoint();
 
             if (instance == null)

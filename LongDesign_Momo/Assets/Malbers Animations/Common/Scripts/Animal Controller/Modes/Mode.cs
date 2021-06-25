@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine; 
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace MalbersAnimations.Controller
 {
@@ -120,13 +121,15 @@ namespace MalbersAnimations.Controller
             {
                 Animal.Set_State_Sleep_FromMode(false);  //Restore all the States that are sleep from this mode
 
-                if (Animal.ModeStatus != MStatus.Interrupted && Animal.ModeStatus != MStatus.ForceExit)
-                    Animal.ModeStatus = MStatus.Completed;
+                if (Animal.ModeInternalStatus != MStatus.Interrupted && Animal.ModeInternalStatus != MStatus.ForceExit)
+                    Animal.ModeInternalStatus = MStatus.Completed;
             }
 
             PlayingMode = false;
 
             modifier?.OnModeExit(this);
+
+            if (ResetToDefault) m_AbilityIndex.Value = DefaultIndex.Value;
 
             OnExitInvoke();
 
@@ -213,6 +216,12 @@ namespace MalbersAnimations.Controller
             {
                 MDebug($"<B>[{newAbility.Name}]</B> cannot be Activated. The Active State won't allow it");
                 return false; 
+            }
+
+            if (StanceCanInterrupt(Animal.Stance, newAbility))       //Check if the States can block the mode
+            {
+                MDebug($"<B>[{newAbility.Name}]</B> cannot be Activated. The current Stance won't allow it");
+                return false;
             }
 
             if (PlayingMode) //if is set to Toggle then if is already playing this mode then stop it
@@ -348,7 +357,7 @@ namespace MalbersAnimations.Controller
             {
                 MDebug($"</B> with Ability: <B>{Animal.ActiveMode.ActiveAbility.Name} <color=black> [FORCE TO EXIT] </color> </B>");
 
-                Animal.ModeStatus = MStatus.ForceExit;
+                Animal.ModeInternalStatus = MStatus.ForceExit;
                 Animal.ActiveMode.ResetMode();
                 ModeExit();           //This allows to Play a mode again
                 AbilityIndex = abilityIndex;
@@ -375,7 +384,7 @@ namespace MalbersAnimations.Controller
                 PlayingMode = true;
 
                 Animal.Set_State_Sleep_FromMode(true);                      //Put to sleep the states needed
-                Animal.ModeStatus = MStatus.Playing;
+                Animal.ModeInternalStatus = MStatus.Playing;
                 OnEnterInvoke();                                        //Invoke the ON ENTER Event
 
                 ModeActivationTime = Time.time; //Store the time the Mode started
@@ -414,7 +423,7 @@ namespace MalbersAnimations.Controller
         {
             if (Animal.ActiveMode == this && ActiveAbility == exitingAbility)               //Means that we just exiting the same animation that we entered IMPORTANT
             {
-                MDebug($"Mode: <B>{Name}<color=red> [ANIMATION EXIT] </color> </B>  with Ability <b>[{(exitingAbility?.Name)}] {Animal.ModeStatus} </b>" );
+                MDebug($"Mode: <B>{Name}<color=red> [ANIMATION EXIT] </color> </B>  with Ability <b>[{(exitingAbility?.Name)}] {Animal.ModeInternalStatus} </b>" );
                
                 ResetMode();
                 ModeExit();
@@ -484,8 +493,31 @@ namespace MalbersAnimations.Controller
             return false;
         }
 
+
+        public virtual bool StanceCanInterrupt(StanceID ID, Ability ability = null)
+        {
+            if (ability == null) ability = ActiveAbility;
+
+            var properties = ability.Properties;
+
+            if (properties.affect_Stance == AffectStates.None) return false;
+
+            if (ability.HasAffectStances)
+            {
+                if (properties.affect_Stance == AffectStates.Exclude && HasStance(properties, ID)      //If the new state is on the Exclude State
+                || (properties.affect_Stance == AffectStates.Include && !HasStance(properties, ID)))   //OR If the new state is not on the Include State
+                {
+                    MDebug($"Current Stance [{ID.name}] is Blocking <B>" + ability.Name + "</B>");
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>Find if a State ID is on the Avoid/Include Override list</summary>
         protected static bool HasState(ModeProperties properties, StateID ID) => properties.affectStates.Exists(x => x.ID == ID.ID);
+        protected static bool HasStance(ModeProperties properties, StanceID ID) => properties.Stances.Exists(x => x.ID == ID.ID);
 
 
         public IEnumerator C_SetCoolDown(float time)
@@ -582,6 +614,9 @@ namespace MalbersAnimations.Controller
 
         /// <summary>It Has Affect states to check</summary>
         public bool HasAffectStates => Properties.affectStates != null && Properties.affectStates.Count > 0;
+
+        /// <summary>It Has Affect stances to check</summary>
+        public bool HasAffectStances => Properties.Stances != null && Properties.Stances.Count > 0;
         public bool HasTransitionFrom => Properties.TransitionFrom != null && Properties.TransitionFrom.Count > 0;
 
         public bool Active { get => active.Value; set => active.Value = value; }
@@ -618,12 +653,22 @@ namespace MalbersAnimations.Controller
         [Tooltip("The Ability can Stay Active by x seconds")]
         public FloatReference HoldByTime = new FloatReference(0);
    
-        ///// <summary>If Exlude then the Mode will not be Enabled when is on a State on the List, If Include, then the mode will only be active when the Animal is on a state on the List </summary>
-        [Tooltip("If Exlude then the Mode will not be Enabled when is on a State on the List, If Include, then the mode will only be active when the Animal is on a state on the List")]
-        public AffectStates affect = AffectStates.None;
+     
+        [Tooltip("Exlcude: The mode will not be activated when is on a State of the List.\n" +
+            "Include: The mode will only be actived when the Animal is on a State of the List")]
+            public AffectStates affect = AffectStates.None;
+       
         /// <summary>Include/Exclude the  States on this list depending the Affect variable</summary>
         [Tooltip("Include/Exclude the  States on this list depending the Affect variable")]
         public List<StateID> affectStates = new List<StateID>();
+
+
+        [Tooltip("Exlcude: The mode will not be activated when is on a Stance of the List.\n" +
+            "Include: The mode will only be actived when the Animal is on a Stance of the List")]
+        public AffectStates affect_Stance = AffectStates.None;
+        /// <summary>Include/Exclude the  Stances on this list depending the Affect variable</summary>
+        [Tooltip("Include/Exclude the Stances on this list depending the Affect Stanes variable")]
+        public List<StanceID> Stances = new List<StanceID>();
 
         [Tooltip("Modes can transition from other abilities inside the same mode. E.g Seat -> Lie -> Sleep")]
         public List<int> TransitionFrom = new List<int>();
@@ -639,6 +684,10 @@ namespace MalbersAnimations.Controller
             affect= properties.affect;
             HoldByTime= properties.HoldByTime.Value;
             affectStates =  new List<StateID>(properties.affectStates);
+
+            affect_Stance = properties.affect_Stance;
+            Stances =  new List<StanceID>(properties.Stances);
+
             TransitionFrom = new List<int>();
         }
     }

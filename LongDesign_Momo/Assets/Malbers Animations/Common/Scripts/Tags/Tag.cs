@@ -7,14 +7,11 @@ using UnityEditor;
 namespace MalbersAnimations
 {
     /// <summary>Tags for Malbers</summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Tag", fileName = "New Tag", order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Tag", fileName = "New Tag", order = 3000)]
     public class Tag : IDs
     {
         /// <summary> Re Calculate the ID on enable</summary>
-        private void OnEnable()
-        {
-            ID = name.GetHashCode();
-        }
+        private void OnEnable() => ID = name.GetHashCode();
     }
 #if UNITY_EDITOR
 
@@ -25,8 +22,8 @@ namespace MalbersAnimations
         {
             SerializedProperty ID = serializedObject.FindProperty("ID");
             ID.intValue = target.name.GetHashCode();
-            serializedObject.ApplyModifiedProperties();
             serializedObject.Update();
+            serializedObject.ApplyModifiedProperties();
         }
 
         public override void OnInspectorGUI()

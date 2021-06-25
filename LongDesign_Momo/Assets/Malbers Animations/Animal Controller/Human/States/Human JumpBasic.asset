@@ -118,7 +118,7 @@ MonoBehaviour:
       Variable: {fileID: 0}
     GravityPower:
       UseConstant: 1
-      ConstantValue: 2
+      ConstantValue: 4
       Variable: {fileID: 0}
   - name: Walk
     VerticalSpeed: 0.5

@@ -8,6 +8,7 @@ using System;
 using UnityEngine.Events;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Object = UnityEngine.Object;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,6 +31,20 @@ namespace MalbersAnimations
             Rotation = Vector3.zero;
             Scale = Vector3.one;
         }
+
+        public TransformOffset(Transform def)
+        {
+            Position = def.localPosition;
+            Rotation = def.localEulerAngles;
+            Scale = def.localScale;
+        }
+
+        public void RestoreTransform(Transform def)
+        {
+            def.localPosition = Position;
+            def.localEulerAngles = Rotation;
+            def.localScale = Scale;
+        }
     }
 
 
@@ -38,9 +53,7 @@ namespace MalbersAnimations
     {
         public static bool IsPrefab(GameObject go) => !go.scene.IsValid();
 
-#if UNITY_EDITOR
-       
-#endif
+ 
 
         public static bool IsParent(Transform childObject, Transform parent)
         {
@@ -56,13 +69,7 @@ namespace MalbersAnimations
             }
             return false; // Could not its parent
         }
-         
-
-     
-
-
-       
-
+          
 
         public static List<Type> GetAllTypes<T>()  
         {
@@ -623,6 +630,8 @@ namespace MalbersAnimations
             {
                 float elapsedTime = 0;
 
+                var Wait = new WaitForFixedUpdate();
+
                 Vector3 CurrentPos = TargetToAlign.position;
 
                 Ray TargetRay = new Ray(AlignOrigin, (TargetToAlign.position - AlignOrigin).normalized);
@@ -638,9 +647,9 @@ namespace MalbersAnimations
 
                     TargetToAlign.position = Vector3.LerpUnclamped(CurrentPos, TargetPos, result);
 
-                    elapsedTime += Time.deltaTime;
+                    elapsedTime += Time.fixedDeltaTime;
 
-                    yield return null;
+                    yield return Wait;
                 }
                 TargetToAlign.position = TargetPos;
             }
@@ -792,6 +801,55 @@ namespace MalbersAnimations
 
         #region Debug
 
+
+
+        public static void Gizmo_Arrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.2f, float arrowHeadAngle = 20.0f)
+        {
+            if (direction == Vector3.zero) return;
+
+            var length = direction.magnitude;
+
+            Gizmos.DrawRay(pos, direction);
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Gizmos.DrawRay(pos + direction, right * (arrowHeadLength* length));
+            Gizmos.DrawRay(pos + direction, left * (arrowHeadLength* length));
+        }
+
+        public static void Gizmo_Arrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            if (direction == Vector3.zero) return;
+            Gizmos.color = color;
+            Gizmos.DrawRay(pos, direction);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
+            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+        }
+
+        public static void Draw_Arrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            if (direction == Vector3.zero) return;
+            Debug.DrawRay(pos, direction);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Debug.DrawRay(pos + direction, right * arrowHeadLength);
+            Debug.DrawRay(pos + direction, left * arrowHeadLength);
+        }
+        public static void Draw_Arrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            if (direction == Vector3.zero) return;
+            Debug.DrawRay(pos, direction, color);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
+            Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+        }
+
+
         public static void DrawBounds(Bounds b, Color color,float delay = 0)
         {
             // bottom
@@ -860,36 +918,39 @@ namespace MalbersAnimations
 
             Gizmos.matrix = transform.localToWorldMatrix;
 
-            if (Trigger && Trigger.enabled)
+            if (Trigger != null && always || Trigger.enabled)
             {
+                var isen = Trigger.enabled;
+                Trigger.enabled = true;
+
                 if (Trigger is BoxCollider)
                 {
                     BoxCollider _C = Trigger as BoxCollider;
+
                     var sizeX = transform.lossyScale.x * _C.size.x;
                     var sizeY = transform.lossyScale.y * _C.size.y;
                     var sizeZ = transform.lossyScale.z * _C.size.z;
                     Matrix4x4 rotationMatrix = Matrix4x4.TRS(_C.bounds.center, transform.rotation, new Vector3(sizeX, sizeY, sizeZ));
 
                     Gizmos.matrix = rotationMatrix;
-                    if (always || Application.isPlaying)
-                    {
-                        Gizmos.DrawCube(Vector3.zero, Vector3.one);
-                        Gizmos.color = DColorFlat;
-                        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-                    }
+
+                    //Debug.Log("dasd = " + DColorFlat);
+                    Gizmos.DrawCube(Vector3.zero, Vector3.one);
+                    Gizmos.color = DColorFlat;
+                    Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
+
                 }
                 else if (Trigger is SphereCollider)
                 {
                     SphereCollider _C = Trigger as SphereCollider;
-
                     Gizmos.matrix = transform.localToWorldMatrix;
-                    if (always || Application.isPlaying)
-                    {
-                        Gizmos.DrawSphere(Vector3.zero + _C.center, _C.radius);
-                        Gizmos.color = DColorFlat;
-                        Gizmos.DrawWireSphere(Vector3.zero + _C.center, _C.radius);
-                    }
+
+
+                    Gizmos.DrawSphere(Vector3.zero + _C.center, _C.radius);
+                    Gizmos.color = DColorFlat;
+                    Gizmos.DrawWireSphere(Vector3.zero + _C.center, _C.radius);
                 }
+                Trigger.enabled = isen;
             }
         }
 
@@ -995,6 +1056,8 @@ namespace MalbersAnimations
 
             Handles.zTest = prevZTest;
         }
+
+
 
         public static void DrawLine(Vector3 p1, Vector3 p2, float width)
         {
@@ -1115,6 +1178,44 @@ namespace MalbersAnimations
                 type = type.BaseType;
             }
             return null;
+        }
+
+
+        public static Object ExtractObject(Object asset, int index)
+        {
+            bool shouldExtract = true;
+            string path = AssetDatabase.GetAssetPath(asset);
+            string destinationPath =
+                $"{path.Substring(0, path.LastIndexOf("/", StringComparison.Ordinal))}/{asset.name}.asset";
+
+            if (AssetDatabase.LoadAssetAtPath(destinationPath, typeof(Object)) != null)
+            {
+                // Asset with same name found
+                shouldExtract = EditorUtility.DisplayDialog($"An asset named {asset.name} already exists",
+                    "do you want to override it?", "Yes", "No");
+            }
+
+            if (!shouldExtract)
+                return null;
+
+            Object clone = Object.Instantiate(asset);
+            AssetDatabase.CreateAsset(clone, destinationPath);
+
+            AssetImporter assetImporter = AssetImporter.GetAtPath(path);
+            assetImporter.AddRemap(new AssetImporter.SourceAssetIdentifier(asset), clone);
+
+            AssetDatabase.WriteImportSettingsIfDirty(path);
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+
+            AssetDatabase.SaveAssets();
+            return clone;
+        }
+
+        public static void CheckListIndex(UnityEditorInternal.ReorderableList list)
+        {
+            list.index -= 1;
+            if (list.index == -1 && list.serializedProperty.arraySize > 0) //In Case you remove the first one
+                list.index = 0;
         }
 
         public static void DrawScriptableObject(ScriptableObject serializedObject, bool showscript = true, int skip = 0)

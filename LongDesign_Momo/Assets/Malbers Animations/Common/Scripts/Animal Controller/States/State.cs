@@ -17,11 +17,7 @@ namespace MalbersAnimations.Controller
         [HideInInspector] public bool Active = true;
 
         /// <summary>Reference for the Animal that Holds this State</summary>
-        protected MAnimal animal;
-
-        //[Tooltip("ID to Identify the State. The name of the ID is the Core Tag used on the Animator")]
-        ///// <summary>ID Asset Reference</summary>
-        //public StateID ID;
+        protected MAnimal animal; 
 
         [Tooltip("Input to Activate the State, leave empty for automatic states")]
         /// <summary>Input to Activate the State</summary>
@@ -272,8 +268,8 @@ namespace MalbersAnimations.Controller
         /// <summary>Activate the State. Code is Applied on base.Activate()</summary>
         public virtual void Activate()
         {
-            if (QUEUED()) return;
-            if (animal.JustActivateState) return;
+            if (QUEUED()) {    return; }
+            if (animal.JustActivateState) { return; }
 
 
 
@@ -303,8 +299,10 @@ namespace MalbersAnimations.Controller
             Debugging("Force Activated");
             animal.lastState = animal.ActiveState;               //Set a new Last State
             animal.activeState = this;
+            animal.JustActivateState = false;
 
             LastStateExit();
+
             animal.SetIntParameter(animal.hash_LastState, ID);   //FORCE SAME STATE AS LAST STATE
             OnQueue = OnActiveQueue = false;
             Activate();
@@ -601,7 +599,7 @@ namespace MalbersAnimations.Controller
         {
             if ((int)modify == 0) return; //Means that the animal have no modification
 
-            if (Modify(modifier.IgnoreLowerStates)) animal.ActiveState.IgnoreLowerStates = IgnoreLowerStates;
+            if (Modify(modifier.IgnoreLowerStates)) { animal.ActiveState.IgnoreLowerStates = IgnoreLowerStates; }
             if (Modify(modifier.AdditivePositionSpeed))animal.UseAdditivePos = AdditivePosition;
          
             if (Modify(modifier.AdditiveRotationSpeed)) animal.UseAdditiveRot = AdditiveRotation;

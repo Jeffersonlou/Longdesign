@@ -60,9 +60,12 @@ namespace MalbersAnimations.Controller.AI
                     break;
             }
 
-
-
             brain.TaskDone(index);
+        }
+
+        public override void ExitAIState(MAnimalBrain brain, int index)
+        {
+            brain.AIMovement.StopWaitCoroutine();
         }
 
         public override void OnTargetArrived(MAnimalBrain brain, Transform Target, int index)

@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace MalbersAnimations
 {
     public class IsKinematicB : StateMachineBehaviour
@@ -64,4 +68,35 @@ namespace MalbersAnimations
             onenterexit = SetKinematic == OnEnterOnExit.OnEnterOnExit;
         }
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(IsKinematicB))] 
+    public class IsKinematicBED : Editor
+    {
+        SerializedProperty SetKinematic, isKinematic;
+        void OnEnable()
+        {
+
+            SetKinematic = serializedObject.FindProperty("SetKinematic");
+            isKinematic = serializedObject.FindProperty("isKinematic");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            EditorGUILayout.BeginHorizontal(); 
+            EditorGUIUtility.labelWidth = 50;
+            EditorGUILayout.PropertyField(SetKinematic, new GUIContent("Set: "));
+
+            if (SetKinematic.intValue != 2)
+            {
+                EditorGUIUtility.labelWidth = 70; 
+                EditorGUILayout.PropertyField(isKinematic, new GUIContent("Kinematic:"), GUILayout.Width(100));
+            } 
+            EditorGUIUtility.labelWidth = 0;
+            EditorGUILayout.EndHorizontal();
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
+#endif
 }

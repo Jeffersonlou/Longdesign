@@ -15,8 +15,8 @@ namespace MalbersAnimations
     {
         public bool UseSendMessage;
         public bool SendToChildren = false;
-        public bool NormalizeTime = true;
         public bool debug;
+        public bool NormalizeTime = true;
 
         public MesssageItem[] onEnterMessage;   //Store messages to send it when Enter the animation State
         public MesssageItem[] onExitMessage;    //Store messages to send it when Exit  the animation State
@@ -25,6 +25,10 @@ namespace MalbersAnimations
         IAnimatorListener[] listeners;         //To all the MonoBehavious that Have this 
 
         private bool firstime = false;
+
+        public bool OnEnter = true;
+        public bool OnExit= true;
+        public bool OnTime = true;
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -37,331 +41,193 @@ namespace MalbersAnimations
                 firstime = true;
                
             }
-            foreach (MesssageItem ontimeM in onTimeMessage) ontimeM.sent = false;  //Set all the messages Ontime Sent = false when start
-           
 
-            foreach (MesssageItem onEnterM in onEnterMessage)
+           if (OnTime)
+                foreach (MesssageItem ontimeM in onTimeMessage) ontimeM.sent = false;  //Set all the messages Ontime Sent = false when start
+
+            if (OnEnter)
             {
-                if (onEnterM.Active && !string.IsNullOrEmpty(onEnterM.message))
+                foreach (MesssageItem onEnterM in onEnterMessage)
                 {
-                    if (UseSendMessage)
-                        DeliverMessage(onEnterM, animator);
-                    else
-                        foreach (var item in listeners) DeliverListener(onEnterM, item);
+                    if (onEnterM.Active && !string.IsNullOrEmpty(onEnterM.message))
+                    {
+                        if (UseSendMessage)
+                            onEnterM.DeliverMessage(animator, SendToChildren, debug);
+                        else
+                            foreach (var animListener in listeners)
+                                onEnterM.DeliverAnimListener(animListener,debug);
+                    }
                 }
             }
         }
 
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex, AnimatorControllerPlayable controller)
         {
-            foreach (MesssageItem onExitM in onExitMessage)
+            if (OnExit)
             {
-                if (onExitM.Active && !string.IsNullOrEmpty(onExitM.message))
+                foreach (MesssageItem onExitM in onExitMessage)
                 {
-                    if (onEnterMessage != null && onEnterMessage.Length > 0 && onEnterMessage.ToList().Exists(x => x.message == onExitM.message))
+                    if (onExitM.Active && !string.IsNullOrEmpty(onExitM.message))
                     {
-                        if (animator.GetCurrentAnimatorStateInfo(layerIndex).fullPathHash == stateInfo.fullPathHash)
+                        if (onEnterMessage != null && onEnterMessage.Length > 0 && onEnterMessage.ToList().Exists(x => x.message == onExitM.message))
                         {
-                            return;   //Means is Looping to itself So Skip the Exit Mode because an Enter Mode is Playing
+                            if (animator.GetCurrentAnimatorStateInfo(layerIndex).fullPathHash == stateInfo.fullPathHash)
+                            {
+                                return;   //Means is Looping to itself So Skip the Exit Mode because an Enter Mode is Playing
+                            }
                         }
-                    }
 
-                    if (UseSendMessage)
-                        DeliverMessage(onExitM, animator);
-                    else
-                        foreach (var item in listeners) DeliverListener(onExitM, item);
+                        if (UseSendMessage)
+                            onExitM.DeliverMessage(animator, SendToChildren, debug);
+                        else
+                            foreach (var animListener in listeners)
+                                onExitM.DeliverAnimListener(animListener, debug);
+                    }
                 }
             }
         }
 
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (stateInfo.fullPathHash == animator.GetNextAnimatorStateInfo(layerIndex).fullPathHash) return; //means is transitioning to itself
-
-            foreach (MesssageItem onTimeM in onTimeMessage)
+            if (OnTime)
             {
-                if (onTimeM.Active && !string.IsNullOrEmpty(onTimeM.message))
+                if (stateInfo.fullPathHash == animator.GetNextAnimatorStateInfo(layerIndex).fullPathHash) return; //means is transitioning to itself
+
+                foreach (MesssageItem onTimeM in onTimeMessage)
                 {
-                    // float stateTime = stateInfo.loop ? stateInfo.normalizedTime % 1 : stateInfo.normalizedTime;
-                    float stateTime = NormalizeTime ? stateInfo.normalizedTime % 1 : stateInfo.normalizedTime;
-
-                    if (!onTimeM.sent && (stateTime >= onTimeM.time))
+                    if (onTimeM.Active && !string.IsNullOrEmpty(onTimeM.message))
                     {
-                        onTimeM.sent = true;
+                        // float stateTime = stateInfo.loop ? stateInfo.normalizedTime % 1 : stateInfo.normalizedTime;
+                        float stateTime = NormalizeTime ? stateInfo.normalizedTime % 1 : stateInfo.normalizedTime;
 
-                        //  Debug.Log(onTimeM.message + ": "+stateTime);
+                        if (!onTimeM.sent && (stateTime >= onTimeM.time))
+                        {
+                            onTimeM.sent = true;
 
-                        if (UseSendMessage)
-                            DeliverMessage(onTimeM, animator);
-                        else
-                            foreach (var item in listeners) DeliverListener(onTimeM, item);
+                            if (UseSendMessage)
+                                onTimeM.DeliverMessage(animator, SendToChildren, debug);
+
+                            else
+                                foreach (var item in listeners)
+                                    onTimeM.DeliverAnimListener(item, debug);
+                        }
                     }
                 }
             }
-        }
-
-        /// <summary>  Using Message to the Monovehaviours asociated to this animator delivery with Send Message  </summary>
-        void DeliverMessage(MesssageItem m, Animator anim)
-        {
-            switch (m.typeM)
-            {
-                case TypeMessage.Bool:
-                    SendMessage(anim, m.message, m.boolValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Int:
-                    SendMessage(anim, m.message, m.intValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Float:
-                    SendMessage(anim, m.message, m.floatValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.String:
-                    SendMessage(anim, m.message, m.stringValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Void:
-                    SendMessage(anim, m.message, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.IntVar:
-                    SendMessage(anim, m.message, (int)m.intVarValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                case TypeMessage.Transform:
-                    SendMessage(anim, m.message, m.transformValue, SendMessageOptions.DontRequireReceiver);
-                    break;
-                default:
-                    break;
-            }
-
-            if (debug) Debug.Log($"{name}:<color=white> <b>[Msg Behaviour] [Animator:{anim.name}] [Msg:{m.message} | Type: {m.typeM}]</b> </color>");  //Debug
-        }
-
-
-        private void SendMessage(Animator anim, string message, object value, SendMessageOptions MsgOption)
-        {
-            if (SendToChildren)
-                anim.BroadcastMessage(message, value, MsgOption);
-            else
-                anim.SendMessage(message, value, MsgOption);
-        }
-
-        private void SendMessage(Animator anim, string message,  SendMessageOptions MsgOption)
-        {
-            if (SendToChildren)
-                anim.BroadcastMessage(message, MsgOption);
-            else
-                anim.SendMessage(message, MsgOption);
-        }
-
-
-        /// <summary> Send messages to all scripts with IBehaviourListener to this animator   </summary>
-        void DeliverListener(MesssageItem m, IAnimatorListener listener)
-        {
-            string val = "";
-            bool succesful = false;
-            switch (m.typeM)
-            {
-                case TypeMessage.Bool:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, m.boolValue);
-                    val = m.boolValue.ToString();
-                    break;
-                case TypeMessage.Int:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, m.intValue);
-                    val = m.intValue.ToString();
-                    break;
-                case TypeMessage.Float:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, m.floatValue);
-                    val = m.floatValue.ToString();
-                    break;
-                case TypeMessage.String:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, m.stringValue);
-                    val = m.stringValue.ToString();
-                    break;
-                case TypeMessage.Void:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, null);
-                    val = "Void";
-                    break;
-                case TypeMessage.IntVar:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, (int)m.intVarValue);
-                    val = m.intVarValue.name.ToString();
-                    break;
-                case TypeMessage.Transform:
-                    succesful = listener.OnAnimatorBehaviourMessage(m.message, m.transformValue);
-                    val = m.transformValue.name.ToString();
-                    break;
-                default:
-                    break;
-            }
-
-            if (debug && succesful) Debug.Log($"<b>[Msg: {m.message}->{val}] [{m.typeM}]</b> T:{Time.time:F3}");  //Debug
-
-        }
+        } 
     }
    
-
     //INSPECTOR
 
 #if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(MesssageItem))]
-    public class MessageDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            // position.y += 2;
-
-            EditorGUI.BeginProperty(position, label, property);
-            //GUI.Box(position, GUIContent.none, EditorStyles.helpBox);
-            var indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-
-            var height = EditorGUIUtility.singleLineHeight;
-
-            //PROPERTIES
-
-            var Active = property.FindPropertyRelative("Active");
-            var message = property.FindPropertyRelative("message");
-            var typeM = property.FindPropertyRelative("typeM");
-
-            var rect = new Rect(position);
-
-            rect.y += 2;
-
-            Rect R_0 = new Rect(rect.x, rect.y, 15, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(R_0, Active, GUIContent.none);
-
-            Rect R_1 = new Rect(rect.x + 15, rect.y, (rect.width / 3) + 15, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(R_1, message, GUIContent.none);
-
-
-            Rect R_3 = new Rect(rect.x + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
-            EditorGUI.PropertyField(R_3, typeM, GUIContent.none);
-
-
-            Rect R_5 = new Rect(rect.x + ((rect.width) / 3) * 2 + 5 + 15, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
-            var TypeM = (TypeMessage)typeM.intValue;
-
-            SerializedProperty messageValue = property.FindPropertyRelative("boolValue");
-
-            switch (TypeM)
-            {
-                case TypeMessage.Bool:
-                    messageValue = property.FindPropertyRelative("boolValue");
-                    messageValue.boolValue = EditorGUI.ToggleLeft(R_5, messageValue.boolValue ? " True" : " False", messageValue.boolValue);
-                    break;
-                case TypeMessage.Int:
-                    messageValue = property.FindPropertyRelative("intValue");
-                    break;
-                case TypeMessage.Float:
-                    messageValue = property.FindPropertyRelative("floatValue");
-                    break;
-                case TypeMessage.String:
-                    messageValue = property.FindPropertyRelative("stringValue");
-                    break;
-                case TypeMessage.IntVar:
-                    messageValue = property.FindPropertyRelative("intVarValue");
-                    break;
-                case TypeMessage.Transform:
-                    messageValue = property.FindPropertyRelative("transformValue");
-                    break;
-                default:
-                    break;
-            }
-
-            if (TypeM != TypeMessage.Void && TypeM != TypeMessage.Bool)
-            {
-                EditorGUI.PropertyField(R_5, messageValue, GUIContent.none);
-            }
-
-
-            EditorGUI.indentLevel = indent;
-            EditorGUI.EndProperty();
-        }
-    }
-
-
     [CustomEditor(typeof(MessagesBehavior))]
     public class MessageBehaviorsEd : Editor
     {
         private ReorderableList listOnEnter, listOnExit, listOnTime;
-        bool OnEnter, OnExit, OnTime;
-
         private MessagesBehavior MMessage;
-        private SerializedProperty sp_messagesONEXIT, onEnterMessage, onTimeMessage, UseSendMessage, SendToChildren, NormalizeTime, debug;
-        private MonoScript script;
+        private SerializedProperty onExitMessage, onEnterMessage, onTimeMessage, UseSendMessage, SendToChildren, NormalizeTime, debug, OnExit, OnTime, OnEnter;
+
+
+        Color selected = new Color(0, 0.6f, 1f, 1f);
 
         private void OnEnable()
         {
 
             MMessage = ((MessagesBehavior)target);
-            sp_messagesONEXIT = serializedObject.FindProperty("onExitMessage");
+            onExitMessage = serializedObject.FindProperty("onExitMessage");
             onEnterMessage = serializedObject.FindProperty("onEnterMessage");
             onTimeMessage = serializedObject.FindProperty("onTimeMessage");
             UseSendMessage = serializedObject.FindProperty("UseSendMessage");
             SendToChildren = serializedObject.FindProperty("SendToChildren");
             NormalizeTime = serializedObject.FindProperty("NormalizeTime");
             debug = serializedObject.FindProperty("debug");
+            OnEnter = serializedObject.FindProperty("OnEnter");
+            OnExit = serializedObject.FindProperty("OnExit");
+            OnTime = serializedObject.FindProperty("OnTime");
 
-            script = MonoScript.FromScriptableObject(MMessage);
+            //script = MonoScript.FromScriptableObject(MMessage);
 
             listOnEnter = new ReorderableList(serializedObject, onEnterMessage, true, true, true, true);
-            listOnExit = new ReorderableList(serializedObject, sp_messagesONEXIT, true, true, true, true);
+            listOnExit = new ReorderableList(serializedObject, onExitMessage, true, true, true, true);
             listOnTime = new ReorderableList(serializedObject, onTimeMessage, true, true, true, true);
 
-            listOnEnter.drawElementCallback = drawElementCallback1;
             listOnEnter.drawHeaderCallback = HeaderCallbackDelegate1;
+            listOnExit.drawHeaderCallback = HeaderCallbackDelegate2;
+            listOnTime.drawHeaderCallback = HeaderCallbackDelegate3;
 
-            listOnExit.drawElementCallback = drawElementCallback2;
-            listOnExit.drawHeaderCallback = HeaderCallbackDelegate1;
+
+            listOnEnter.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                EditorGUI.PropertyField(rect, onEnterMessage.GetArrayElementAtIndex(index), GUIContent.none);
+            };
+
+            listOnExit.drawElementCallback =  (rect, index, isActive, isFocused) =>
+            {
+                EditorGUI.PropertyField(rect, onExitMessage.GetArrayElementAtIndex(index), GUIContent.none);
+            };
 
             listOnTime.drawElementCallback = drawElementCallback3;
-            listOnTime.drawHeaderCallback = HeaderCallbackDelegate2;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            MalbersEditor.DrawDescription("Notifies the Animator Asociate Scripts\nWorks exactly like Animation Events");
+            MalbersEditor.DrawDescription("Send Messages to all the MonoBehaviours that uses the Interface |IAnimatorListener|");
 
 
             EditorGUI.BeginChangeCheck();
 
             EditorGUILayout.BeginVertical(MTools.StyleGray);
             {
-                MalbersEditor.DrawScript(script);
+                EditorGUILayout.BeginHorizontal();
 
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                var currentGUIColor = GUI.color;
 
-                EditorGUI.indentLevel++;
-                if (listOnEnter.count > 0) OnEnter = true;
-                OnEnter = EditorGUILayout.Foldout(OnEnter, "On Enter (" + listOnEnter.count + ")");
-                EditorGUI.indentLevel--;
+                GUI.color = OnEnter.boolValue ? selected : currentGUIColor;
+                OnEnter.boolValue = GUILayout.Toggle(OnEnter.boolValue,
+                                    new GUIContent("Enter", "Send the message On Enter State "), EditorStyles.miniButton);
+                
+                GUI.color = OnExit.boolValue ? selected : currentGUIColor;
+                OnExit.boolValue = GUILayout.Toggle(OnExit.boolValue,
+                                   new GUIContent("Exit", "Send the message On Exit State"), EditorStyles.miniButton);
 
-                if (OnEnter)
+
+                GUI.color = OnTime.boolValue ? selected : currentGUIColor;
+
+                OnTime.boolValue = GUILayout.Toggle(OnTime.boolValue,
+                                  new GUIContent("Time", "Send the message On Update State using a time"), EditorStyles.miniButton);
+
+
+                GUI.color = SendToChildren.boolValue ? ( Color.green) : currentGUIColor;
+
+                SendToChildren.boolValue = GUILayout.Toggle(SendToChildren.boolValue,
+                    new GUIContent("Children", "The Messages will be sent also to the Animator gameobject children"), EditorStyles.miniButton);
+             
+                
+                
+                GUI.color = UseSendMessage.boolValue ? (Color.green) : currentGUIColor;
+                UseSendMessage.boolValue = GUILayout.Toggle(UseSendMessage.boolValue,
+                    new GUIContent("SendMessage()", "Uses the SendMessage() method, instead of checking for IAnimator Listener Interfaces"), EditorStyles.miniButton);
+
+                //EditorGUILayout.PropertyField(SendToChildren, new GUIContent("Message Children", "All the children gameObjects in the hierarchy will receive the message"));
+
+                GUI.color = currentGUIColor;
+                
+                MalbersEditor.DrawDebugIcon(debug);
+
+                EditorGUILayout.EndHorizontal();
+
+                if (OnEnter.boolValue) 
                     listOnEnter.DoLayoutList();
 
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                EditorGUI.indentLevel++;
-                if (listOnExit.count > 0) OnExit = true;
-                OnExit = EditorGUILayout.Foldout(OnExit, "On Exit (" + listOnExit.count + ")");
-                EditorGUI.indentLevel--;
-
-                if (OnExit)
-                    listOnExit.DoLayoutList();
-
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                EditorGUI.indentLevel++;
-                if (listOnTime.count > 0) OnTime = true;
-                OnTime = EditorGUILayout.Foldout(OnTime, "On Time (" + listOnTime.count + ")");
-                EditorGUI.indentLevel--;
-
-                if (OnTime)
-                    listOnTime.DoLayoutList();
-
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.PropertyField(SendToChildren, new GUIContent("Message Children", "All the children gameObjects in the hierarchy will receive the message"));
-                EditorGUILayout.PropertyField(UseSendMessage, new GUIContent("Use Send Message", "Uses the SendMessage() instead"));
-                EditorGUILayout.PropertyField(NormalizeTime, new GUIContent("Nomalized", "Update State Time will be normalized "));
-                EditorGUILayout.PropertyField(debug);
+                if (OnExit.boolValue) 
+                    listOnExit.DoLayoutList(); 
+              
+                if (OnTime.boolValue) 
+                    listOnTime.DoLayoutList();  
+              
+                EditorGUIUtility.labelWidth = 0;
             }
 
             EditorGUILayout.EndVertical();
@@ -375,13 +241,11 @@ namespace MalbersAnimations
         }
 
 
-        /// <summary>
-        /// Reordable List Header
-        /// </summary>
+        /// <summary>  Reordable List Header  </summary>
         void HeaderCallbackDelegate1(Rect rect)
         {
-            Rect R_1 = new Rect(rect.x + 10, rect.y, (rect.width / 3) + 30, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(R_1, "Message");
+            Rect R_1 = new Rect(rect.x, rect.y, (rect.width / 3) + 30, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(R_1, "Msg (On Enter)");
 
             Rect R_3 = new Rect(rect.x + 10 + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(R_3, "Type");
@@ -392,18 +256,38 @@ namespace MalbersAnimations
 
         void HeaderCallbackDelegate2(Rect rect)
         {
-            Rect R_1 = new Rect(rect.x + 10, rect.y, (rect.width / 4) + 30, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(R_1, "Message");
+            Rect R_1 = new Rect(rect.x, rect.y, (rect.width / 3) + 30, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(R_1, "Msg (On Exit)");
 
-            Rect R_3 = new Rect(rect.x + 10 + ((rect.width) / 4) + 5 + 30, rect.y, ((rect.width) / 4) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            Rect R_3 = new Rect(rect.x + 10 + ((rect.width) / 3) + 5 + 30, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(R_3, "Type");
+
+            Rect R_5 = new Rect(rect.x + 10 + ((rect.width) / 3) * 2 + 5 + 15, rect.y, ((rect.width) / 3) - 5 - 15, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(R_5, "Value");
+        }
+
+        void HeaderCallbackDelegate3(Rect rect)
+        {
+            Rect R_1 = new Rect(rect.x, rect.y, (rect.width / 4) + 30, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(R_1, "Msg (OnTime)");
+
+            Rect R_3 = new Rect(rect.x + 10 + ((rect.width) / 4) + 5 + 30, rect.y,  32, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(R_3, "Type");
             Rect R_4 = new Rect(rect.x + 10 + ((rect.width) / 4) * 2 + 5 + 20, rect.y, ((rect.width) / 4) - 5, EditorGUIUtility.singleLineHeight);
 
             EditorGUI.LabelField(R_4, "Time");
+
+            Rect R_4_1 = new Rect(R_4);
+            R_4_1.x += 32;
+            R_4_1.width = 20;
+
+            NormalizeTime.boolValue = GUI.Toggle(R_4_1,NormalizeTime.boolValue, new GUIContent("N", "Normalize the State Animation Time"),EditorStyles.miniButton);
+
             Rect R_5 = new Rect(rect.x + ((rect.width) / 4) * 3 + 5 + 10, rect.y, ((rect.width) / 4) - 5, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(R_5, "Value");
 
         }
+
         //ON ENTER
         void drawElementCallback1(Rect rect, int index, bool isActive, bool isFocused)
         {
@@ -448,7 +332,7 @@ namespace MalbersAnimations
         void drawElementCallback2(Rect rect, int index, bool isActive, bool isFocused)
         {
             var element = MMessage.onExitMessage[index];
-            var sp_element = sp_messagesONEXIT.GetArrayElementAtIndex(index);
+            var sp_element = onExitMessage.GetArrayElementAtIndex(index);
 
             rect.y += 2;
 

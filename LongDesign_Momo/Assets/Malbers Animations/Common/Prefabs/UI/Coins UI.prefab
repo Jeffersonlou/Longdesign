@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8398827197724020680}
   - component: {fileID: 114648567485852344}
   - component: {fileID: 1189449120860714568}
+  - component: {fileID: 4075005677219826427}
   m_Layer: 5
   m_Name: Coins UI
   m_TagString: Untagged
@@ -65,6 +66,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: 0
     Variable: {fileID: 0}
+  Auto: 1
   Description: Listen to the Coins Variable and Updates the UI
   ShowDescription: 0
   debug: 0
@@ -86,12 +88,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 11400000, guid: b5b9ed24092168d429271f41eecd4bf2, type: 2}
+      - m_Target: {fileID: 4075005677219826427}
         m_MethodName: Play
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 2194702945013330763}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -155,6 +157,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4075005677219826427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747387321310396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de6f169dc7cedcb46a2ad97a93a383cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 11400000, guid: b5b9ed24092168d429271f41eecd4bf2, type: 2}
+  m_transform: {fileID: 2194702945013330763}
+  PlayOnStart: 0
+  PlayForever: 0
+  DefaultValue:
+    Position: {x: -15.6, y: -9, z: 0}
+    Rotation: {x: -0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
 --- !u!1 &1929378677025184
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +264,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2194702945013330763}
-  - component: {fileID: 8816323091594837257}
   m_Layer: 5
   m_Name: To Scale
   m_TagString: Untagged
@@ -270,15 +291,3 @@ RectTransform:
   m_AnchoredPosition: {x: -15.6, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8816323091594837257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4967041744976585637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e69cafcfb37bad4f9f2a67e936461cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

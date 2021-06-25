@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MalbersAnimations.Scriptables;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace MalbersAnimations.Events
@@ -8,8 +9,8 @@ namespace MalbersAnimations.Events
     public class UnityEventRaiser : MonoBehaviour
     {
         [Tooltip("Delayed time for invoking the Events, or the Repeated time  when Repeat is enable")]
-        public float Delayed;
-        public float RepeatTime;
+        public FloatReference Delayed = new FloatReference();
+        public FloatReference RepeatTime = new FloatReference();
         public bool Repeat;
 
 
@@ -56,7 +57,7 @@ namespace MalbersAnimations.Events
 
 
 #if UNITY_EDITOR
-    [UnityEditor.CustomEditor(typeof(UnityEventRaiser))]
+    [UnityEditor.CustomEditor(typeof(UnityEventRaiser)),UnityEditor.CanEditMultipleObjects] 
     public class UnityEventRaiserInspector : UnityEditor.Editor
     {
         UnityEditor.SerializedProperty Delayed, Repeat, RepeatTime, OnEnableEvent, ShowDescription, Description;
@@ -100,8 +101,8 @@ namespace MalbersAnimations.Events
             if (Repeat.boolValue)
             {
 
-                UnityEditor.EditorGUIUtility.labelWidth = 20;
-                UnityEditor.EditorGUILayout.PropertyField(RepeatTime, new GUIContent("RT", "Repeat Time"), GUILayout.MinWidth(40));
+                UnityEditor.EditorGUIUtility.labelWidth = 35;
+                UnityEditor.EditorGUILayout.PropertyField(RepeatTime, new GUIContent(" RT", "Repeat Time"), GUILayout.MinWidth(40));
                 UnityEditor.EditorGUIUtility.labelWidth = 0;
             }
 

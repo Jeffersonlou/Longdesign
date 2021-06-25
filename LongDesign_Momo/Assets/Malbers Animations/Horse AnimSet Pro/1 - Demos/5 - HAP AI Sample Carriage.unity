@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.73045594, g: 0.7985105, b: 0.8354486, a: 1}
+  m_IndirectSpecularColor: {r: 0.73045343, g: 0.79851073, b: 0.8354537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -694,7 +694,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788944, y: 1}
+    m_SensorSize: {x: 1.7795275, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -8791,6 +8791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114024224531268755
@@ -9032,6 +9033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114143660864665973
@@ -9231,6 +9233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114218328985801167
@@ -9991,7 +9994,9 @@ MonoBehaviour:
   ModeShowEvents: 0
   Editor_Tabs1: 4
   Editor_Tabs2: 0
+  Editor_EventTabs: 0
   SelectedMode: 0
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 1
@@ -10026,11 +10031,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 1
   center: {x: 0, y: 0, z: 0}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1.05
@@ -10067,6 +10069,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: {fileID: 0}
     Variable: {fileID: 0}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 1
@@ -10140,6 +10143,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10165,6 +10170,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10190,6 +10197,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10249,6 +10258,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10274,6 +10285,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10299,6 +10312,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10324,6 +10339,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10349,6 +10366,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10374,6 +10393,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10433,6 +10454,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10458,6 +10481,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10483,6 +10508,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -10969,6 +10996,9 @@ MonoBehaviour:
   OnGrounded:
     m_PersistentCalls:
       m_Calls: []
+  OnMovementDetected:
+    m_PersistentCalls:
+      m_Calls: []
   OnStateChange:
     m_PersistentCalls:
       m_Calls: []
@@ -11195,6 +11225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114575700423546241
@@ -11215,7 +11246,9 @@ MonoBehaviour:
   ModeShowEvents: 0
   Editor_Tabs1: 4
   Editor_Tabs2: 0
+  Editor_EventTabs: 0
   SelectedMode: 0
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 1
@@ -11250,11 +11283,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 1
   center: {x: 0, y: 0, z: 0}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1
@@ -11291,6 +11321,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: {fileID: 0}
     Variable: {fileID: 0}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 1
@@ -11364,6 +11395,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11389,6 +11422,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11414,6 +11449,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11473,6 +11510,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11498,6 +11537,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11523,6 +11564,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11548,6 +11591,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11573,6 +11618,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11598,6 +11645,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11657,6 +11706,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11682,6 +11733,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -11707,6 +11760,8 @@ MonoBehaviour:
           Variable: {fileID: 0}
         affect: 0
         affectStates: []
+        affect_Stance: 0
+        Stances: []
         TransitionFrom: 
         ShowEvents: 0
         OnEnter:
@@ -12168,6 +12223,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnGrounded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMovementDetected:
     m_PersistentCalls:
       m_Calls: []
   OnStateChange:
@@ -12838,6 +12896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114691942866299929
@@ -12853,6 +12912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114694551593134813
@@ -13486,6 +13546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!114 &114750575035596097
@@ -14688,6 +14749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StepsManager: {fileID: 0}
+  Tracks: {fileID: 0}
   WaitNextStep: 0.2
   StepAudio: {fileID: 0}
 --- !u!135 &135125451307883373
@@ -17878,5 +17940,4 @@ MonoBehaviour:
   OnTargetSet:
     m_PersistentCalls:
       m_Calls: []
-  pointType: 0
   Editor_Tabs1: 0

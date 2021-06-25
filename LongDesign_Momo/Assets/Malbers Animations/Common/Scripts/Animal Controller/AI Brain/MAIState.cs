@@ -1,21 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using MalbersAnimations.Scriptables;
 using System.Text.RegularExpressions;
-
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditorInternal;
 using UnityEditor;
+
 #endif
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/AI State", order = 1000, fileName = "New AI State")]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/AI State", order = -100, fileName = "New AI State")]
     public class MAIState : ScriptableObject
     {
         [Tooltip("ID of the AI State. This is used on the AI Brain On AIStateChanged Event")]
@@ -24,8 +22,7 @@ namespace MalbersAnimations.Controller.AI
         //[Tooltip("Creates the Decisions and Tasks inside this AI State")]
         //public bool internalData = true;
 
-        [FormerlySerializedAs("actions")]
-        public MTask[] tasks;
+        [FormerlySerializedAs("actions")] public MTask[] tasks;
         public MAITransition[] transitions;
         public Color GizmoStateColor = Color.gray;
 
@@ -63,10 +60,12 @@ namespace MalbersAnimations.Controller.AI
                 }
             }
         }
+
         private void Decide(MAnimalBrain brain, int Index, MAITransition transition)
         {
             bool decisionSucceded = brain.DecisionResult[Index] = transition.decision.Decide(brain, Index);
-            brain.TransitionToState(decisionSucceded ? transition.trueState : transition.falseState, decisionSucceded, transition.decision, Index);
+            brain.TransitionToState(decisionSucceded ? transition.trueState : transition.falseState, decisionSucceded,
+                transition.decision, Index);
         }
 
         /// <summary>When a new State starts this method is called for each Tasks</summary>
@@ -74,6 +73,7 @@ namespace MalbersAnimations.Controller.AI
         {
             for (int i = 0; i < tasks.Length; i++) StartTaks(brain, i);
         }
+
         internal void StartTaks(MAnimalBrain brain, int i)
         {
             if (brain.TasksStarted[i]) return; //DO NOT START AN ALREADY STARTED TASK 
@@ -85,9 +85,10 @@ namespace MalbersAnimations.Controller.AI
                 brain.TasksStarted[i] = true;
                 brain.SetElapsedTaskTime(i);
 
-                tasks[i].StartTask(brain, i);  //Start the Task after it has being prepared.
+                tasks[i].StartTask(brain, i); //Start the Task after it has being prepared.
 
-                if (tasks[i].MessageID != 0) brain.OnTaskStarted.Invoke(tasks[i].MessageID); //Send Events after the Task has started
+                if (tasks[i].MessageID != 0)
+                    brain.OnTaskStarted.Invoke(tasks[i].MessageID); //Send Events after the Task has started
             }
         }
 
@@ -104,9 +105,9 @@ namespace MalbersAnimations.Controller.AI
         {
             for (int i = 0; i < tasks.Length; i++)
             {
-                if (brain.TasksStarted[i])
+                if (brain.TasksStarted[i] && !brain.TasksDone[i])
                 {
-                    if (!brain.TasksDone[i]) tasks[i].UpdateTask(brain, i);
+                     tasks[i].UpdateTask(brain, i);
                 }
             }
         }
@@ -116,16 +117,11 @@ namespace MalbersAnimations.Controller.AI
             for (int i = 0; i < tasks.Length; i++)
                 tasks[i].ExitAIState(brain, i);
         }
+         
 
 
-        //public void Finish_Decisions(MAnimalBrain brain)
-        //{
-        //    for (int i = 0; i < transitions.Length; i++)
-        //        transitions[i].decision.FinishDecision(brain, i);
-        //}
+        #region Target Event Listeners for Tasks
 
-
-        #region Target Event Listeners for Tasks 
         public void OnTargetArrived(MAnimalBrain brain, Transform target)
         {
             for (int i = 0; i < tasks.Length; i++)
@@ -144,9 +140,11 @@ namespace MalbersAnimations.Controller.AI
             for (int i = 0; i < tasks.Length; i++)
                 tasks[i].OnPositionArrived(brain, Position, i);
         }
+
         #endregion
 
         #region Self Animal Listen Events
+
         public void OnAnimalStateEnter(MAnimalBrain brain, State state)
         {
             for (int i = 0; i < tasks.Length; i++)
@@ -159,29 +157,20 @@ namespace MalbersAnimations.Controller.AI
         public void OnAnimalStateExit(MAnimalBrain brain, State state)
         {
             for (int i = 0; i < tasks.Length; i++)
-                tasks[i].OnAnimalStateExit(brain, state, i);
-
-            //for (int i = 0; i < transitions.Length; i++)
-            //    transitions[i].decision.OnAnimalStateExit(brain, state, i);
+                tasks[i].OnAnimalStateExit(brain, state, i); 
         }
 
         public void OnAnimalStanceChange(MAnimalBrain brain, int Stance)
         {
             for (int i = 0; i < tasks.Length; i++)
-                tasks[i].OnAnimalStanceChange(brain, Stance, i);
-
-            //for (int i = 0; i < transitions.Length; i++)
-            //    transitions[i].decision.OnAnimalStanceChange(brain, Stance, i);
+                tasks[i].OnAnimalStanceChange(brain, Stance, i); 
         }
 
 
         public void OnAnimalModeStart(MAnimalBrain brain, Mode mode)
         {
             for (int i = 0; i < tasks.Length; i++)
-                tasks[i].OnAnimalModeStart(brain, mode, i);
-
-            //for (int i = 0; i < transitions.Length; i++)
-            //    transitions[i].decision.OnAnimalModeStart(brain, mode, i);
+                tasks[i].OnAnimalModeStart(brain, mode, i); 
         }
 
         public void OnAnimalModeEnd(MAnimalBrain brain, Mode mode)
@@ -192,9 +181,11 @@ namespace MalbersAnimations.Controller.AI
             //for (int i = 0; i < transitions.Length; i++)
             //    transitions[i].decision.OnAnimalModeEnd(brain, mode, i);
         }
+
         #endregion
 
         #region Target Animal Listen Events
+
         public void OnTargetAnimalStateEnter(MAnimalBrain brain, State state)
         {
             for (int i = 0; i < tasks.Length; i++)
@@ -240,6 +231,7 @@ namespace MalbersAnimations.Controller.AI
             //for (int i = 0; i < transitions.Length; i++)
             //    transitions[i].decision.OnTargetAnimalModeEnd(brain, mode, i);
         }
+
         #endregion
 
 
@@ -301,7 +293,6 @@ namespace MalbersAnimations.Controller.AI
         {
             Reo_List_Tasks = new ReorderableList(serializedObject, tasks, true, true, true, true)
             {
-
                 drawElementCallback = (rect, index, isActive, isFocused) =>
                 {
                     var element = tasks.GetArrayElementAtIndex(index);
@@ -318,12 +309,19 @@ namespace MalbersAnimations.Controller.AI
 
                     if (space)
                     {
-                        var AddButtonRect = new Rect(rect) { x = rect.width + 22, width = 22, y = rect.y + 2, height = EditorGUIUtility.singleLineHeight };
+                        var AddButtonRect = new Rect(rect)
+                        {
+                            x = rect.width + 22,
+                            width = 22,
+                            y = rect.y + 2,
+                            height = EditorGUIUtility.singleLineHeight
+                        };
 
                         // if (!internalData.boolValue)
                         if (GUI.Button(AddButtonRect, new GUIContent("+", "Create New Task Asset Externally")))
                         {
-                            MTools.AddScriptableAssetContextMenu(element, typeof(MTask), MTools.GetSelectedPathOrFallback());
+                            MTools.AddScriptableAssetContextMenu(element, typeof(MTask),
+                                MTools.GetSelectedPathOrFallback());
                         }
                     }
                 },
@@ -342,42 +340,40 @@ namespace MalbersAnimations.Controller.AI
                     EditorGUI.LabelField(rect, new GUIContent("   Tasks", "Tasks for the state"));
                     EditorGUI.PropertyField(ColorRect, GizmoStateColor, GUIContent.none);
                 },
-               
+
                 onAddCallback = list => OnAddCallback_Task(list),
 
                 onRemoveCallback = list =>
                 {
                     var task = tasks.GetArrayElementAtIndex(list.index).objectReferenceValue;
 
-                    string Path = AssetDatabase.GetAssetPath(task);
-
-                    if (Path == AssetDatabase.GetAssetPath(target)) //mean it was created inside the AI STATE
+                    if (task != null)
                     {
-                        DestroyImmediate(task, true); //Delete the internal asset!
-                        tasks.DeleteArrayElementAtIndex(list.index); //Delete the Index
-                        tasks.DeleteArrayElementAtIndex(list.index); //Double Hack
-                        AssetDatabase.SaveAssets();
+                        string Path = AssetDatabase.GetAssetPath(task);
+
+                        if (Path == AssetDatabase.GetAssetPath(target)) //mean it was created inside the AI STATE
+                        {
+                            DestroyImmediate(task, true); //Delete the internal asset!
+                            tasks.DeleteArrayElementAtIndex(list.index); //Double Hack
+                            task = null;
+                            AssetDatabase.SaveAssets();
+                        }
+                        else // is an Outside Element
+                        {
+                            tasks.DeleteArrayElementAtIndex(list.index);
+                        }
                     }
-                    else// is an Outside Element
-                        // if ()
+                    else // is an null Element
                     {
                         tasks.DeleteArrayElementAtIndex(list.index);
                     }
 
-                    CheckListIndex(list);
+                    MTools.CheckListIndex(list);
 
                     EditorUtility.SetDirty(target);
-
                 }
             };
-        }
-
-        private void CheckListIndex(ReorderableList list)
-        {
-            list.index -= 1;
-            if (list.index == -1 && tasks.arraySize > 0)  //In Case you remove the first one
-                list.index = 0;
-        }
+        } 
 
         private void OnAddCallback_Task(ReorderableList list)
         {
@@ -397,10 +393,7 @@ namespace MalbersAnimations.Controller.AI
             addMenu.AddItem(new GUIContent("Empty"), false, () => { });
 
             addMenu.ShowAsContext();
-
-           // list.index = -1;
         }
-
 
 
         private void AddTask(Type NewTask, int index)
@@ -414,11 +407,10 @@ namespace MalbersAnimations.Controller.AI
             Reo_List_Tasks.index = index;
             Reo_List_Transitions.index = -1;
 
-            //EditorUtility.SetDirty(task);
+            EditorUtility.SetDirty(task);
             EditorUtility.SetDirty(target);
             serializedObject.ApplyModifiedProperties();
-            AssetDatabase.SaveAssets(); 
-
+            AssetDatabase.SaveAssets();
         }
 
         private void TransitionList()
@@ -441,92 +433,107 @@ namespace MalbersAnimations.Controller.AI
                     var empty = decision.objectReferenceValue == null;
                     if (empty) r1.width -= 30;
 
-                    EditorGUI.PropertyField(r1, decision, new GUIContent("[" + index + "] Decision", "If the Decision is true it will go to the True State, else it will go to the False state"));
+                    EditorGUI.PropertyField(r1, decision,
+                        new GUIContent("[" + index + "] Decision",
+                            "If the Decision is true it will go to the True State, else it will go to the False state"));
 
                     if (empty)
                     {
-                        var AddButtonRect = new Rect(r1) { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
+                        var AddButtonRect = new Rect(r1)
+                        { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
 
                         if (GUI.Button(AddButtonRect, "+"))
                         {
                             // OnAddCallback_Decision(index);
-                            MTools.AddScriptableAssetContextMenu(decision, typeof(MAIDecision), MTools.GetSelectedPathOrFallback());
+                            MTools.AddScriptableAssetContextMenu(decision, typeof(MAIDecision),
+                                MTools.GetSelectedPathOrFallback());
                         }
                     }
-                     
-                    
+
 
                     empty = TrueState.objectReferenceValue == null;
 
                     if (empty) r2.width -= 30;
 
                     r2.y += EditorGUIUtility.singleLineHeight + 3;
-                    EditorGUI.PropertyField(r2, TrueState, new GUIContent("True" + (empty ? " (Do Nothing)" : ""), "If the Decision is TRUE, It will execute this state. if is Empty, it will do nothing"));
+                    EditorGUI.PropertyField(r2, TrueState,
+                        new GUIContent("True" + (empty ? " (Do Nothing)" : ""),
+                            "If the Decision is TRUE, It will execute this state. if is Empty, it will do nothing"));
 
 
                     if (empty)
                     {
-                        var AddButtonRect = new Rect(r2) { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
+                        var AddButtonRect = new Rect(r2)
+                        { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
                         if (GUI.Button(AddButtonRect, "+"))
-                            MTools.CreateScriptableAsset(TrueState, typeof(MAIState), MTools.GetSelectedPathOrFallback());
+                            MTools.CreateScriptableAsset(TrueState, typeof(MAIState),
+                                MTools.GetSelectedPathOrFallback());
                     }
 
-
-                  
 
                     empty = FalseState.objectReferenceValue == null;
                     if (empty) r3.width -= 30;
-                    r3.y += (EditorGUIUtility.singleLineHeight + 3)*2;
+                    r3.y += (EditorGUIUtility.singleLineHeight + 3) * 2;
 
 
-                    EditorGUI.PropertyField(r3, FalseState, new GUIContent("False" + (empty ? " (Do Nothing)" : "" ), "If the Decision is FALSE, It will execute this state. if is Empty, it will do nothing"));
+                    EditorGUI.PropertyField(r3, FalseState,
+                        new GUIContent("False" + (empty ? " (Do Nothing)" : ""),
+                            "If the Decision is FALSE, It will execute this state. if is Empty, it will do nothing"));
 
                     if (empty)
                     {
-                        var AddButtonRect = new Rect(r3) { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
+                        var AddButtonRect = new Rect(r3)
+                        { x = rect.width + 12, width = 25, height = EditorGUIUtility.singleLineHeight };
                         if (GUI.Button(AddButtonRect, "+"))
-                            MTools.CreateScriptableAsset(FalseState, typeof(MAIState), MTools.GetSelectedPathOrFallback());
+                            MTools.CreateScriptableAsset(FalseState, typeof(MAIState),
+                                MTools.GetSelectedPathOrFallback());
                     }
                 },
 
-                drawHeaderCallback = rect => EditorGUI.LabelField(rect, new GUIContent("   Decisions", "Transitions for other States")),
+                drawHeaderCallback = rect =>
+                    EditorGUI.LabelField(rect, new GUIContent("   Decisions", "Transitions for other States")),
 
                 onAddCallback = list => OnAddCallback_Decision(),
-               
+
 
                 onRemoveCallback = list =>
                 {
                     var decision = m.transitions[list.index].decision;
 
-                    string Path = AssetDatabase.GetAssetPath(decision);
-
-                    if (Path == AssetDatabase.GetAssetPath(target)) //mean it was created inside the AI STATE
+                    if (decision != null)
                     {
-                        DestroyImmediate(decision, true); //Delete the internal asset!
-                        transitions.DeleteArrayElementAtIndex(list.index); // Removed double //HACK HACK
-                        AssetDatabase.SaveAssets();
+                        string Path = AssetDatabase.GetAssetPath(decision);
+
+                        if (Path == AssetDatabase.GetAssetPath(target)) //mean it was created inside the AI STATE
+                        {
+                            DestroyImmediate(decision, true); //Delete the internal asset!
+                            
+                            m.transitions[list.index].decision = null;
+                            transitions.DeleteArrayElementAtIndex(list.index); // Removed double //HACK HACK
+                            
+                            AssetDatabase.SaveAssets();
+                        }
+                        else
+                        {
+                            transitions.DeleteArrayElementAtIndex(list.index);
+                        }
                     }
                     else
                     {
                         transitions.DeleteArrayElementAtIndex(list.index);
                     }
 
-                    CheckListIndex(list);
-
+                    MTools.CheckListIndex(list);
                     EditorUtility.SetDirty(target);
-
                 },
                 elementHeightCallback = (index) =>
                 {
                     var DefaultHeight = EditorGUIUtility.singleLineHeight + 5;
-
-                    //if (Reo_List_Transitions.index == index)
                     return DefaultHeight * 3;
-                    //else
-                    //    return DefaultHeight;
                 },
             };
         }
+
         private void OnAddCallback_Decision()
         {
             var addMenu = new GenericMenu();
@@ -538,7 +545,7 @@ namespace MalbersAnimations.Controller.AI
 
                 var Rname = Regex.Replace(st.Name, @"([a-z])([A-Z])", "$1 $2");
 
-                addMenu.AddItem(new GUIContent(Rname), false, () => AddDecision(st, m.transitions.Length-1));
+                addMenu.AddItem(new GUIContent(Rname), false, () => AddDecision(st, m.transitions.Length - 1));
             }
 
 
@@ -546,6 +553,7 @@ namespace MalbersAnimations.Controller.AI
             addMenu.AddItem(new GUIContent("Empty"), false, () => { });
             addMenu.ShowAsContext();
         }
+
         private void AddDecision(Type desicion, int index)
         {
             MAIDecision des = (MAIDecision)CreateInstance(desicion);
@@ -577,6 +585,7 @@ namespace MalbersAnimations.Controller.AI
             {
                 Array.Resize<MTask>(ref m.tasks, m.tasks.Length + 1); //Hack for non UNITY  OBJECTS ARRAYS
             }
+
             EditorUtility.SetDirty(target);
         }
 
@@ -588,8 +597,10 @@ namespace MalbersAnimations.Controller.AI
             }
             else
             {
-                Array.Resize<MAITransition>(ref m.transitions, m.transitions.Length + 1); //Hack for non UNITY  OBJECTS ARRAYS
+                Array.Resize<MAITransition>(ref m.transitions,
+                    m.transitions.Length + 1); //Hack for non UNITY  OBJECTS ARRAYS
             }
+
             EditorUtility.SetDirty(target);
         }
 
@@ -629,14 +640,28 @@ namespace MalbersAnimations.Controller.AI
 
                     EditorGUILayout.BeginHorizontal();
                     {
-                        asset.name =  EditorGUILayout.TextField("Name", asset.name);
+                        asset.name = EditorGUILayout.TextField("Name", asset.name);
                         element.serializedObject.ApplyModifiedProperties();
                         EditorUtility.SetDirty(asset);
 
                         if (GUILayout.Button(new GUIContent("R", "Update the Asset name"), GUILayout.Width(20)))
                         {
+                            string taskPath = AssetDatabase.GetAssetPath(asset);
+                            string targetPath = AssetDatabase.GetAssetPath(target);
+
+                            // Check if the asset itself is external or internal to the target
+                            if (taskPath != targetPath)
+                                AssetDatabase.RenameAsset(taskPath, asset.name);
+
                             AssetDatabase.SaveAssets();
-                            EditorGUIUtility.PingObject(asset); //Final way of chaning the name of the asset... dirty but it works
+                            EditorGUIUtility.PingObject(asset); //Final way of changing the name of the asset... dirty but it works
+                        }
+
+
+                        if (GUILayout.Button(new GUIContent("E", "Extract the task into its own file"),
+                            GUILayout.Width(20)))
+                        {
+                            ExtractTaskFromList(asset, element, indexTasks);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -654,7 +679,8 @@ namespace MalbersAnimations.Controller.AI
                 if (decision != null && decision.objectReferenceValue != null)
                 {
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                    EditorGUILayout.LabelField("Decision: " + decision.objectReferenceValue.name, EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField("Decision: " + decision.objectReferenceValue.name,
+                        EditorStyles.boldLabel);
 
                     var asset = decision.objectReferenceValue;
 
@@ -666,8 +692,23 @@ namespace MalbersAnimations.Controller.AI
 
                         if (GUILayout.Button(new GUIContent("R", "Update the Asset name"), GUILayout.Width(20)))
                         {
+                            string taskPath = AssetDatabase.GetAssetPath(asset);
+                            string targetPath = AssetDatabase.GetAssetPath(target);
+
+                            // Check if the asset itself is external or internal to the target
+                            if (taskPath != targetPath)
+                                AssetDatabase.RenameAsset(taskPath, asset.name);
+
                             AssetDatabase.SaveAssets();
-                            EditorGUIUtility.PingObject(asset); //Final way of chaning the name of the asset... dirty but it works
+                            EditorGUIUtility
+                                .PingObject(
+                                    asset); //Final way of changing the name of the asset... dirty but it works
+                        }
+
+                        if (GUILayout.Button(new GUIContent("E", "Extract the decision into its own file"),
+                            GUILayout.Width(20)))
+                        {
+                            ExtractDecisionFromList(asset, element, indexTrans);
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -680,34 +721,71 @@ namespace MalbersAnimations.Controller.AI
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void ShowAllItems()
+        private void ExtractTaskFromList(Object asset, SerializedProperty element, int index)
         {
-                foreach (var task in m.tasks)
-                {
-                    if (task)
-                    {
-                        task.hideFlags = HideFlags.None;
-                        EditorUtility.SetDirty(task);
-                    }
-                }
-            foreach (var des in m.transitions)
+            string taskPath = AssetDatabase.GetAssetPath(asset);
+            string targetPath = AssetDatabase.GetAssetPath(target);
+            if (taskPath == targetPath)
             {
-                if (des != null && des.decision != null)
-                {
-                    des.decision.hideFlags = HideFlags.None;
-                    EditorUtility.SetDirty(des.decision);
-                }
+                Object clone = MTools.ExtractObject(asset, index);
+                if (!clone)  return;
+                  
+
+                // Remove from list
+                DestroyImmediate(asset, true);
+                tasks.DeleteArrayElementAtIndex(index);
+                AssetDatabase.SaveAssets();
+
+                // Add as external task
+                element.objectReferenceValue = clone;
+                Reo_List_Tasks.index = index;
+                Reo_List_Transitions.index = -1;
+                EditorUtility.SetDirty(target);
+                serializedObject.ApplyModifiedProperties();
+                AssetDatabase.SaveAssets();
+
+                EditorGUIUtility.PingObject(clone);
             }
-
-
-            serializedObject.ApplyModifiedProperties();
-            EditorUtility.SetDirty(target);
-            AssetDatabase.SaveAssets();
+            else
+            {
+                // Checking this beforehand is quite in-efficient as the AssetDatabase.GetAssetPath() is slow
+                // If there is a better way to check whether it's an internal or external asset then that could be used
+                Debug.LogWarning("Cannot extract already extracted task");
+            }
         }
 
+        private void ExtractDecisionFromList(Object asset, SerializedProperty element, int index)
+        {
+            string taskPath = AssetDatabase.GetAssetPath(asset);
+            string targetPath = AssetDatabase.GetAssetPath(target);
+           
+            if (taskPath == targetPath)
+            {
+                Object clone = MTools.ExtractObject(asset, index);
+                if (!clone)   return; 
 
+                // Remove from list
+                DestroyImmediate(asset, true);
 
-      
+                // Add as external decision
+                SerializedProperty decision = element.FindPropertyRelative("decision");
+                decision.objectReferenceValue = clone;
+                Reo_List_Tasks.index = -1;
+                Reo_List_Transitions.index = index;
+                EditorUtility.SetDirty(target);
+                serializedObject.ApplyModifiedProperties();
+                AssetDatabase.SaveAssets();
+
+                EditorGUIUtility.PingObject(clone);
+            }
+            else
+            {
+                // Checking this beforehand is quite in-efficient as the AssetDatabase.GetAssetPath() is slow
+                // If there is a better way to check whether it's an internal or external asset then that could be used
+                Debug.LogWarning("Cannot extract already extracted decision");
+            }
+        }
+
     }
 #endif
 }

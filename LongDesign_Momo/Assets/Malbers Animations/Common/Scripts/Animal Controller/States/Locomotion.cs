@@ -43,12 +43,13 @@ namespace MalbersAnimations.Controller
         public override bool TryActivate()
         {
             if (animal.Grounded)
-            {
+            { 
                 if (!HasIdle) return true; //Return true if is grounded (Meaning Locomotion is also the IDLE STATE
 
                 if (animal.MovementAxisSmoothed != Vector3.zero || animal.MovementDetected) //If is moving? 
                 {
                     SetStatus((int)animal.CurrentSpeedModifier.Vertical.Value); //When entering Locomotion the State set the Status the current Speed Modifier.
+  
                     return true;
                 }
             }

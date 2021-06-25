@@ -22,15 +22,19 @@ namespace MalbersAnimations
         /// <summary>Center of the Animal to be used for AI and Targeting  </summary>
         public Vector3 Center
         {
-            private set => center = value; 
+            private set => center = value;
             get => transform.TransformPoint(center);
         }
 
         public void SetLocalCenter(Vector3 localCenter) => center = localCenter;
 
-        public virtual Vector3 GetPosition() => transform.TransformPoint(center);
+        public virtual Vector3 GetPosition() => Center;
 
         public float StopDistance() => stoppingDistance * transform.localScale.y; //IMPORTANT For Scaled objects like the ball
+
+        public void SetGrounded() => pointType = WayPointType.Ground;
+        public void SetAir() => pointType = WayPointType.Ground;
+        public void SetWater() => pointType = WayPointType.Ground;
 
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()

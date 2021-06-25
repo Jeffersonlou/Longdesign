@@ -184,7 +184,9 @@ namespace MalbersAnimations.Controller
             if (Physics.Raycast(ClimbPivotPoint, animal.Forward, out ClimbHit, animal.ScaleFactor * ClimbPivot.multiplier, animal.GroundLayer, IgnoreTrigger))
             {
                 WallClimbTag = ClimbHit.transform.gameObject.CompareTag(SurfaceTag);
-                Debug.Log("WallClimbTag = " + WallClimbTag);
+
+                Debugging("WallClimbTag = " + WallClimbTag);
+              
                 AvNormal = ClimbHit.normal;
                 return WallClimbTag;
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MalbersAnimations.Scriptables
 {
     ///<summary> V3 Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple  </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Vector3", order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Vector3", order = 1000)]
     public class Vector3Var : ScriptableVar
     {
         /// <summary>The current value</summary>

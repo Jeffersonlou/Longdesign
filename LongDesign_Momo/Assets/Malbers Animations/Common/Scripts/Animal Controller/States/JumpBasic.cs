@@ -38,7 +38,8 @@ namespace MalbersAnimations.Controller
         public FloatReference AirRotation = new FloatReference(10);
         [Tooltip("How much Movement the Animal can do while Jumping")]
         public FloatReference AirMovement = new FloatReference(5);
-        public int StartGravityTime = 10;
+
+       
 
         [Tooltip("How much Movement the Animal can do while Jumping")]
         public List<StateID> ResetJump;
@@ -52,7 +53,7 @@ namespace MalbersAnimations.Controller
         private bool ActivateJumpLogic;
         private int JumpsPerformanced = 0;
 
-        private int GravityTime = 0;
+        //private int GravityTime = 0;
        /// <summary>  Used on the Pressed feature so it cannot be pressed again on the middle </summary>
         private bool justJumpPressed;
         
@@ -66,27 +67,16 @@ namespace MalbersAnimations.Controller
             ActivateJumpLogic = false;
             justJumpPressed = false;
             StartedJumpLogicTime = 0;
-            GravityTime = StartGravityTime;
-        }
+          //  GravityTime = 0;
+        } 
 
-        public override void ExitState()
-        {
-            base.ExitState();
-
-        }
-
-        //public override void RestoreAnimalOnExit()
-        //{
-        //    animal.UpdateDirectionSpeed = true; //Reset the Rotate Direction
-        //}
 
         //Do not use the Try Activate
         public override bool TryActivate() => false;
-        
 
         public override void StatebyInput()
         {
-            if (InputValue && (JumpsPerformanced < Jumps) /*&& (MTools.ElapsedTime(StartedJumpLogicTime, JumpTime.Value))*/)
+            if (InputValue && (JumpsPerformanced < Jumps) )
             {
                 Activate(); 
             }
@@ -99,7 +89,7 @@ namespace MalbersAnimations.Controller
             justJumpPressed = true;
             animal.Grounded = false;
             StartedJumpLogicTime = Time.time;
-            GravityTime =  StartGravityTime;
+            animal.GravityTime = activeJump.StartGravityTime;
             Debugging("[Basic Jump] Activate JumpLogic");
         }
 
@@ -115,12 +105,22 @@ namespace MalbersAnimations.Controller
             StartingSpeedDirection = animal.Forward;            //Store the Starting SpeedDirection
 
             activeJump = (profiles != null && profiles.Count > 0) ? profiles[0] : new JumpBasicProfile(0);
-           
+
             foreach (var jump in profiles)                          //Save/Search the Current Jump Profile by the Lowest Speed available
             {
-                if (jump.VerticalSpeed <= animal.VerticalSmooth && jump.VerticalSpeed > activeJump.VerticalSpeed)
+                if (jump.LastState == null)
                 {
-                    activeJump = jump;
+                    if (jump.VerticalSpeed <= animal.VerticalSmooth)
+                    {
+                        activeJump = jump;
+                    }
+                }
+                else
+                {
+                    if (jump.VerticalSpeed <= animal.VerticalSmooth && jump.LastState == animal.LastState.ID)
+                    {
+                        activeJump = jump;
+                    }
                 }
             }
         }
@@ -142,11 +142,6 @@ namespace MalbersAnimations.Controller
                 rotation = AirRotation,
                 animator = 1,
             };
-
-            //animal.UpdateDirectionSpeed = AirControl; 
-
-            //if (animal.HasExternalForce)
-            //    animal.Speed_Direction = Vector3.ProjectOnPlane(animal.ExternalForce, animal.UpVector).normalized;
 
             animal.SetCustomSpeed(JumpSpeed, true);       //Set the Current Speed to the Jump Speed Modifier
 
@@ -225,10 +220,10 @@ namespace MalbersAnimations.Controller
 
                 //Apply Fake Gravity (HAD TO TO IT)
 
-                var GTime = deltaTime * GravityTime;
+                var GTime = deltaTime * animal.GravityTime;
                 var GravityStoredVelocity = animal.Gravity * animal.GravityPower * (GTime * GTime / 2);
                 animal.AdditivePosition += GravityStoredVelocity * deltaTime * activeJump.GravityPower.Value;                                         //Add Gravity if is in use
-                GravityTime++;
+                animal.GravityTime++;
 
             }
         }
@@ -259,7 +254,7 @@ namespace MalbersAnimations.Controller
             {
                 AllowExit();
                 
-                var lastGravityTime = GravityTime;
+                var lastGravityTime = animal.GravityTime;
                 animal.State_Activate(StateEnum.Fall); //Seems Important
                 animal.GravityTime = lastGravityTime;
 
@@ -324,8 +319,11 @@ namespace MalbersAnimations.Controller
         /// <summary>Name to identify the Jump Profile</summary>
         public string name;
 
+        [Tooltip("Last State the animal was before making the Jump")]
+        public StateID LastState;
+
         /// <summary>Maximum Vertical Speed to Activate this Jump</summary>
-        [Tooltip("Maximum Vertical Speed to Activate this Profile")]
+        [Tooltip("Minimal Vertical Speed to Activate this Profile")]
         public float VerticalSpeed;
 
         /// <summary>Maximum distance to land on a Cliff </summary>
@@ -340,10 +338,14 @@ namespace MalbersAnimations.Controller
         [Tooltip("Multiplier for the Gravity")]
         public FloatReference GravityPower;
 
-       // public AnimationCurve JumpCurve;
+        [Tooltip("Higher value makes the Jump more Arcady")]
+        public int StartGravityTime;
 
-       // static Keyframe[] K = { new Keyframe(0, 0), new Keyframe(1, 1) };
-     
+
+        // public AnimationCurve JumpCurve;
+
+        // static Keyframe[] K = { new Keyframe(0, 0), new Keyframe(1, 1) };
+
 
         public JumpBasicProfile(int Vertical)
         {
@@ -352,7 +354,9 @@ namespace MalbersAnimations.Controller
             JumpTime = 0.3f;
             VerticalSpeed = Vertical;
             name = "Default";
-           // JumpCurve = new AnimationCurve(K);
+            StartGravityTime = 10;
+            LastState = null;
+            // JumpCurve = new AnimationCurve(K);
         }
     }
 }

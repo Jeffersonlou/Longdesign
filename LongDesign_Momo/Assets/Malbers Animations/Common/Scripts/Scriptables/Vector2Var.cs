@@ -3,7 +3,7 @@
 namespace MalbersAnimations.Scriptables
 {
     ///<summary>  Vector2 Scriptable Variable. Based on the Talk - Game Architecture with Scriptable Objects by Ryan Hipple </summary>
-    [CreateAssetMenu(menuName = "Malbers Animations/Scriptables/Variables/Vector2",order = 1000)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Variables/Vector2",order = 1000)]
     public class Vector2Var : ScriptableVar
     {
         /// <summary>The current value</summary>

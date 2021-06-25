@@ -14,7 +14,7 @@ namespace MalbersAnimations.Controller
 
         public override void InitializeState()
         {
-            HasLocomotion = animal.HasState(StateEnum.Idle); //Check if the animal has Idle State if it does not have then Locomotion is IDLE TOO
+            HasLocomotion = animal.HasState(StateEnum.Locomotion); //Check if the animal has Idle State if it does not have then Locomotion is IDLE TOO
         }
 
         public override void Activate()
@@ -30,7 +30,7 @@ namespace MalbersAnimations.Controller
             {
                 return (
                     animal.MovementAxisSmoothed == Vector3.zero &&
-                    animal.MovementAxis == Vector3.zero && 
+                    //animal.MovementAxis == Vector3.zero && 
                     !animal.MovementDetected  &&  
                     General.Grounded == animal.Grounded);
             }

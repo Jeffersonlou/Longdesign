@@ -115,9 +115,10 @@ namespace MalbersAnimations.Controller.AI
             AgentHeight = transform.lossyScale.y * AIMovement.Agent.height;
         }
 
-        void Start()
+        public void StartBrain()
         {
             Animal.isPlayer.Value = false; //If is using a brain... disable that he is the main player
+            AIMovement.StartAgent();
 
             if (currentState)
             {
@@ -135,7 +136,7 @@ namespace MalbersAnimations.Controller.AI
 
             if (AIMovement.Target)
                 SetLastWayPoint(AIMovement.Target);
-        }
+        }   
 
 
         void Update() { currentState?.Update_State(this); }
@@ -198,15 +199,18 @@ namespace MalbersAnimations.Controller.AI
         /// <summary>Prepare all the local variables on the New State before starting new tasks</summary>
         private void ResetVarsOnNewState()
         {
-            TasksVars = new BrainVars[currentState.tasks.Length];                //Local Variables you can use on your tasks
-            TasksTime = new float[currentState.tasks.Length];                    //Reset all the Tasks    Time elapsed time
+            var tasks = currentState.tasks.Length > 0 ? currentState.tasks.Length : 1;
+            var transitions = currentState.transitions.Length > 0 ? currentState.transitions.Length : 1;
 
-            TasksDone = new bool[currentState.tasks.Length];                     //Reset if they are Done
-            TasksStarted = new bool[currentState.tasks.Length];                  //Reset if they tasks are started
+            TasksVars = new BrainVars[tasks];                //Local Variables you can use on your tasks
+            TasksTime = new float[tasks];                    //Reset all the Tasks    Time elapsed time
 
-            DecisionsVars = new BrainVars[currentState.transitions.Length];      //Local Variables you can use on your Decisions
-            DecisionsTime = new float[currentState.transitions.Length];          //Reset all the Decisions Time elapsed time
-            DecisionResult = new bool[currentState.transitions.Length];          //Reset if they tasks are started
+            TasksDone = new bool[tasks];                     //Reset if they are Done
+            TasksStarted = new bool[tasks];                  //Reset if they tasks are started
+
+            DecisionsVars = new BrainVars[transitions];      //Local Variables you can use on your Decisions
+            DecisionsTime = new float[transitions];          //Reset all the Decisions Time elapsed time
+            DecisionResult = new bool[transitions];          //Reset if they tasks are started
         }
 
 
@@ -260,6 +264,8 @@ namespace MalbersAnimations.Controller.AI
             Animal.OnStanceChange.AddListener(OnAnimalStanceChange);
             Animal.OnModeStart.AddListener(OnAnimalModeStart);
             Animal.OnModeEnd.AddListener(OnAnimalModeEnd);
+
+            StartBrain();
         }
 
         void OnDisable()
@@ -271,6 +277,11 @@ namespace MalbersAnimations.Controller.AI
             Animal.OnStanceChange.RemoveListener(OnAnimalStanceChange);
             Animal.OnModeStart.RemoveListener(OnAnimalModeStart);
             Animal.OnModeEnd.RemoveListener(OnAnimalModeEnd);
+
+            AIMovement.Stop();
+            StopAllCoroutines();
+            AIMovement.StopAllCoroutines();
+
         }
         #endregion
 

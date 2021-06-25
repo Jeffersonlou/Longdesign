@@ -82,7 +82,7 @@ namespace MalbersAnimations.Controller
         
         private bool GoingDown;
         private bool DeltaGoingDown;
-        private bool FoundLand;
+      //  private bool FoundLand;
 
         private int Hits;
 
@@ -112,40 +112,44 @@ namespace MalbersAnimations.Controller
             var Radius = animal.RayCastRadius * animal.ScaleFactor;
             Hits = Physics.SphereCastNonAlloc(fall_Pivot, Radius, Direction, FallHits, Multiplier, animal.GroundLayer, IgnoreTrigger);
 
+            if (debug)
+            {
+                Debug.DrawRay(fall_Pivot, Direction * Multiplier, Color.magenta);
+                Debug.DrawRay(FallRayCast.point, FallRayCast.normal * animal.ScaleFactor * 0.2f, Color.magenta);
+            }
+
+
+            var TerrainSlope = 0f;
+
             if (Hits > 0)
             {
-                if (animal.Grounded)
+                if (animal.Grounded) //Check when its grounded
                 {
                     foreach (var hit in FallHits)
                     {
                         if (hit.collider != null)
                         {
-                            var slope = Vector3.Angle(hit.normal, animal.UpVector);
-                            slope *= Vector3.Dot(animal.UpVector, animal.Forward) < 0 ? -1 : 1;            //Calcualte the Fall Angle Positive or Negative
+                            TerrainSlope = Vector3.SignedAngle(hit.normal, animal.UpVector,animal.Right);
 
-                            if (slope > -animal.maxAngleSlope && slope <= animal.maxAngleSlope)
+                          
+                           MTools.DrawWireSphere(fall_Pivot + Direction * DistanceToGround, Color.magenta, Radius);
+
+                           // Debug.Log("TerrainSlope = " + TerrainSlope);
+
+                            FallRayCast = hit;
+
+                            if (TerrainSlope > -animal.maxAngleSlope) //Check for the first Good Fall Ray that does not break the Fall.
                             {
-                                FallRayCast = hit;
-
-                                if (debug)
-                                {
-                                    Debug.DrawRay(fall_Pivot, Direction * Multiplier, Color.magenta);
-                                    Debug.DrawRay(FallRayCast.point, FallRayCast.normal * animal.ScaleFactor * 0.2f, Color.magenta);
-                                    MTools.DrawWireSphere(fall_Pivot + Direction * DistanceToGround, Color.magenta, Radius);
-                                }
                                 break;
                             }
                         }
                     }
 
-                    DistanceToGround = FallRayCast.distance;
-
-                    var TerrainSlope = Vector3.Angle(FallRayCast.normal, animal.UpVector);
-                    TerrainSlope *= Vector3.Dot(animal.UpVector, animal.Forward) < 0 ? -1 : 1;            //Calcualte the Fall Angle Positive or Negative
-
+                    DistanceToGround = FallRayCast.distance; 
+                
                     if (TerrainSlope < -animal.maxAngleSlope || animal.DeepSlope)
                     {
-                        Debugging($"[Try] Slope is too deep [{FallRayCast.collider}] | Hits: {Hits} | Slope : {TerrainSlope:F2} T:{Time.time:F3}");
+                        Debugging($"[Try] Slope is too deep [{FallRayCast.collider}] | Hits: {Hits} | Slope: {TerrainSlope:F2}");
                         return true;
                     }
                 }
@@ -158,7 +162,7 @@ namespace MalbersAnimations.Controller
 
                     if (FallSlope > animal.maxAngleSlope)
                     {
-                        Debugging($"[Try] The Animal is on the Air and the angle SLOPE of the ground Hitted is too Deep");
+                        Debugging($"[Try] The Animal is on the Air and the angle SLOPE of the ground hitted is too Deep");
                       
                         return true;
                     }
@@ -187,7 +191,7 @@ namespace MalbersAnimations.Controller
 
         public override void Activate()
         {
-            StartingSpeedDirection = animal.ActiveState.Speed_Direction();  //Store the Last Speed Direction
+            StartingSpeedDirection = animal.ActiveState.Speed_Direction();  //Store the Last Speed Direction.... why??
             base.Activate();
             animal.State_SetFloat(0);
             ResetStateValues();
@@ -208,16 +212,17 @@ namespace MalbersAnimations.Controller
                 position = animal.HorizontalSpeed + animal.ExternalForceHSpeed,
                 strafeSpeed = animal.HorizontalSpeed + animal.ExternalForceHSpeed,
                 animator = 1,
-                rotation = AirRotation.Value, 
-            };
+                rotation = AirRotation.Value,  
+            };  
 
             animal.SetCustomSpeed(FallSpeed, true);
 
             if (animal.HasExternalForce && animal.Zone) animal.UseGravity = false; //Disable again the Gravity if we are on an external force
 
             Has_UP_Impulse = Vector3.Dot(UpImpulse, animal.UpVector) > 0;
-            
-            if (MTools.CompareOR( animal.LastState.ID,0,1, StateEnum.Swim, StateEnum.Climb) && Has_UP_Impulse || animal.HasExternalForce) //means it was on locomotion or idle //Remove Up Impulse HACK
+
+            //means it was on locomotion or idle //Remove Up Impulse HACK
+            if (MTools.CompareOR(animal.LastState.ID, 0, 1, StateEnum.Swim, StateEnum.Climb) && Has_UP_Impulse || animal.HasExternalForce)
                 UpImpulse = Vector3.zero;
         }
 
@@ -248,9 +253,9 @@ namespace MalbersAnimations.Controller
               
                 if (Has_UP_Impulse)  UpImpulse = Vector3.Lerp(UpImpulse, Vector3.zero, deltaTime * AirDrag); //Clean the Up impulse with air Drag
 
-                //Change the Speed to the maximum Speed when AirMovement is enable
+
                 if (AirControl && AirMovement > 0 && AirMovement > CurrentSpeedPos)
-                    CurrentSpeedPos = Mathf.Lerp(CurrentSpeedPos, AirMovement, deltaTime * airSmooth); 
+                    CurrentSpeedPos = Mathf.Lerp(CurrentSpeedPos, AirMovement, (airSmooth != 0 ? (deltaTime * airSmooth) : 1));
             }
         }
 
@@ -308,7 +313,7 @@ namespace MalbersAnimations.Controller
             {
                 DistanceToGround = FallRayCast.distance;
 
-                FoundLand = true;
+              //  FoundLand = true;
 
                 if (animal.debugGizmos && debug)
                 {
@@ -343,9 +348,6 @@ namespace MalbersAnimations.Controller
                         break;
                 }
 
-
-        
-            
                 if (animal.Height > DistanceToGround || ((DistanceToGround - DeltaDistance) < 0)) //Means has touched the ground
                 {
                     var angl = Vector3.Angle(FallRayCast.normal, animal.UpVector);
@@ -355,52 +357,38 @@ namespace MalbersAnimations.Controller
                     if (!DeepSlope) //Check if we are not on a deep slope
                     {
                         AllowExit();
+                        animal.CheckIfGrounded();
+
                         animal.Grounded = true;
                         animal.UseGravity = false;
-                        var GroundedPos = Vector3.Project(FallRayCast.point - animal.transform.position, Gravity);  //IMPORTANT HACk FOR 
-                       
 
+                        var GroundedPos = Vector3.Project(FallRayCast.point - animal.transform.position, Gravity);  //IMPORTANT HACk FOR when the Animal is falling to fast
 
                         if (DeltaDistance > 0.1f)
                         { 
-                            animal.Teleport_Internal(animal.transform.position + GroundedPos); //SUPER IMPORTANT!!!
-                        }
-
-                        animal.ResetUPVector(); //IMPORTAAANT!
-
-                        UpImpulse = Vector3.zero;
-                        Debugging($"[Try Exit] (Grounded) + [Terrain Angle ={angl}] DeltaDistance: {DeltaDistance:F3}");
+                            animal.Teleport_Internal(animal.transform.position + GroundedPos); //SUPER IMPORTANT!!! this is when the Animal is falling from a great height
+                            animal.ResetUPVector(); //IMPORTAAANT!
+                        } 
+                         Debugging($"[Try Exit] (Grounded) + [Terrain Angle ={angl}] DeltaDistance: {DeltaDistance:F3}");
                     }
                 }
             }
-            else
-            {
-                //Means that has lost the RayCastHit that it had
-                if (FoundLand)
-                {
-                   // Debug.LogWarning("The Animal Tried to go below the terrain.... Unity Physic Bug  :( ");
-                    animal.Teleport_Internal(animal.LastPos); //HACK WHEN THE ANIMAL Goes UnderGround
-                    animal.ResetUPVector();
-                }
-                        
-            }
+           
 
-            //Pushing the Animal Forward when an animal collider is stuck on a ledge
-            if (!animal.Zone && !animal.HasExternalForce)
-            {
-                if (DeltaGoingDown && !GoingDown)
-                {
-                    if (LastDeltaDistance > DeltaDistance)
-                    {
-                        //Means that is still trying to fall but it cant because something is bloking the fall soo lets push it forward
-                        animal.ResetUPVector();
-                        animal.GravityTime = animal.StartGravityTime;
-                        animal.MovementAxis.z = 1; //Force going forward HACK
-                        animal.InertiaPositionSpeed = animal.Forward * animal.ScaleFactor * DeltaTime * animal.FallForward;
-                      //  Debug.Log("GoingForward "+ DeltaDistance);
-                    }
-                }
-            }
+            ////Pushing the Animal Forward when an animal collider is stuck on a ledge
+            //if (!animal.Zone && !animal.HasExternalForce)
+            //{
+            //    if (DeltaGoingDown && !GoingDown)
+            //    {
+            //        if (LastDeltaDistance > DeltaDistance)
+            //        { 
+            //            //  animal.MovementAxis.z = 1; //Force going forward HACK
+            //            var Forward = animal.Forward * animal.ScaleFactor * DeltaTime * animal.FallForward;
+            //            animal.InertiaPositionSpeed = Forward;
+            //            //Debug.Log("GoingForward");
+            //        }
+            //    }
+            //}
             LastDeltaDistance = DeltaDistance;
         }
 
@@ -408,22 +396,16 @@ namespace MalbersAnimations.Controller
         { 
             MaxHeight = float.NegativeInfinity; //Resets MaxHeight
             GoingDown =
-            DeltaGoingDown =
-            FoundLand = false;
+            DeltaGoingDown = false;
+            //FoundLand = false;
             DistanceToGround = float.PositiveInfinity;
             FallSpeed = new MSpeed();
             FallBlend = 1;
             FallRayCast = new RaycastHit();
             FallHits = new RaycastHit[RayHits];
             UpImpulse = Vector3.zero;
-
             FallCurrentDistance = 0;
             LastDeltaDistance = 0; 
-        }
-
-        public override void RestoreAnimalOnExit()
-        {
-         //   animal.UpdateDirectionSpeed = true; //Reset the Rotate Direction to the Default value
         }
 
 

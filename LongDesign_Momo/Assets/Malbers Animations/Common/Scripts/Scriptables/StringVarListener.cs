@@ -17,23 +17,25 @@ namespace MalbersAnimations
             set
             {
                 this.value.Value = value;
-                Raise.Invoke(value);
+                if (Auto) Invoke(value);
             }
         }
 
         void OnEnable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged += InvokeInt;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged += Invoke;
             Raise.Invoke(value);
         }
 
         void OnDisable()
         {
-            if (value.Variable != null) value.Variable.OnValueChanged -= InvokeInt;
+            if (value.Variable != null && Auto) value.Variable.OnValueChanged -= Invoke;
         }
 
-        public virtual void InvokeInt(string value)
+        public virtual void Invoke(string value)
         { if (Enable) Raise.Invoke(value);}
+
+        public virtual void Invoke() => Invoke(Value);
     }
 
     //INSPECTOR

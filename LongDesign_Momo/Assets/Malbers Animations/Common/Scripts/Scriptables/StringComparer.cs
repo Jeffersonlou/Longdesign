@@ -19,8 +19,8 @@ namespace MalbersAnimations
         {
             set
             {
-                base.Value = value;
-                Compare();
+                base.Value = value; 
+                if (Auto) Compare();
             }
         }
 
@@ -33,10 +33,10 @@ namespace MalbersAnimations
 
         void OnEnable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged += Compare;
-                value.Variable.OnValueChanged += InvokeInt;
+                value.Variable.OnValueChanged += Invoke;
             }
 
             Raise.Invoke(Value);
@@ -44,10 +44,10 @@ namespace MalbersAnimations
 
         void OnDisable()
         {
-            if (value.Variable)
+            if (value.Variable && Auto)
             {
                 value.Variable.OnValueChanged -= Compare;
-                value.Variable.OnValueChanged -= InvokeInt;
+                value.Variable.OnValueChanged -= Invoke;
             }
         }
 
@@ -130,14 +130,10 @@ namespace MalbersAnimations
             var rectName = new Rect(rect.x, rect.y, split + p - 2, height);
             var rectComparer = new Rect(rect.x + split + p, rect.y, split - p + 15, height);
             var rectValue = new Rect(rect.x + split * 2 + p + 5, rect.y, split - p, height);
-            var DebugRect  = new Rect(rect.width-5, rect.y-1, 35, height+2);
 
             UnityEditor.EditorGUI.LabelField(rectName,"    Name");
             UnityEditor.EditorGUI.LabelField(rectComparer, " Compare");
             UnityEditor.EditorGUI.LabelField(rectValue, " Value");
-
-
-            Debug.boolValue= GUI.Toggle(DebugRect,Debug.boolValue, new GUIContent("Deb", "Debug"), UnityEditor.EditorStyles.miniButton);
         }
 
         protected override void DrawEvents()

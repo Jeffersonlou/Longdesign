@@ -8,12 +8,18 @@ namespace MalbersAnimations
     [AddComponentMenu("Malbers/Utilities/Effects - Audio/Step Trigger")]
     public class StepTrigger : MonoBehaviour
     {
-        [RequiredField] public StepsManager m_StepsManager;
-        public float WaitNextStep = 0.2f;
+        [RequiredField] 
+        public StepsManager m_StepsManager;
+       
+        [Tooltip("Particle System for the Tracks")]
+        public ParticleSystem Tracks;
 
-        LayerMask GroundLayer = 1;
-         
+
+        public float WaitNextStep = 0.2f;
         public AudioSource StepAudio; 
+
+
+        private LayerMask GroundLayer => m_StepsManager.GroundLayer.Value;
 
         WaitForSeconds wait;
         bool waitrack;                      // Check if is time to put a track; 
@@ -29,8 +35,7 @@ namespace MalbersAnimations
                 Destroy(gameObject);
                 return;
             }
-
-            GroundLayer = m_StepsManager.GroundLayer.Value;
+             
 
             if (m_StepsManager.Active == false) //If there's no  StepManager Remove the Stepss
             {
@@ -54,13 +59,16 @@ namespace MalbersAnimations
 
         void OnTriggerEnter(Collider other)
         {
-            if (!MTools.CollidersLayer(other, GroundLayer)) return; //Ignore layers that are not Ground
-
-            if (!waitrack) 
+            if (m_StepsManager != null) //If there's no  StepManager Remove the Stepss
             {
-                 StartCoroutine(WaitForStep());     //Wait Half a Second before making another Step
-                m_StepsManager.EnterStep(this);
-                HasTrack = true;
+                if (!MTools.CollidersLayer(other, GroundLayer)) return; //Ignore layers that are not Ground
+
+                if (!waitrack)
+                {
+                    StartCoroutine(WaitForStep());     //Wait Half a Second before making another Step
+                    m_StepsManager.EnterStep(this);
+                    HasTrack = true;
+                }
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace MalbersAnimations.Controller.AI
 {
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Stance", order = 2)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Stance", order = 3)]
     public class CheckStanceDecision : MAIDecision
     {
         [Space, Tooltip("Check the Decision on the Animal(Self) or the Target(Target)")]

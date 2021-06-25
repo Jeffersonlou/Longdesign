@@ -12,6 +12,7 @@ namespace MalbersAnimations.Controller.AI
         [Tooltip("When you want to send the Message")]
         public ExecuteTask when = ExecuteTask.OnStart;
         public bool UseSendMessage = false;
+        public bool SendToChildren = false;
         [Hide("ShowUpdate",true,false)]
         public float interval = 1f;
         [Tooltip("The message will be send to the Root of the Hierarchy")]
@@ -61,20 +62,23 @@ namespace MalbersAnimations.Controller.AI
             }
         }
 
+
         public virtual void SendMessage(Transform t)
         {
-            var listeners = t.root.GetComponentsInChildren<IAnimatorListener>();
+            IAnimatorListener[] listeners;
+
+            if (SendToChildren)
+                listeners = t.GetComponentsInChildren<IAnimatorListener>();
+            else
+                listeners = t.GetComponents<IAnimatorListener>();
 
             foreach (var msg in messages)
             {
-                if (msg.Active && !string.IsNullOrEmpty(msg.message))
-                {
-                    if (UseSendMessage)
-                        Messages.BroadcastMessage(msg, t.gameObject);
-                    else
-                        foreach (var item in listeners)
-                            Messages.DeliverListener(msg, item);
-                }
+                if (UseSendMessage)
+                    msg.DeliverMessage(t, SendToChildren);
+                else
+                    foreach (var animListener in listeners)
+                        msg.DeliverAnimListener(animListener);
             }
         }
 

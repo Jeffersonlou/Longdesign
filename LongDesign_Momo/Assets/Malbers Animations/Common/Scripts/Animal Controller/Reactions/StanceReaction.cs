@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MalbersAnimations.Controller.Reactions
 {
     [System.Serializable]
-    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Stance Reaction", order = 2)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Animal Reactions/Stance Reaction"/*, order = 2*/)]
     public class StanceReaction : MReaction
     {
         public Stance_Reaction type = Stance_Reaction.Set;
@@ -26,7 +24,7 @@ namespace MalbersAnimations.Controller.Reactions
                     animal.Stance_Toggle(ID);
                     break;
                 case Stance_Reaction.SetDefault:
-                    animal.DefaultStance = ID.ID;
+                    animal.DefaultStance = ID;
                     break;
             }     
         }
@@ -76,7 +74,7 @@ namespace MalbersAnimations.Controller.Reactions
                     description = "Set a new Stance on an Animal";
                     break;
                 case Stance_Reaction.Reset:
-                    description = "Reset a Stance on an Animal";
+                    description = "Reset a Stance on an Animal. (Changes the Stance Valueto the Animal Default Value)";
                     ShowID = false;
                     break;
                 case Stance_Reaction.Toggle:

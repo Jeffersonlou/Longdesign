@@ -309,6 +309,7 @@ MonoBehaviour:
   Editor_Tabs1: 2
   Editor_Tabs2: 4
   SelectedMode: 0
+  SelectedState: 0
   debugStates: 0
   debugModes: 0
   ShowAnimParametersOptional: 1
@@ -394,11 +395,8 @@ MonoBehaviour:
     Variable: {fileID: 0}
   height: 1
   center: {x: 0, y: 0, z: 0}
-  currentStance: 0
-  defaultStance:
-    UseConstant: 1
-    ConstantValue: 0
-    Variable: {fileID: 0}
+  currentStance: {fileID: 0}
+  defaultStance: {fileID: 0}
   AnimatorSpeed:
     UseConstant: 1
     ConstantValue: 1
@@ -435,6 +433,7 @@ MonoBehaviour:
     UseConstant: 1
     ConstantValue: {fileID: 0}
     Variable: {fileID: 0}
+  additivePosLog: 0
   SmoothVertical:
     UseConstant: 1
     ConstantValue: 1
@@ -453,7 +452,7 @@ MonoBehaviour:
     Variable: {fileID: 0}
   AlignPosDelta:
     UseConstant: 1
-    ConstantValue: 2.5
+    ConstantValue: 5
     Variable: {fileID: 0}
   AlignRotDelta:
     UseConstant: 1
@@ -873,6 +872,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnGrounded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMovementDetected:
     m_PersistentCalls:
       m_Calls: []
   OnStateChange:
@@ -1452,8 +1454,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c40057955ac3324f9b900fad19f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Delayed: 0
-  RepeatTime: 0
+  Delayed:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
+  RepeatTime:
+    UseConstant: 1
+    ConstantValue: 0
+    Variable: {fileID: 0}
   Repeat: 0
   onEnable:
     m_PersistentCalls:

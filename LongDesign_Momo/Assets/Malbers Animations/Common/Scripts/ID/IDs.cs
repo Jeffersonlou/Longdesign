@@ -28,7 +28,7 @@ namespace MalbersAnimations
         List<IDs> Instances;
         List<string> popupOptions;
 
-        private readonly Color Require= new Color(1, 0.4f, 0.4f, 1);
+       // private readonly Color Require= new Color(1, 0.4f, 0.4f, 1);
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -48,6 +48,7 @@ namespace MalbersAnimations
             buttonRect.yMin += popupStyle.margin.top;
             buttonRect.width = popupStyle.fixedWidth + popupStyle.margin.right;
             buttonRect.x -= 20;
+            buttonRect.y -= 2;
 
             position.xMin = buttonRect.xMax;
 
@@ -60,7 +61,7 @@ namespace MalbersAnimations
             {
                 var NameOfType = GetPropertyType(property);
                 string[] guids = AssetDatabase.FindAssets("t:" + NameOfType);  //FindAssets uses tags check documentation for more info
-                                                                               //  Debug.Log("ONNCE");
+                                                                              
                 Instances = new List<IDs>();
                 popupOptions = new List<string>();
                 popupOptions.Add("None");

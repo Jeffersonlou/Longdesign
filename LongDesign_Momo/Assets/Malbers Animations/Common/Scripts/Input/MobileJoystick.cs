@@ -25,7 +25,10 @@ namespace MalbersAnimations
         public float sensitivityY = 1;
 
 
-    //    [Header("References")]
+        [Tooltip("The Joystick Start position will be First click on the Area")]
+        public bool Dynamic = false;
+
+        //    [Header("References")]
         /// <summary> Is the Joystick is being pressed.</summary>
         public BoolReference pressed;
         /// <summary>Variable to Store the XAxis and Y Axis of the JoyStick</summary>
@@ -52,9 +55,13 @@ namespace MalbersAnimations
 
 
         /// <summary>JoyStick Background</summary>
-        private Graphic bg;
+        public Graphic bg;
+
+        /// <summary>Drag Area Background</summary>
+        public Graphic DragRect;
+
         /// <summary>JoyStick Button</summary>
-        private Graphic Jbutton;
+        public Graphic Jbutton;
 
         /// <summary>Mutliplier to </summary>
         private const float mult = 3;
@@ -84,12 +91,12 @@ namespace MalbersAnimations
 
         void Start()
         {
-            bg = GetComponent<Graphic>();
-            Jbutton = transform.GetChild(0).GetComponent<Graphic>();
+            if (bg == null)   bg = GetComponent<Graphic>();
+            if (Jbutton == null) Jbutton = transform.GetChild(0).GetComponent<Graphic>();
+            if (DragRect == null) DragRect = GetComponent<Graphic>(); 
+
             BgXSize = bg.rectTransform.sizeDelta.x;
             BgYSize = bg.rectTransform.sizeDelta.y;
-
-            //m_Cam = Camera.main.transform;
         }
 
         void Update()
@@ -111,7 +118,7 @@ namespace MalbersAnimations
 
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(bg.rectTransform, Point.position, Point.pressEventCamera, out Vector2 pos))
             {
-                if (!m_Drag)
+                if (!m_Drag || Dynamic)
                 {
                     pos.x /= BgXSize;              // Get the Joystick position on the 2 axes based on the Bg position.
                     pos.y /= BgYSize;              // Get the Joystick position on the 2 axes based on the Bg position.
@@ -128,7 +135,9 @@ namespace MalbersAnimations
                 {
                     Jbutton.rectTransform.anchoredPosition = pos;
                     var relative = pos - DeltaDrag;
-                    TargetAxis = new Vector3(relative.x * sensitivityX * Screen.width * 0.001f, relative.y * sensitivityY * 0.001f * Screen.height);      // Position is relative to the  Bg.
+
+                    TargetAxis =
+                        new Vector3(relative.x * sensitivityX * Screen.width * 0.001f, relative.y * sensitivityY * 0.001f * Screen.height);      // Position is relative to the  Bg.
                     DeltaDrag = pos;
                 }
             }
@@ -149,14 +158,27 @@ namespace MalbersAnimations
             //OnYAxisChange.Invoke(axisValue.Value.y);
         }
 
-
-
         // When the virtual analog's press occured this will be called.
         public virtual void OnPointerDown(PointerEventData Point)
         {
             OnJoystickDown.Invoke();
             Pressed = true;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(bg.rectTransform, Point.position, Point.pressEventCamera, out DeltaDrag);
+
+            DeltaDrag = Vector2.zero;
+
+            if (Dynamic && !m_Drag)
+            {
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(DragRect.rectTransform, Point.position, Point.pressEventCamera, out Vector2 DeltaDrag))
+                {
+                    DeltaDrag.x -= DragRect.rectTransform.sizeDelta.x;              // Get the Joystick Correct X Position
+                    DeltaDrag.y -= DragRect.rectTransform.sizeDelta.y;              // Get the Joystick Correct X Position
+                    bg.rectTransform.anchoredPosition = DeltaDrag;
+                }
+            }
+            else
+            {
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(bg.rectTransform, Point.position, Point.pressEventCamera, out DeltaDrag);
+            }
             OnDrag(Point);
         }
 
@@ -167,7 +189,7 @@ namespace MalbersAnimations
             Pressed = false;
             AxisValue = Vector2.zero;
             Jbutton.rectTransform.anchoredPosition = Vector3.zero;
-
+            DeltaDrag = Vector2.zero;
             OnAxisChange.Invoke(axisValue);
             OnXAxisChange.Invoke(axisValue.Value.x);
             OnYAxisChange.Invoke(axisValue.Value.y);

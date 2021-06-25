@@ -14,6 +14,9 @@ namespace MalbersAnimations.Controller
 
             var indent = EditorGUI.indentLevel;
 
+            var Light = new Color(0.6f, 0.6f, 0.6f, 0.333f);
+            var Dark = new Color(0.12f, 0.12f, 0.12f, 0.333f);
+
             EditorGUI.indentLevel = 0;
 
 
@@ -24,6 +27,8 @@ namespace MalbersAnimations.Controller
             //var ModifyOnExit = property.FindPropertyRelative("ModifyOnExit");
             var affect = property.FindPropertyRelative("affect");
             var affectStates = property.FindPropertyRelative("affectStates");
+            var affectSt = property.FindPropertyRelative("affect_Stance");
+            var Stances = property.FindPropertyRelative("Stances");
             var OnEnter = property.FindPropertyRelative("OnEnter");
             var OnExit = property.FindPropertyRelative("OnExit");
             var TransitionFrom = property.FindPropertyRelative("TransitionFrom");
@@ -53,34 +58,70 @@ namespace MalbersAnimations.Controller
                 line.y += height + 2;
             }
 
-
-            float ListHeight = EditorGUI.GetPropertyHeight(affectStates);
+            line.y += 2;
+            var SplRect = new Rect(line) { height = 1, };
+            EditorGUI.DrawRect(SplRect, !EditorGUIUtility.isProSkin   ? Light : Dark);
+            line.y += 2;
 
 
             line.y += 2;
-            EditorGUI.PropertyField(line, affect);
+            EditorGUI.PropertyField(line, affect, new GUIContent("Affect States (" + affectStates.arraySize + ")"));
             line.y += height + 2;
 
             if (affect.intValue != 0)
             {
                 EditorGUI.indentLevel++;
-                EditorGUI.PropertyField(line, affectStates, true);
+                EditorGUI.PropertyField(line, affectStates, new GUIContent("States"), true);
                 // line.y += 7;
                 EditorGUI.indentLevel--;
 
-                line.y += ListHeight;
+                line.y += EditorGUI.GetPropertyHeight(affectStates);
+            }
+
+
+
+
+            line.y += 4;
+            SplRect = new Rect(line) { height = 1, };
+            EditorGUI.DrawRect(SplRect, !EditorGUIUtility.isProSkin ? Light : Dark);
+            line.y += 2;
+
+
+            line.y += 2;
+            EditorGUI.PropertyField(line, affectSt, new GUIContent("Affect Stances ("+ Stances.arraySize  +")"));
+            line.y += height + 2;
+
+            if (affectSt.intValue != 0)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUI.PropertyField(line, Stances, true);
+                // line.y += 7;
+                EditorGUI.indentLevel--;
+
+                line.y += EditorGUI.GetPropertyHeight(Stances); ;
             }
 
 
 
             float TransitionfromHeight = EditorGUI.GetPropertyHeight(TransitionFrom);
 
+            line.y += 4;
+            SplRect = new Rect(line) { height = 1, };
+            EditorGUI.DrawRect(SplRect, !EditorGUIUtility.isProSkin ? Light : Dark);
+            line.y += 2;
+
 
             EditorGUI.indentLevel++;
-            EditorGUI.PropertyField(line, TransitionFrom, true);
+            EditorGUI.PropertyField(line, TransitionFrom, new GUIContent("Can Transition from Ability (" + TransitionFrom.arraySize + ")"), true);
             EditorGUI.indentLevel--;
 
             line.y += TransitionfromHeight;
+
+
+            line.y += 4;
+            SplRect = new Rect(line) { height = 1, };
+            EditorGUI.DrawRect(SplRect, !EditorGUIUtility.isProSkin ? Light : Dark);
+            line.y += 2;
 
 
             EditorGUI.indentLevel++;
@@ -104,20 +145,25 @@ namespace MalbersAnimations.Controller
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             var Status = property.FindPropertyRelative("Status");
-            var affect = property.FindPropertyRelative("affect");
-            var affectStates = property.FindPropertyRelative("affectStates");
             var ShowEvents = property.FindPropertyRelative("ShowEvents");
             var OnEnter = property.FindPropertyRelative("OnEnter");
             var OnExit = property.FindPropertyRelative("OnExit");
             var TransitionFrom = property.FindPropertyRelative("TransitionFrom");
 
+            var affect = property.FindPropertyRelative("affect");
+            var affectSt = property.FindPropertyRelative("affect_Stance");
+
+            var Stances = property.FindPropertyRelative("Stances");
+            var affectStates = property.FindPropertyRelative("affectStates");
+
             var height = EditorGUIUtility.singleLineHeight;
 
-            float TotalHeight = (height + 2) * 4 + 4; //Label and Status
+            float TotalHeight = (height + 2) * 6 + 4; //Label and Status
 
             if (Status.intValue == 2) TotalHeight += height + 2;
 
             if (affect.intValue != 0)  TotalHeight += EditorGUI.GetPropertyHeight(affectStates);
+            if (affectSt.intValue != 0)  TotalHeight += EditorGUI.GetPropertyHeight(Stances);
 
 
             TotalHeight += EditorGUI.GetPropertyHeight(TransitionFrom);
@@ -128,6 +174,9 @@ namespace MalbersAnimations.Controller
                 TotalHeight += EditorGUI.GetPropertyHeight(OnExit);
             }
             return TotalHeight;
-        } 
+        }
+
+
+        
     }
 }

@@ -12,6 +12,10 @@ namespace MalbersAnimations
 
         public bool Enable => gameObject.activeInHierarchy && enabled;
 
+        [Tooltip("The Events will be invoked when the Listener Value changes.\n" +
+            "If is set to false, call Invoke() to invoke the events manually")]
+        public bool Auto = true;
+
         public string Description = "";
         [HideInInspector] public bool ShowDescription = false;
         [ContextMenu("Show Description")]
@@ -26,7 +30,7 @@ namespace MalbersAnimations
     [UnityEditor.CustomEditor(typeof(VarListener))]
     public class VarListenerEditor : UnityEditor.Editor
     {
-        protected UnityEditor.SerializedProperty value, Description, Index, ShowEvents, ShowDescription, Debug;
+        protected UnityEditor.SerializedProperty value, Description, Index, ShowEvents, ShowDescription, Debug, Auto;
         protected GUIStyle style;
 
         void OnEnable()    { SetEnable(); }
@@ -39,6 +43,7 @@ namespace MalbersAnimations
             Index = serializedObject.FindProperty("ID");
             ShowEvents = serializedObject.FindProperty("ShowEvents");
             Debug = serializedObject.FindProperty("debug");
+            Auto = serializedObject.FindProperty("Auto");
         }
 
 
@@ -67,18 +72,28 @@ namespace MalbersAnimations
             UnityEditor.EditorGUIUtility.labelWidth = 35;
             UnityEditor.EditorGUILayout.PropertyField(Index, GUILayout.MinWidth(25), GUILayout.MaxWidth(100));
             UnityEditor.EditorGUIUtility.labelWidth = 0;
-            ShowEvents.boolValue = GUILayout.Toggle(ShowEvents.boolValue, new GUIContent("", "Show Events"), UnityEditor.EditorStyles.miniButton, GUILayout.Width(15));
+            ShowEvents.boolValue = GUILayout.Toggle(ShowEvents.boolValue, new GUIContent("E", "Show Events"), UnityEditor.EditorStyles.miniButton, GUILayout.Width(22));
             UnityEditor.EditorGUILayout.EndHorizontal();
 
             if (ShowEvents.boolValue)
             {
+                UnityEditor.EditorGUILayout.BeginHorizontal(UnityEditor.EditorStyles.helpBox);
+                UnityEditor.EditorGUIUtility.labelWidth = 55;
+                UnityEditor.EditorGUILayout.PropertyField(Auto);
+                UnityEditor.EditorGUIUtility.labelWidth = 0;
+                MalbersEditor.DrawDebugIcon(Debug);
+                //Debug.boolValue = GUILayout.Toggle(Debug.boolValue, new GUIContent("D"), UnityEditor.EditorStyles.miniButton, GUILayout.Width(22));
+                UnityEditor.EditorGUILayout.EndHorizontal();
+
                 DrawEvents();
             }
             serializedObject.ApplyModifiedProperties();
         }
 
 
-        protected virtual void DrawEvents()  { UnityEditor.EditorGUILayout.PropertyField(Debug); }
+        protected virtual void DrawEvents()  {
+          
+        }
     }
 #endif
 }

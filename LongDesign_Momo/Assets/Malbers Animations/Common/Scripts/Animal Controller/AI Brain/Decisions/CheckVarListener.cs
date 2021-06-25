@@ -6,7 +6,7 @@ namespace MalbersAnimations.Controller.AI
     using Scriptables;
     using System.Collections.Generic;
 
-    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Var Listener", order = 4)]
+    [CreateAssetMenu(menuName = "Malbers Animations/Pluggable AI/Decision/Check Var Listener", order = 5)]
     public class CheckVarListener : MAIDecision
     {
         public enum Affect

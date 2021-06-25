@@ -92,18 +92,18 @@ MonoBehaviour:
   ID: {fileID: 11400000, guid: 8078fbdb01991b44b9c1351f444b5efe, type: 2}
   AirControl:
     UseConstant: 0
-    ConstantValue: 1
+    ConstantValue: 0
     Variable: {fileID: 11400000, guid: f39bbadf72c684c4d804bfe47b409b80, type: 2}
   AirRotation:
     UseConstant: 0
     ConstantValue: 10
     Variable: {fileID: 11400000, guid: 4c88f28c5af37e1448dc9d7345ad249b, type: 2}
   AirMovement:
-    UseConstant: 0
+    UseConstant: 1
     ConstantValue: 5
     Variable: {fileID: 11400000, guid: 8ee0bf1f77aecf64c83fe6307542d514, type: 2}
   airSmooth:
-    UseConstant: 0
+    UseConstant: 1
     ConstantValue: 1
     Variable: {fileID: 11400000, guid: e9a3691e367dd6048acfe7537f7c7114, type: 2}
   FallRayForward:
