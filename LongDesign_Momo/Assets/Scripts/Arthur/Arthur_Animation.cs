@@ -58,7 +58,7 @@ public class Arthur_Animation : MonoBehaviour{
         {
             if(_myAnimator.enabled)
             {
-                _myAnimator.SetFloat(Forward, _forwardAmount, 0.2f, Time.deltaTime);
+                _myAnimator.SetFloat(id: Forward, _forwardAmount, 0.2f, Time.deltaTime);
                 _forwardAmount = Vector3.forward.z;
             }
         }

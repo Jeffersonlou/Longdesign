@@ -9,6 +9,7 @@ public class Cowboy_navpursue : MonoBehaviour
     private NavMeshAgent myNavMeshAgent;
     private float checkRate;
     private float nextCheck;
+    public Transform horse;
 
     void OnEnable()
     {
@@ -40,7 +41,7 @@ public class Cowboy_navpursue : MonoBehaviour
     {
         if(cowboyMaster.myTarget != null && myNavMeshAgent != null && !cowboyMaster.isNavPaused)
         {
-            myNavMeshAgent.SetDestination(cowboyMaster.myTarget.position);
+            myNavMeshAgent.SetDestination(horse.position);
 
             if(myNavMeshAgent.remainingDistance > myNavMeshAgent.stoppingDistance)
             {
