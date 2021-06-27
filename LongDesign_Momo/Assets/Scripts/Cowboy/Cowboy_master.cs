@@ -15,6 +15,7 @@ public class Cowboy_master : MonoBehaviour
     public event GeneralEventHandler EventCowboyWander;
     public event GeneralEventHandler EventCowboyAttack;
     public event GeneralEventHandler EventCowboyDie;
+    public event GeneralEventHandler EventCowboyOnMount;
 
     public delegate void NavTargetEventHandler(Transform targetTransform);
     public event NavTargetEventHandler EventCowboySetNavTarget;
@@ -73,6 +74,14 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyChase != null)
         {
             EventCowboyChase();
+        }
+    }
+
+    public void CallEventCowboyOnMount()
+    {
+        if(EventCowboyOnMount != null)
+        {
+            EventCowboyOnMount();
         }
     }
 }

@@ -64,6 +64,7 @@ public class Arthur_Animation : MonoBehaviour{
         }
     }
 
+
     void DisableAnimator()
     {
         if(_myAnimator != null)

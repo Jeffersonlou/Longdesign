@@ -41,7 +41,12 @@ public class Cowboy_navpursue : MonoBehaviour
     {
         if(cowboyMaster.myTarget != null && myNavMeshAgent != null && !cowboyMaster.isNavPaused)
         {
+            Debug.Log(myNavMeshAgent.remainingDistance);
             myNavMeshAgent.SetDestination(horse.position);
+            if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance)
+            {
+                cowboyMaster.CallEventCowboyOnMount();
+            }
 
             if(myNavMeshAgent.remainingDistance > myNavMeshAgent.stoppingDistance)
             {
