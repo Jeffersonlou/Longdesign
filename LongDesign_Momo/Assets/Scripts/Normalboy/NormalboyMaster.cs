@@ -11,6 +11,7 @@ namespace Normalboy_event
 
         public delegate void GeneralEventHandler();
         public event GeneralEventHandler EventNormalboyFlee;
+        public event GeneralEventHandler EventNormalboyChase;
         public event GeneralEventHandler EventNormalboyReachedTarget;
         public event GeneralEventHandler EventNormalboyLostTarget;
         public event GeneralEventHandler EventNormalboyWander;
@@ -21,10 +22,16 @@ namespace Normalboy_event
 
         public delegate void NavTargetEventHandler(Transform targetTransform);
         public event NavTargetEventHandler EventNormalboySetRunawayNavTarget;
+        public event NavTargetEventHandler EventNormalboySetNavTarget;
 
         public void CallEventNormalboySetRunawayNavTarget(Transform tragTransform)
         {
             EventNormalboySetRunawayNavTarget?.Invoke(tragTransform);
+            myTarget = tragTransform;
+        }
+        public void CallEventNormalboySetNavTarget(Transform tragTransform)
+        {
+            EventNormalboySetNavTarget?.Invoke(tragTransform);
             myTarget = tragTransform;
         }
 
@@ -55,6 +62,12 @@ namespace Normalboy_event
         {
             EventNormalboyFlee?.Invoke();
             NormalBoyStateText.text = "Flee";
+        }
+
+         public void CallEventNormalboyChase()
+        {
+            EventNormalboyChase?.Invoke();
+            NormalBoyStateText.text = "Chasing";
         }
     
         public void CallEventNormalboyLostTarget()
