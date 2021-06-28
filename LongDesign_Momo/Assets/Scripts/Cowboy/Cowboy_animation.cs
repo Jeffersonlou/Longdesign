@@ -12,8 +12,6 @@ public class Cowboy_animation : MonoBehaviour{
     private Animator myAnimator;
     private float forwardAmount;
 
-    public MRider mRider;
-
 
     // Start is called before the first frame update
     void OnEnable() 
@@ -23,7 +21,6 @@ public class Cowboy_animation : MonoBehaviour{
         cowboyMaster.EventCowboyAttack += SetAnimationToAttack;
         cowboyMaster.EventCowboyWander += SetAnimationToWalk;
         cowboyMaster.EventCowboyChase += SetAnimationToRun;
-        cowboyMaster.EventCowboyOnMount += SetMount;
     }
 
     // Update is called once per frame
@@ -33,7 +30,6 @@ public class Cowboy_animation : MonoBehaviour{
         cowboyMaster.EventCowboyAttack -= SetAnimationToAttack;
         cowboyMaster.EventCowboyWander -= SetAnimationToWalk;
         cowboyMaster.EventCowboyChase -= SetAnimationToRun;
-        cowboyMaster.EventCowboyChase -= SetMount;
     }
 
     void SetinitialRefrence()
@@ -92,17 +88,6 @@ public class Cowboy_animation : MonoBehaviour{
                 myAnimator.SetInteger("State",1);
                 myAnimator.SetFloat("Vertical", forwardAmount,0.01f,Time.deltaTime);
                 forwardAmount = Vector3.forward.z;
-            }
-        }
-    }
-
-    void SetMount()
-    {
-        if (myAnimator != null)
-        {
-            if (myAnimator.enabled)
-            {
-                mRider.Start_Mounted();
             }
         }
     }

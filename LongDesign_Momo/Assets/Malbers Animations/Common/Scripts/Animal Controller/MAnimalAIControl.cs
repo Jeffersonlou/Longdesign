@@ -81,7 +81,7 @@ namespace MalbersAnimations.Controller
 
         internal void ResetStoppingDistance() { StoppingDistance = DefaultStopDistance; }
 
-        [SerializeField] private Transform target;
+        [SerializeField] public Transform target;
         [SerializeField] private Transform nextTarget;
 
         [Tooltip("States that will reset the Offmesh link, in case the animal was in one.")]
@@ -154,7 +154,7 @@ namespace MalbersAnimations.Controller
 
 
         /// <summary>Is the Target an AITarget</summary>
-        public IAITarget IsAITarget { get; protected set; }
+        public IAITarget IsAITarget { get;set; }
 
         /// <summary>AITarget Position</summary>
         public Vector3 AITargetPos { get; protected set; }
@@ -200,7 +200,7 @@ namespace MalbersAnimations.Controller
         //Vector3 m_DestinationPosition;
 
         public virtual Transform NextTarget { get => nextTarget; set => nextTarget = value; }
-        public virtual Transform Target => target;
+        public Transform Target => target;
 
         /// Height Diference from the Target and the Agent
         public virtual float TargetHeight => Mathf.Abs(DestinationPosition.y - Agent.transform.position.y);

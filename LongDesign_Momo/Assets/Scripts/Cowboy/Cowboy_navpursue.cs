@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MalbersAnimations;
+using MalbersAnimations.Controller;
+using MalbersAnimations.HAP;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,9 +10,12 @@ public class Cowboy_navpursue : MonoBehaviour
 {
     private Cowboy_master cowboyMaster;
     private NavMeshAgent myNavMeshAgent;
+    public MAnimalAIControl AIControl;
     private float checkRate;
     private float nextCheck;
-    public Transform horse;
+    public Transform Horse;
+    public MRider mRider;
+    public IAITarget IsAITarget { get; set; }
 
     void OnEnable()
     {
@@ -41,11 +47,17 @@ public class Cowboy_navpursue : MonoBehaviour
     {
         if(cowboyMaster.myTarget != null && myNavMeshAgent != null && !cowboyMaster.isNavPaused)
         {
-            Debug.Log(myNavMeshAgent.remainingDistance);
-            myNavMeshAgent.SetDestination(horse.position);
-            if (myNavMeshAgent.remainingDistance < myNavMeshAgent.stoppingDistance)
+            //Debug.Log(myNavMeshAgent.remainingDistance);
+            myNavMeshAgent.SetDestination(Horse.position);
+
+            if(mRider.IsOnHorse)
             {
-                cowboyMaster.CallEventCowboyOnMount();
+                if(AIControl.IsAITarget == null)
+                {
+                    Debug.Log("null");
+                }
+                AIControl.SetTarget(cowboyMaster.myTarget);
+
             }
 
             if(myNavMeshAgent.remainingDistance > myNavMeshAgent.stoppingDistance)

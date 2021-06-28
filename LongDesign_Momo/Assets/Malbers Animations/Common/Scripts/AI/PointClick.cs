@@ -24,7 +24,7 @@ namespace MalbersAnimations.Controller
         [FormerlySerializedAs("OnInteractableClick")]
         public TransformEvent OnAITargetClick = new TransformEvent();
 
-        protected Collider[] AITargets;
+        public Collider[] AITargets;
 
         void OnEnable()
         {

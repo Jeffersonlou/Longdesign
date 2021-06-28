@@ -11,7 +11,7 @@ public class Cowboy_detection : MonoBehaviour
     public LayerMask sightLayer;
     private float checkRate;
     private float nextCheck;
-    private float detectRadius = 80;
+    public float detectRadius = 10;
     private RaycastHit hit;
 
     // Start is called before the first frame update

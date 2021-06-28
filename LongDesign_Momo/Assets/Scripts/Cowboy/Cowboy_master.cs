@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cowboy_master : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class Cowboy_master : MonoBehaviour
     public event GeneralEventHandler EventCowboyWander;
     public event GeneralEventHandler EventCowboyAttack;
     public event GeneralEventHandler EventCowboyDie;
-    public event GeneralEventHandler EventCowboyOnMount;
+
+    public Text CowboyStateText;
 
     public delegate void NavTargetEventHandler(Transform targetTransform);
     public event NavTargetEventHandler EventCowboySetNavTarget;
@@ -42,6 +44,7 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyWander != null)
         {
             EventCowboyWander();
+            CowboyStateText.text = "Wandering";
         }
     }
 
@@ -50,6 +53,7 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyAttack != null)
         {
             EventCowboyAttack();
+            CowboyStateText.text = "Attacking";
         }
     }
 
@@ -58,6 +62,7 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyReachedTarget != null)
         {
             EventCowboyReachedTarget();
+            CowboyStateText.text = "Reached Target";
         }
     }
 
@@ -66,6 +71,7 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyLostTarget != null)
         {
             EventCowboyLostTarget();
+            CowboyStateText.text = "Lost Target";
         }
     }
 
@@ -74,14 +80,8 @@ public class Cowboy_master : MonoBehaviour
         if(EventCowboyChase != null)
         {
             EventCowboyChase();
+            CowboyStateText.text = "Chasing";
         }
     }
 
-    public void CallEventCowboyOnMount()
-    {
-        if(EventCowboyOnMount != null)
-        {
-            EventCowboyOnMount();
-        }
-    }
 }

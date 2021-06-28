@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MalbersAnimations 
+namespace MalbersAnimations
 {
     /// <summary>Interface used for Moving the Animal with a Nav Mesh Agent</summary>
     public interface IAIControl
