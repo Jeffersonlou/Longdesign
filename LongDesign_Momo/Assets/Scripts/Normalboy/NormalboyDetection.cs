@@ -11,7 +11,7 @@ namespace Normalboy_event
         public LayerMask sightLayer;
         private float _checkRate;
         private float _nextCheck;
-        private float _detectRadius = 80;
+        private float _detectRadius = 50;
         private RaycastHit _hit;
 
         // Start is called before the first frame update

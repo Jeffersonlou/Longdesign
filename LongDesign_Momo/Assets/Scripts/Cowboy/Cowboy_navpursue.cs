@@ -54,7 +54,8 @@ public class Cowboy_navpursue : MonoBehaviour
             {
                 if(AIControl.IsAITarget == null)
                 {
-                    Debug.Log("null");
+                    //Debug.Log("null");
+                    AIControl.SetTarget(cowboyMaster.myTarget);
                 }
                 AIControl.SetTarget(cowboyMaster.myTarget);
 
