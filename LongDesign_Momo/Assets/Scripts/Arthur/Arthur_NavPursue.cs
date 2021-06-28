@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -40,7 +40,8 @@ public class Arthur_NavPursue : MonoBehaviour
     {
         if(_arthurmaster.myTarget != null && _myNavMeshAgent != null && !_arthurmaster.isNavPaused)
         {
-            _myNavMeshAgent.SetDestination(_arthurmaster.myTarget.position);
+             Vector3 newArthurPos = new Vector3(_arthurmaster.myTarget.transform.position.x - 2.5f, _arthurmaster.myTarget.transform.position.y, _arthurmaster.myTarget.transform.position.z);
+            _myNavMeshAgent.SetDestination(newArthurPos);
 
             if(_myNavMeshAgent.remainingDistance > _myNavMeshAgent.stoppingDistance)
             {
