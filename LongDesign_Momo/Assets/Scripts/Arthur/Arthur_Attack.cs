@@ -48,7 +48,7 @@ public class Arthur_Attack : MonoBehaviour
     public void TrytoshootTarget()
     {
         if (_arthurmaster.myTarget != null && _myNavMeshAgent != null)
-            if (_myNavMeshAgent.remainingDistance < 2)
+            if (_myNavMeshAgent.remainingDistance < 5)
             {
                 Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
                 bulletPrefab.transform.LookAt(_arthurmaster.myTarget.transform.position);

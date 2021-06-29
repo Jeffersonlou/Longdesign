@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:LongDesign_Momo/Assets/Scripts/audio.cs.meta
 fileFormatVersion: 2
 guid: 15d02921964114c4bb6d4f218792495e
 MonoImporter:
@@ -9,3 +10,16 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+fileFormatVersion: 2
+guid: 46c767eff4bd24f49b884da98c4194d4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> Stashed changes:LongDesign_Momo/Assets/Scripts/information_Script.cs.meta
